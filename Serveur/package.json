@@ -10,7 +10,11 @@
    "author": "Denis QUEVAL",
    "license": "ISC",
    "dependencies": {
+      "@prisma/client": "^3.14.0",
       "dotenv": "^16.0.1",
       "express": "^4.18.1"
+   },
+   "devDependencies": {
+      "prisma": "^3.14.0"
    }
 }
