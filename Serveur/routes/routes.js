@@ -1,45 +1,27 @@
-import { Router } from 'express';
-import {
-   getAllUsers,
-   getOneUser,
-   createUser,
-   updateUser,
-   deleteUser,
-} from '../controllers/ctrlUser.js';
-import {
-   getAllposts,
-   getOnepost,
-   createpost,
-   updatepost,
-   deletepost,
-} from '../controllers/ctrlPost.js';
-import {
-   getOnecomment,
-   createcomment,
-   updatecomment,
-   deletecomment,
-} from '../controllers/ctrlComment.js';
+const Router = require('express');
+const ctrlUser = require('../controllers/ctrlUser.js');
+const ctrlComment = require('../controllers/ctrlComment.js');
+const ctrlPost = require('../controllers/ctrlPost.js');
 
 const router = Router();
 
-router.get('/', (req, res) => res.send('Hello Denis'));
+router.get('/users', ctrlUser.getAllUsers);
+router.get('/user/:id', ctrlUser.getOneUser);
+router.get('/logUser', ctrlUser.logUser);
+router.post('/userCreate', ctrlUser.createUser);
+router.put('/userUpdate/:id', ctrlUser.updateUser);
+router.delete('/userDelete/:id', ctrlUser.deleteUser);
 
-router.get('/users', getAllUsers);
-router.get('/user/:id', getOneUser);
-router.post('/userCreate', createUser);
-router.put('/userUpdate/:id', updateUser);
-router.delete('/userDelete/:id', deleteUser);
+router.get('/posts', ctrlPost.getAllposts);
+router.get('/post/:id', ctrlPost.getOnepost);
+router.post('/postCreate/:id', ctrlPost.createpostUser);
+router.put('/postUpdate/:id', ctrlPost.updatepost);
+router.delete('/postDelete/:id', ctrlPost.deletepost);
 
-router.get('/posts', getAllposts);
-router.get('/post/:id', getOnepost);
-router.post('/postCreate', createpost);
-router.put('/postUpdate/:id', updatepost);
-router.delete('/postDelete/:id', deletepost);
+router.get('/comments/:id', ctrlComment.getAllcommentsUser);
+router.get('/comments/:id', ctrlComment.getOnecomment);
+router.post('/commentCreate', ctrlComment.createcommentUser);
+router.put('/commentUpdate/:id', ctrlComment.updatecomment);
+router.delete('/commentDelete/:id', ctrlComment.deletecomment);
 
-// router.get('/comments', getAllcomments);
-router.get('/comments/:id', getOnecomment);
-router.post('/commentCreate/:id', createcomment);
-router.put('/commentUpdate/:id', updatecomment);
-router.delete('/commentDelete/:id', deletecomment);
-
-export default router;
+module.exports = router;

@@ -1,14 +1,89 @@
-const getOnecomment = async (req, res) => {
-   res.send('One comment');
-};
-const createcomment = async (req, res) => {
-   res.send('Create comment');
-};
-const updatecomment = async (req, res) => {
-   res.send('Update comment');
-};
-const deletecomment = async (req, res) => {
-   res.send('Delete comment');
+const prisma = require('../utils/db.js');
+
+exports.getAllcommentsUser = async (req, res) => {
+   const { id } = req.params;
+   try {
+      const comments = await prisma.comments.findMany({
+         where: {
+            usersId: Number(id),
+         },
+      });
+      res.json(comments);
+   } catch (error) {
+      res.status(500).send({
+         message:
+            error.message ||
+            'Une erreur est survenue dans la recherche de comments.',
+      });
+   }
 };
 
-export { getOnecomment, createcomment, updatecomment, deletecomment };
+exports.getOnecomment = async (req, res) => {
+   const { id } = req.params;
+   try {
+      const comment = await prisma.comments.findUnique({
+         where: {
+            id: Number(id),
+         },
+      });
+      res.json(comment);
+   } catch (error) {
+      res.status(500).send({
+         message:
+            error.message ||
+            'Une erreur est survenue dans la recherche de comment.',
+      });
+   }
+};
+
+exports.createcommentUser = async (req, res) => {
+   try {
+      const comment = await prisma.comments.create({
+         data: req.body,
+      });
+      res.json(comment);
+   } catch (error) {
+      res.status(500).send({
+         message:
+            error.message ||
+            'Une erreur est survenue dans la création de comment.',
+      });
+   }
+};
+
+exports.updatecomment = async (req, res) => {
+   const { id } = req.params;
+   try {
+      const comment = await prisma.comments.update({
+         where: {
+            id: Number(id),
+         },
+         data: req.body,
+      });
+      res.json(comment);
+   } catch (error) {
+      res.status(500).send({
+         message:
+            error.message ||
+            'Une erreur est survenue dans la modification de comment.',
+      });
+   }
+};
+
+exports.deletecomment = async (req, res) => {
+   try {
+      const { id } = req.params;
+      const comment = await prisma.comments.delete({
+         where: {
+            id: Number(id),
+         },
+      });
+      res.json(comment);
+   } catch (error) {
+      res.status(500).send({
+         message:
+            error.message ||
+            'Une erreur est survenue dans la suppression de comment.',
+      });
+   }
+};
