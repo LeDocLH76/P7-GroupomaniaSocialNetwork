@@ -60,7 +60,7 @@ model users {
 model session {
   id        String   @id
   sid       String   @unique
-  sess      String
+  data      String
   expiresAt DateTime
 
   @@index([expiresAt], map: "IDX_session_expireAt")

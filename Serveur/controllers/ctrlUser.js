@@ -33,6 +33,14 @@ exports.getOneUser = async (req, res) => {
 };
 
 exports.createUser = async (req, res) => {
+   const { email, password, pseudo, firstName, lastName } = req.body;
+   // Valider les données !!!!!!!!!!!!!!!!!!!!!!!
+   if (!email || !password || !pseudo || !firstName || !lastName) {
+      return res
+         .status(400)
+         .json('Pseudo, email, mot de passe, prénom, nom obligatoire');
+   }
+
    try {
       const exist = await prisma.users.count({
          where: {
@@ -44,22 +52,22 @@ exports.createUser = async (req, res) => {
          throw new Error("L'email existe déja");
       }
       // Crypter pw
-      const passwordHash = await bcrypt.hash(req.body.password, 10);
+      const passwordHash = await bcrypt.hash(password, 10);
 
       const user = await prisma.users.create({
          data: {
-            email: req.body.email,
-            pseudo: req.body.pseudo,
+            email: email,
+            pseudo: pseudo,
             password: passwordHash,
             profils: {
                create: {
-                  firstName: req.body.firstName,
-                  lastName: req.body.lastName,
+                  firstName: firstName,
+                  lastName: lastName,
                },
             },
          },
       });
-      res.json(user);
+      res.json(`L'utilisateur ${user.pseudo} est créé`);
    } catch (error) {
       res.status(500).send({
          message:
@@ -69,17 +77,29 @@ exports.createUser = async (req, res) => {
    }
 };
 
+// Endpoint non protègé
 exports.logUser = async (req, res) => {
+   const { email, password } = req.body;
+   // Valider les données !!!!!!!!!!!!!!!!!!!!!!!
+   if (!email || !password) {
+      return res.status(400).json('Email et mot de passe obligatoire');
+   }
+
    try {
+      // Cherche un user par son email sur la bd
       const user = await prisma.users.findUnique({
          where: {
-            email: req.body.email,
+            email: email,
          },
       });
-      if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
+      // Si pas user ou password incorrect
+      if (!user || !(await bcrypt.compare(password, user.password))) {
          throw new Error("Erreur d'email ou de mot de passe");
       }
-      res.json(user);
+      // User valide
+      // Création session
+      req.session.user = user;
+      res.json(`L'utilisateur ${user.pseudo} est connecté`);
    } catch (error) {
       res.status(500).send({
          message:

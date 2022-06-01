@@ -2,26 +2,27 @@ const Router = require('express');
 const ctrlUser = require('../controllers/ctrlUser.js');
 const ctrlComment = require('../controllers/ctrlComment.js');
 const ctrlPost = require('../controllers/ctrlPost.js');
+const auth = require('../middlewares/auth.js');
 
 const router = Router();
 
-router.get('/users', ctrlUser.getAllUsers);
-router.get('/user/:id', ctrlUser.getOneUser);
+router.get('/users', auth, ctrlUser.getAllUsers);
+router.get('/user/:id', auth, ctrlUser.getOneUser);
 router.get('/logUser', ctrlUser.logUser);
 router.post('/userCreate', ctrlUser.createUser);
-router.put('/userUpdate/:id', ctrlUser.updateUser);
-router.delete('/userDelete/:id', ctrlUser.deleteUser);
+router.put('/userUpdate/:id', auth, ctrlUser.updateUser);
+router.delete('/userDelete/:id', auth, ctrlUser.deleteUser);
 
-router.get('/posts', ctrlPost.getAllposts);
-router.get('/post/:id', ctrlPost.getOnepost);
-router.post('/postCreate/:id', ctrlPost.createpostUser);
-router.put('/postUpdate/:id', ctrlPost.updatepost);
-router.delete('/postDelete/:id', ctrlPost.deletepost);
+router.get('/posts', auth, ctrlPost.getAllposts);
+router.get('/post/:id', auth, ctrlPost.getOnepost);
+router.post('/postCreate/:id', auth, ctrlPost.createpostUser);
+router.put('/postUpdate/:id', auth, ctrlPost.updatepost);
+router.delete('/postDelete/:id', auth, ctrlPost.deletepost);
 
-router.get('/comments/:id', ctrlComment.getAllcommentsUser);
-router.get('/comments/:id', ctrlComment.getOnecomment);
-router.post('/commentCreate', ctrlComment.createcommentUser);
-router.put('/commentUpdate/:id', ctrlComment.updatecomment);
-router.delete('/commentDelete/:id', ctrlComment.deletecomment);
+router.get('/comments/:id', auth, ctrlComment.getAllcommentsUser);
+router.get('/comments/:id', auth, ctrlComment.getOnecomment);
+router.post('/commentCreate', auth, ctrlComment.createcommentUser);
+router.put('/commentUpdate/:id', auth, ctrlComment.updatecomment);
+router.delete('/commentDelete/:id', auth, ctrlComment.deletecomment);
 
 module.exports = router;
