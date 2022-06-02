@@ -33,6 +33,15 @@ exports.getOneUser = async (req, res) => {
 };
 
 exports.createUser = async (req, res) => {
+   // const pathName = `${req.protocol}://${req.get('host')}/${req.file.path}`;
+   // console.log(pathName);
+   // console.log('Body = ', req.body);
+   console.log('imagetype = ', req.file.mimetype);
+   console.log('imageName = ', req.file.originalname);
+   console.log('imageData = ', req.file.buffer); // undefined => Promise!
+
+   return res.status(200).send(`Images enregistrées`);
+
    const { email, password, pseudo, firstName, lastName } = req.body;
    // Valider les données !!!!!!!!!!!!!!!!!!!!!!!
    if (!email || !password || !pseudo || !firstName || !lastName) {
@@ -58,6 +67,7 @@ exports.createUser = async (req, res) => {
          data: {
             email: email,
             pseudo: pseudo,
+            avatar: pathName,
             password: passwordHash,
             profils: {
                create: {
