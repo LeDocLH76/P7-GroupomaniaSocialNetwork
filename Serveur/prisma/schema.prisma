@@ -7,54 +7,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model comments {
-  id        Int      @id @default(autoincrement())
-  body      String?
-  picture   Int?
-  link      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  postId    Int
-  usersId   Int
-  posts     posts    @relation(fields: [postId], references: [id], onDelete: Cascade)
-  users     users    @relation(fields: [usersId], references: [id], onDelete: Cascade)
+model users {
+  id        Int            @id @default(autoincrement())
+  email     String         @unique @db.VarChar(255)
+  password  String         @db.VarChar(255)
+  pseudo    String         @unique @db.VarChar(50)
+  avatar    String?        @db.VarChar(255)
+  role      user_role_enum @default(user)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  comments  comments[]
+  posts     posts[]
 }
 
 model posts {
   id        Int        @id @default(autoincrement())
-  body      String?
-  picture   Int?
-  link      String?
+  body      String
+  picture   String?    @db.VarChar(255)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   like      Int        @default(0)
   dislike   Int        @default(0)
-  userId    Int        @unique
   users     users      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int        @unique
   comments  comments[]
 }
 
-model profils {
+model comments {
   id        Int      @id @default(autoincrement())
-  firstName String   @db.VarChar(50)
-  lastName  String   @db.VarChar(50)
-  picture   Int?
+  body      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  userId    Int      @unique
+  post      posts    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int
   user      users    @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model users {
-  id       Int            @id @default(autoincrement())
-  pseudo   String         @unique @db.VarChar(50)
-  avatar   Bytes?
-  email    String         @unique @db.VarChar(255)
-  password String         @db.VarChar(255)
-  role     user_role_enum @default(user)
-  comments comments[]
-  posts    posts?
-  profils  profils?
+  userId    Int
 }
 
 model session {

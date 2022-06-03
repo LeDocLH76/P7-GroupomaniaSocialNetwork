@@ -2,8 +2,13 @@ const prisma = require('../utils/db.js');
 const bcrypt = require('bcrypt');
 
 exports.getAllUsers = async (req, res) => {
+   // ADMIN required
    try {
-      const users = await prisma.users.findMany({});
+      const users = await prisma.users.findMany({
+         orderBy: {
+            pseudo: 'asc',
+         },
+      });
       res.json(users);
    } catch (error) {
       res.status(500).send({
@@ -36,11 +41,11 @@ exports.createUser = async (req, res) => {
    // const pathName = `${req.protocol}://${req.get('host')}/${req.file.path}`;
    // console.log(pathName);
    // console.log('Body = ', req.body);
-   console.log('imagetype = ', req.file.mimetype);
-   console.log('imageName = ', req.file.originalname);
-   console.log('imageData = ', req.file.buffer); // undefined => Promise!
+   // console.log('imagetype = ', req.file.mimetype);
+   // console.log('imageName = ', req.file.originalname);
+   // console.log('imageData = ', req.file.buffer); // undefined => Promise!
 
-   return res.status(200).send(`Images enregistrées`);
+   // return res.status(200).send(`Images enregistrées`);
 
    const { email, password, pseudo, firstName, lastName } = req.body;
    // Valider les données !!!!!!!!!!!!!!!!!!!!!!!
@@ -67,14 +72,7 @@ exports.createUser = async (req, res) => {
          data: {
             email: email,
             pseudo: pseudo,
-            avatar: pathName,
             password: passwordHash,
-            profils: {
-               create: {
-                  firstName: firstName,
-                  lastName: lastName,
-               },
-            },
          },
       });
       res.json(`L'utilisateur ${user.pseudo} est créé`);
@@ -108,13 +106,27 @@ exports.logUser = async (req, res) => {
       }
       // User valide
       // Création session
-      req.session.user = user;
+      req.session.user = { id: user.id, role: user.role };
+
       res.json(`L'utilisateur ${user.pseudo} est connecté`);
    } catch (error) {
       res.status(500).send({
          message:
             error.message ||
             'Une erreur est survenue dans la création de user.',
+      });
+   }
+};
+
+exports.logoutUser = (req, res) => {
+   if (req.session) {
+      const userId = req.session.user.id;
+      req.session.destroy((err) => {
+         if (err) {
+            res.status(400).send(`Logout impossible de user: ${userId}`);
+         } else {
+            res.status(200).send(`Logout OK user: ${userId}`);
+         }
       });
    }
 };

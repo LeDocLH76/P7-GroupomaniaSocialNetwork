@@ -2,7 +2,11 @@ const prisma = require('../utils/db.js');
 
 exports.getAllposts = async (req, res) => {
    try {
-      const posts = await prisma.posts.findMany({});
+      const posts = await prisma.posts.findMany({
+         orderBy: {
+            updatedAt: 'desc',
+         },
+      });
       res.json(posts);
    } catch (error) {
       res.status(500).send({

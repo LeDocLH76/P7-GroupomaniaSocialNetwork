@@ -18,7 +18,7 @@ exports.getAllcommentsUser = async (req, res) => {
    }
 };
 
-exports.getOnecomment = async (req, res) => {
+exports.getOnecommentUser = async (req, res) => {
    const { id } = req.params;
    try {
       const comment = await prisma.comments.findUnique({
@@ -51,7 +51,7 @@ exports.createcommentUser = async (req, res) => {
    }
 };
 
-exports.updatecomment = async (req, res) => {
+exports.updatecommentUser = async (req, res) => {
    const { id } = req.params;
    try {
       const comment = await prisma.comments.update({
@@ -70,7 +70,7 @@ exports.updatecomment = async (req, res) => {
    }
 };
 
-exports.deletecomment = async (req, res) => {
+exports.deletecommentUser = async (req, res) => {
    try {
       const { id } = req.params;
       const comment = await prisma.comments.delete({
