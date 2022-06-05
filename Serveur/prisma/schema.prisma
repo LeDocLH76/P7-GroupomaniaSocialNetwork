@@ -23,7 +23,7 @@ model users {
 model posts {
   id          Int        @id @default(autoincrement())
   body        String
-  picture     String?    @db.VarChar(255)
+  picture     String[]   @db.VarChar(255)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   like        Int        @default(0)
@@ -31,7 +31,7 @@ model posts {
   userLike    String[]
   userDislike String[]
   users       users      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      Int        @unique
+  userId      Int
   comments    comments[]
 }
 

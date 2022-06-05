@@ -19,12 +19,17 @@ router.delete('/logoutUser', auth, ctrlUser.logoutUser);
 router.get('/posts', auth, ctrlPost.getAllposts);
 router.get('/post/:id', auth, ctrlPost.getOnepost);
 router.post(
-   '/postCreate/:id',
+   '/postCreate',
    auth,
    multer.array('images', 6),
-   ctrlPost.createpostUser
+   ctrlPost.createpost
 );
-router.put('/postUpdate/:id', auth, ctrlPost.updatepost);
+router.put(
+   '/postUpdate/:id',
+   auth,
+   multer.array('images', 6),
+   ctrlPost.updatepost
+);
 router.delete('/postDelete/:id', auth, ctrlPost.deletepost);
 
 router.get('/comments/:id', auth, ctrlComment.getAllcommentsUser);

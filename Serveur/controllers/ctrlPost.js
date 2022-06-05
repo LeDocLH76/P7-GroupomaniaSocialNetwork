@@ -1,4 +1,5 @@
 const prisma = require('../utils/db.js');
+const fs = require('fs');
 
 exports.getAllposts = async (req, res) => {
    try {
@@ -35,48 +36,72 @@ exports.getOnepost = async (req, res) => {
    }
 };
 
-exports.createpostUser = async (req, res) => {
-   if (req.file) {
-      for (let index = 0; index < req.files.length; index++) {
-         const element = req.files[index];
-         const pathName = `${req.protocol}://${req.get('host')}/${
-            element.path
-         }`;
-         console.log(pathName);
-      }
+exports.createpost = async (req, res) => {
+   // Récupération des données en entrée
+   let { innerImage, innerBody } = recuperationInnerData(req);
+
+   if (innerImage.length == 0 && innerBody == '') {
+      return res.status(400).send('Un post ne peut pes être vide');
    }
 
-   console.log('Body = ', req.body.body);
-   const { id } = req.session.id;
+   const { id } = req.session.user;
    console.log('userId = ', id);
-   return res.status(200).send(`${req.files.length} images enregistrées`);
 
-   // try {
-   //    const post = await prisma.posts.create({
-   //       data: {
-   //          text: req.body.text,
-   //          userId: Number(id),
-   //       },
-   //    });
-   //    res.json(post);
-   // } catch (error) {
-   //    res.status(500).send({
-   //       message:
-   //          error.message ||
-   //          'Une erreur est survenue dans la création de post.',
-   //    });
+   //*****A supprimer */
+   // if (innerImage.length != 0) {
+   //    for (let index = 0; index < innerImage.length; index++) {
+   //       fs.unlink(innerImage[index], () => {
+   //          console.log(`Fichier ${innerImage} éffacé`);
+   //       });
+   //    }
    // }
+   // return res.status(200).send('Données reçues');
+   //*****A supprimer */
+
+   try {
+      const post = await prisma.posts.create({
+         data: {
+            body: innerBody,
+            picture: innerImage,
+            like: 0,
+            dislike: 0,
+            userLike: [],
+            userDislike: [],
+            userId: Number(id),
+         },
+      });
+      res.json(post);
+   } catch (error) {
+      res.status(500).send({
+         message:
+            error.message ||
+            'Une erreur est survenue dans la création de post.',
+      });
+   }
 };
 
 exports.updatepost = async (req, res) => {
-   const { id } = req.params;
+   const id = req.params.id;
+   // Récupération des données en entrée
+   let { innerImage, innerBody } = recuperationInnerData(req);
+
+   if (innerImage.length == 0 && innerBody == '') {
+      return res.status(400).send('Un post ne peut pes être vide');
+   }
+
+   console.log('userId = ', id);
+
    try {
       const post = await prisma.posts.update({
          where: {
             id: Number(id),
          },
-         data: req.body,
+         data: {
+            body: innerBody,
+            picture: innerImage,
+         },
       });
+
       res.json(post);
    } catch (error) {
       res.status(500).send({
@@ -104,3 +129,25 @@ exports.deletepost = async (req, res) => {
       });
    }
 };
+
+function recuperationInnerData(req) {
+   let innerImage = [];
+   if (req.files) {
+      for (let index = 0; index < req.files.length; index++) {
+         const element = req.files[index];
+         const pathName = `${req.protocol}://${req.get('host')}/${
+            element.path
+         }`;
+         console.log(pathName);
+         innerImage.push(pathName);
+      }
+   }
+   console.log('innerImage = ', innerImage);
+
+   let innerBody = '';
+   if (req.body.body) {
+      innerBody = req.body.body;
+      console.log('Body = ', req.body.body);
+   }
+   return { innerImage, innerBody };
+}
