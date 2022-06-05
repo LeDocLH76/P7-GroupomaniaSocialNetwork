@@ -5,7 +5,7 @@ exports.getAllcommentsUser = async (req, res) => {
    try {
       const comments = await prisma.comments.findMany({
          where: {
-            usersId: Number(id),
+            userId: Number(id),
          },
       });
       res.json(comments);

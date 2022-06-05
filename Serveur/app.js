@@ -28,22 +28,22 @@ app.use((req, res, next) => {
 app.use('/images', express.static(path.join(__dirname, 'images')));
 // *******************************
 
-app.post('/single', multer.single('image'), (req, res) => {
-   console.log(req.file);
-   res.status(200).send('Image enregistrée');
-});
+// app.post('/single', multer.single('image'), (req, res) => {
+//    console.log(req.file);
+//    res.status(200).send('Image enregistrée');
+// });
 
-app.post('/multiple', multer.array('images', 6), (req, res) => {
-   console.log(req.files.length);
-   for (let index = 0; index < req.files.length; index++) {
-      const element = req.files[index];
-      const pathName = `${req.protocol}://${req.get('host')}/${element.path}`;
-      console.log(pathName);
-   }
-   console.log(req.body.body);
+// app.post('/multiple', multer.array('images', 6), (req, res) => {
+//    console.log(req.files.length);
+//    for (let index = 0; index < req.files.length; index++) {
+//       const element = req.files[index];
+//       const pathName = `${req.protocol}://${req.get('host')}/${element.path}`;
+//       console.log(pathName);
+//    }
+//    console.log(req.body.body);
 
-   res.status(200).send('Images enregistrées');
-});
+//    res.status(200).send('Images enregistrées');
+// });
 
 // *******************************
 

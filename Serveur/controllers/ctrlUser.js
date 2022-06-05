@@ -1,5 +1,6 @@
 const prisma = require('../utils/db.js');
 const bcrypt = require('bcrypt');
+const fs = require('fs');
 
 exports.getAllUsers = async (req, res) => {
    // ADMIN required
@@ -37,34 +38,42 @@ exports.getOneUser = async (req, res) => {
    }
 };
 
+// Endpoint non protègé
 exports.createUser = async (req, res) => {
-   // const pathName = `${req.protocol}://${req.get('host')}/${req.file.path}`;
-   // console.log(pathName);
-   // console.log('Body = ', req.body);
-   // console.log('imagetype = ', req.file.mimetype);
-   // console.log('imageName = ', req.file.originalname);
-   // console.log('imageData = ', req.file.buffer); // undefined => Promise!
+   let pathName = '';
+   // Si une image est reçue elle est enregistrée par multer dans req.file
+   // Recomposition de son nom complet et stockage dans pathName
+   if (req.file) {
+      pathName = `${req.protocol}://${req.get('host')}/images/${req.file.path}`;
+   }
 
-   // return res.status(200).send(`Images enregistrées`);
-
-   const { email, password, pseudo, firstName, lastName } = req.body;
+   const { email, password, pseudo } = req.body;
    // Valider les données !!!!!!!!!!!!!!!!!!!!!!!
-   if (!email || !password || !pseudo || !firstName || !lastName) {
-      return res
-         .status(400)
-         .json('Pseudo, email, mot de passe, prénom, nom obligatoire');
+   // Si il manque une donnée requise
+   if (!email || !password || !pseudo) {
+      // Si il y a une image
+      if (pathName != '') {
+         effaceImage();
+      }
+      return res.status(400).json('Pseudo, email, mot de passe obligatoire');
    }
 
    try {
+      // L'email est-elle déja enregistrée sur la BD
       const exist = await prisma.users.count({
          where: {
-            email: req.body.email,
+            email: email,
          },
-      });
+      }); // 0/1 - false/true
       // Si email existe rejetter la demande
       if (exist) {
+         // Si il y a une image
+         if (pathName != '') {
+            effaceImage();
+         }
          throw new Error("L'email existe déja");
       }
+
       // Crypter pw
       const passwordHash = await bcrypt.hash(password, 10);
 
@@ -72,6 +81,7 @@ exports.createUser = async (req, res) => {
          data: {
             email: email,
             pseudo: pseudo,
+            avatar: pathName,
             password: passwordHash,
          },
       });
@@ -81,6 +91,12 @@ exports.createUser = async (req, res) => {
          message:
             error.message ||
             'Une erreur est survenue dans la création de user.',
+      });
+   }
+
+   function effaceImage() {
+      fs.unlink(req.file.path, () => {
+         console.log(`Fichier ${req.file.path} éffacé`);
       });
    }
 };
@@ -107,7 +123,7 @@ exports.logUser = async (req, res) => {
       // User valide
       // Création session
       req.session.user = { id: user.id, role: user.role };
-
+      console.log(req.session);
       res.json(`L'utilisateur ${user.pseudo} est connecté`);
    } catch (error) {
       res.status(500).send({
