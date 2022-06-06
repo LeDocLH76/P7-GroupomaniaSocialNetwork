@@ -28,6 +28,7 @@ const load = async () => {
                pseudo: faker.internet.userName(name, lastname),
                email: faker.internet.email(lastname, name),
                password: passwordHash,
+               avatar: faker.image.avatar(),
                posts: {
                   create: {
                      body: faker.lorem.paragraphs(1),

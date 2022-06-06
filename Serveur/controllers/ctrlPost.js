@@ -11,9 +11,7 @@ exports.getAllposts = async (req, res) => {
       res.json(posts);
    } catch (error) {
       res.status(500).send({
-         message:
-            error.message ||
-            'Une erreur est survenue dans la recherche de posts.',
+         message: error.message || 'Une erreur est survenue dans la recherche de posts.',
       });
    }
 };
@@ -29,16 +27,14 @@ exports.getOnepost = async (req, res) => {
       res.json(post);
    } catch (error) {
       res.status(500).send({
-         message:
-            error.message ||
-            'Une erreur est survenue dans la recherche de post.',
+         message: error.message || 'Une erreur est survenue dans la recherche de post.',
       });
    }
 };
 
 exports.createpost = async (req, res) => {
    // Récupération des données en entrée
-   let { innerImage, innerBody } = recuperationInnerData(req);
+   let { innerImage, innerBody } = findInnerData(req);
 
    if (innerImage.length == 0 && innerBody == '') {
       return res.status(400).send('Un post ne peut pes être vide');
@@ -70,74 +66,130 @@ exports.createpost = async (req, res) => {
             userId: Number(id),
          },
       });
-      res.json(post);
+      res.status(201).json(post);
    } catch (error) {
       res.status(500).send({
-         message:
-            error.message ||
-            'Une erreur est survenue dans la création de post.',
+         message: error.message || 'Une erreur est survenue dans la création de post.',
       });
    }
 };
 
 exports.updatepost = async (req, res) => {
-   const id = req.params.id;
+   const postId = req.params.id;
+   // console.log('postId = ', postId);
+
    // Récupération des données en entrée
-   let { innerImage, innerBody } = recuperationInnerData(req);
+   let { innerImage, innerBody } = findInnerData(req);
 
    if (innerImage.length == 0 && innerBody == '') {
       return res.status(400).send('Un post ne peut pes être vide');
    }
 
-   console.log('userId = ', id);
-
    try {
+      // Récuperation du tableau des images et du userId du post "retouné dans un objet"
+      const dataPostBdObj = await findOnePost(postId);
+      // console.log('objet picture sur la Bd = ', imagePostBdObj);
+      // Récuperation du tableau des url des images
+      const imagePostBd = dataPostBdObj.picture;
+      // Récuperation du userId propriétaire du post
+      const userIdPostBd = dataPostBdObj.userId;
+      // console.log('UserId sur la Bd = ', userIdPostBd, 'UserId de session = ', req.session.user.id);
+      // Vérifie la propriété du post
+      if (parseInt(req.session.user.id) !== userIdPostBd) {
+         // Efface images entrantes du le serveur
+         for (let index = 0; index < innerImage.length; index++) {
+            // Extrait le nom de l'url de l'image
+            const imageName = innerImage[index].split('/images/')[1];
+            // console.log('image = ', imageName);
+            fs.unlink(`./images/${imageName}`, () => {
+               // console.log(`Fichier ${imageName} éffacé`);
+            });
+         }
+         return res.status(401).send('Erreur user');
+      }
+
+      // Efface les anciennes images sur le serveur
+      deleteOldPic(imagePostBd);
+
+      // Enregistre les nouvelles données
       const post = await prisma.posts.update({
          where: {
-            id: Number(id),
+            id: Number(postId),
          },
          data: {
             body: innerBody,
             picture: innerImage,
          },
       });
-
-      res.json(post);
+      res.status(201).send(post);
    } catch (error) {
       res.status(500).send({
-         message:
-            error.message ||
-            'Une erreur est survenue dans la modification de post.',
+         message: error.message || 'Une erreur est survenue dans la modification de post.',
       });
    }
 };
 
 exports.deletepost = async (req, res) => {
+   const postId = req.params.id;
    try {
-      const { id } = req.params;
-      const post = await prisma.posts.delete({
+      // Récuperation du tableau des images et du userId du post "retouné dans un objet"
+      const dataPostBdObj = await findOnePost(postId);
+      // Récuperation du tableau des url des images
+      const imagePostBd = dataPostBdObj.picture;
+      // Récuperation du userId propriétaire du post
+      const userIdPostBd = dataPostBdObj.userId;
+      // console.log('UserId sur la Bd = ', userIdPostBd, 'UserId de session = ', req.session.user.id);
+      // Vérifie la propriété du post
+      if (parseInt(req.session.user.id) !== userIdPostBd) {
+         return res.status(401).send('Erreur user');
+      }
+
+      // Efface les anciennes images sur le serveur
+      deleteOldPic(imagePostBd);
+
+      await prisma.posts.delete({
          where: {
-            id: Number(id),
+            id: Number(postId),
          },
       });
-      res.json(post);
+
+      res.status(200).send('Post supprimé');
    } catch (error) {
       res.status(500).send({
-         message:
-            error.message ||
-            'Une erreur est survenue dans la suppression de post.',
+         message: error.message || 'Une erreur est survenue dans la suppression de post.',
       });
    }
 };
 
-function recuperationInnerData(req) {
+async function findOnePost(postId) {
+   return await prisma.posts.findUnique({
+      where: {
+         id: Number(postId),
+      },
+      select: {
+         picture: true,
+         userId: true,
+      },
+   });
+}
+
+function deleteOldPic(imagePostBd) {
+   for (let index = 0; index < imagePostBd.length; index++) {
+      // Extrait le nom de l'url de l'image
+      const imageName = imagePostBd[index].split('/images/')[1];
+      // console.log('image = ', imageName);
+      fs.unlink(`./images/${imageName}`, () => {
+         console.log(`Fichier ${imageName} éffacé`);
+      });
+   }
+}
+
+function findInnerData(req) {
    let innerImage = [];
    if (req.files) {
       for (let index = 0; index < req.files.length; index++) {
          const element = req.files[index];
-         const pathName = `${req.protocol}://${req.get('host')}/${
-            element.path
-         }`;
+         const pathName = `${req.protocol}://${req.get('host')}/images/${element.filename}`;
          console.log(pathName);
          innerImage.push(pathName);
       }
