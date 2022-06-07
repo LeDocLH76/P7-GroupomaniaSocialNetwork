@@ -2,15 +2,27 @@ const prisma = require('../utils/db.js');
 const bcrypt = require('bcrypt');
 const fs = require('fs');
 
+// ADMIN required
 exports.getAllUsers = async (req, res) => {
-   // ADMIN required
    try {
       const users = await prisma.users.findMany({
          orderBy: {
             pseudo: 'asc',
          },
+         select: {
+            pseudo: true,
+            email: true,
+            avatar: true,
+            role: true,
+            posts: true,
+         },
       });
-      res.json(users);
+
+      if (!users) {
+         res.status(404).send("Aucun utilisateur n'à été trouvé! C'est pas possible!");
+      }
+
+      res.status(200).json(users);
    } catch (error) {
       res.status(500).send({
          message: error.message || 'Une erreur est survenue dans la recherche de users.',
@@ -25,8 +37,18 @@ exports.getOneUser = async (req, res) => {
          where: {
             id: Number(id),
          },
+         select: {
+            pseudo: true,
+            avatar: true,
+            role: true,
+            posts: true,
+         },
       });
-      res.json(user);
+      if (!user) {
+         res.status(404).send("L'utilisateur n'à pas été trouvé");
+      }
+
+      res.status(200).json(user);
    } catch (error) {
       res.status(500).send({
          message: error.message || 'Une erreur est survenue dans la recherche de user.',
@@ -115,7 +137,7 @@ exports.logUser = async (req, res) => {
       // User valide
       // Création session
       req.session.user = { id: user.id, role: user.role };
-      console.log(req.session);
+      // console.log(req.session);
       res.json(`L'utilisateur ${user.pseudo} est connecté`);
    } catch (error) {
       res.status(500).send({
@@ -195,14 +217,15 @@ exports.updateUser = async (req, res) => {
 };
 
 exports.deleteUser = async (req, res) => {
-   const { id } = req.params;
+   const userId = req.session.user.id;
+
    try {
       const user = await prisma.users.delete({
          where: {
-            id: Number(id),
+            id: Number(userId),
          },
       });
-      res.json(user);
+      res.status(201).json(`L'utilisateur ${user.pseudo} est supprimé`);
    } catch (error) {
       res.status(500).send({
          message: error.message || 'Une erreur est survenue dans la suppression de user.',

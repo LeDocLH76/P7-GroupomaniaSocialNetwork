@@ -7,8 +7,8 @@ const multer = require('../middlewares/multer.js');
 const isAdmin = require('../middlewares/isAdmin.js');
 
 const router = Router();
-// , isAdmin
-router.get('/users', auth, ctrlUser.getAllUsers);
+//
+router.get('/users', auth, isAdmin, ctrlUser.getAllUsers);
 router.get('/user/:id', auth, ctrlUser.getOneUser);
 router.get('/logUser', ctrlUser.logUser);
 router.post('/userCreate', multer.single('image'), ctrlUser.createUser);

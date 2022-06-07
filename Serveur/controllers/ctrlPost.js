@@ -7,8 +7,25 @@ exports.getAllposts = async (req, res) => {
          orderBy: {
             updatedAt: 'desc',
          },
+         select: {
+            id: true,
+            body: true,
+            picture: true,
+            updatedAt: true,
+            like: true,
+            dislike: true,
+            userId: true,
+            userLike: true,
+            userDislike: true,
+            comments: true,
+         },
       });
-      res.json(posts);
+
+      if (!posts) {
+         return res.status(404).send('Aucun post à été trouvé');
+      }
+
+      res.status(200).json(posts);
    } catch (error) {
       res.status(500).send({
          message: error.message || 'Une erreur est survenue dans la recherche de posts.',
@@ -23,8 +40,25 @@ exports.getOnepost = async (req, res) => {
          where: {
             id: Number(id),
          },
+         select: {
+            id: true,
+            body: true,
+            picture: true,
+            updatedAt: true,
+            like: true,
+            dislike: true,
+            userId: true,
+            userLike: true,
+            userDislike: true,
+            comments: true,
+         },
       });
-      res.json(post);
+
+      if (!post) {
+         return res.status(404).send("Le post n'à pas  été trouvé");
+      }
+
+      res.status(200).json(post);
    } catch (error) {
       res.status(500).send({
          message: error.message || 'Une erreur est survenue dans la recherche de post.',
@@ -41,18 +75,7 @@ exports.createpost = async (req, res) => {
    }
 
    const { id } = req.session.user;
-   console.log('userId = ', id);
-
-   //*****A supprimer */
-   // if (innerImage.length != 0) {
-   //    for (let index = 0; index < innerImage.length; index++) {
-   //       fs.unlink(innerImage[index], () => {
-   //          console.log(`Fichier ${innerImage} éffacé`);
-   //       });
-   //    }
-   // }
-   // return res.status(200).send('Données reçues');
-   //*****A supprimer */
+   // console.log('userId = ', id);
 
    try {
       const post = await prisma.posts.create({
