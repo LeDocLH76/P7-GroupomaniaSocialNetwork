@@ -106,8 +106,13 @@ exports.createUser = async (req, res) => {
             avatar: innerImage,
             password: passwordHash,
          },
+         select: {
+            pseudo: true,
+            email: true,
+            avatar: true,
+         },
       });
-      res.status(201).json(`L'utilisateur ${user.pseudo} est créé`);
+      res.status(201).json(user);
    } catch (error) {
       res.status(500).send({
          message: error.message || 'Une erreur est survenue dans la création de user.',
@@ -167,36 +172,46 @@ exports.updateUser = async (req, res) => {
    if (req.file) {
       innerImage = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
    }
-   const { email, password, pseudo } = req.body;
+   const { pseudo, email, password, oldPassword } = req.body;
    // Valider les données !!!!!!!!!!!!!!!!!!!!!!!
    // Si il manque une donnée requise
-   if (!email || !password || !pseudo) {
+   if (!pseudo || !email || !password || !oldPassword) {
       // Si il y a une image
       if (innerImage != '') {
          deleteImage(innerImage);
       }
-      return res.status(400).json('Pseudo, email, mot de passe obligatoire');
+      return res.status(400).json('Pseudo, email, mots de passe obligatoire');
    }
 
    try {
+      // Récupère l'ancien avatar et password
+      const userBd = await findOneUser(userId);
+      const oldPasswordBd = userBd.password;
+
+      // Si oldPassword pas celui enregistré sur la BD
+      if (!(await bcrypt.compare(oldPassword, oldPasswordBd))) {
+         throw new Error('Erreur de mot de passe');
+      }
+
       // Si il n'y a pas d'image
       if (innerImage == '') {
-         // Recupere le nom de l'ancienne image
-         const userBd = await findOneUser(userId);
-         console.log('ancienne image = ', userBd.avatar);
          // Extrait le nom de l'url de l'image
          const imageName = userBd.avatar.split('/images/')[1];
-         console.log('image = ', imageName);
-         // Efface l'ancienne image
-         fs.unlink(`./images/${imageName}`, () => {
-            console.log(`Fichier ${imageName} éffacé`);
-         });
-         // Si il n'y a pas d'immage, en ajouter une par défaut
+         // Si l'image enregistrée est différente de l'image par défaut
+         if (imageName != 'fakeImages/person.png') {
+            // Efface l'ancienne image
+            fs.unlink(`./images/${imageName}`, () => {
+               console.log(`Fichier ${imageName} éffacé`);
+            });
+         }
+         // Il n'y a pas d'immage, en ajoute une par défaut
          innerImage = `${req.protocol}://${req.get('host')}/images/fakeImages/person.png`;
       }
 
+      // Crytpe le nouveau mot de passe
       const passwordHash = await bcrypt.hash(password, 10);
 
+      // Met à jour le user
       const user = await prisma.users.update({
          where: {
             id: Number(userId),
@@ -207,8 +222,14 @@ exports.updateUser = async (req, res) => {
             password: passwordHash,
             avatar: innerImage,
          },
+         select: {
+            pseudo: true,
+            email: true,
+            avatar: true,
+         },
       });
-      res.status(201).json(`L'utilisateur ${user.pseudo} est modifié`);
+      // Renvoi les infos partielles de user
+      res.status(201).json(user);
    } catch (error) {
       res.status(500).send({
          message: error.message || 'Une erreur est survenue dans la modification de user.',
@@ -218,8 +239,36 @@ exports.updateUser = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
    const userId = req.session.user.id;
+   const { oldPassword } = req.body;
+   // Valider les données !!!!!!!!!!!!!!!!!!!!!!!
+   // Si il manque une donnée requise
+   if (!oldPassword) {
+      return res.status(400).json('mot de passe obligatoire');
+   }
+   console.log(oldPassword);
 
    try {
+      // Récupère l'ancien password et tableau de post
+      const userBd = await findOneUser(userId);
+      const oldPasswordBd = userBd.password;
+      console.log(oldPasswordBd);
+      const posts = userBd.posts;
+
+      // Si oldPassword pas celui enregistré sur la BD
+      if (!(await bcrypt.compare(oldPassword, oldPasswordBd))) {
+         throw new Error('Erreur de mot de passe');
+      }
+
+      // Le user à le droit de supprimer son compte,
+      // alors supprimer toutes les images de ses posts sur le serveur.
+      posts.forEach((post) => {
+         for (let index = 0; index < post.picture.length; index++) {
+            const image = post.picture[index];
+            deleteImage(image);
+         }
+      });
+
+      // Puis supprimer son compte-- user posts et comments en cascade
       const user = await prisma.users.delete({
          where: {
             id: Number(userId),
@@ -239,16 +288,17 @@ async function findOneUser(userId) {
          id: userId,
       },
       select: {
+         pseudo: true,
          avatar: true,
+         password: true,
+         posts: true,
       },
    });
 }
 
 function deleteImage(innerImage) {
-   // Efface l'image entrante du serveur
    // Extrait le nom de l'url de l'image
    imageName = innerImage.split('/images/')[1];
-   console.log('image = ', imageName);
    fs.unlink(`./images/${imageName}`, () => {
       console.log(`Fichier ${imageName} éffacé`);
    });
