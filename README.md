@@ -14,4 +14,6 @@ Installer les dépendances: npm install.
 Migrer les tables sur la base de données gmsn: npx prisma migrate dev --name migration-init.
 Remplir les champs des tables pour tester avec de fausses données: npx prisma db seed.
 Le user admin est créé lors du seed: email et password dans le .env non présent sur Git.
+En phase développement, pour voir facilement les données de la base sur chrome (ou autre) localhost:5555: npx prisma studio.
+Pour lancer le serveur: node server
 ```
