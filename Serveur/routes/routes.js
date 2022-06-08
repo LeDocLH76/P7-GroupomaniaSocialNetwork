@@ -8,7 +8,7 @@ const isAdmin = require('../middlewares/isAdmin.js');
 
 const router = Router();
 //
-router.get('/users', auth, isAdmin, ctrlUser.getAllUsers);
+router.get('/users', auth, isAdmin, ctrlUser.getAllUsers); // is admin
 router.get('/user/:id', auth, ctrlUser.getOneUser);
 router.get('/logUser', ctrlUser.logUser);
 router.post('/userCreate', multer.single('image'), ctrlUser.createUser);
@@ -22,10 +22,11 @@ router.post('/postCreate', auth, multer.array('images', 6), ctrlPost.createpost)
 router.put('/postUpdate/:id', auth, multer.array('images', 6), ctrlPost.updatepost);
 router.delete('/postDelete/:id', auth, ctrlPost.deletepost);
 
-router.get('/comments/:id', auth, ctrlComment.getAllcommentsUser);
-router.get('/comment/:id', auth, ctrlComment.getOnecommentUser);
-router.post('/commentCreate', auth, ctrlComment.createcommentUser);
-router.put('/commentUpdate/:id', auth, ctrlComment.updatecommentUser);
-router.delete('/commentDelete/:id', auth, ctrlComment.deletecommentUser);
+router.get('/comments', auth, ctrlComment.getAllcomments); // isAdmin
+router.get('/comments/:id', auth, ctrlComment.getAllcommentsUser); // isAdmin
+router.get('/comment/:id', auth, ctrlComment.getOnecomment);
+router.post('/commentCreate', auth, ctrlComment.createcomment);
+router.put('/commentUpdate/:id', auth, ctrlComment.updatecomment);
+router.delete('/commentDelete/:id', auth, ctrlComment.deletecomment);
 
 module.exports = router;

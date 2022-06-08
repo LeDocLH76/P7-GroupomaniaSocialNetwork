@@ -1,11 +1,17 @@
 const prisma = require('../utils/db.js');
 
-exports.getAllcommentsUser = async (req, res) => {
-   const { id } = req.params;
+// isAdmin require
+exports.getAllcomments = async (req, res) => {
    try {
       const comments = await prisma.comments.findMany({
-         where: {
-            userId: Number(id),
+         orderBy: {
+            updatedAt: 'desc',
+         },
+         select: {
+            body: true,
+            updatedAt: true,
+            postId: true,
+            userId: true,
          },
       });
       res.json(comments);
@@ -16,15 +22,47 @@ exports.getAllcommentsUser = async (req, res) => {
    }
 };
 
-exports.getOnecommentUser = async (req, res) => {
+// isAdmin require
+exports.getAllcommentsUser = async (req, res) => {
+   const { id } = req.params;
+   try {
+      const comments = await prisma.comments.findMany({
+         where: {
+            userId: Number(id),
+         },
+         orderBy: {
+            updatedAt: 'desc',
+         },
+         select: {
+            body: true,
+            updatedAt: true,
+            postId: true,
+            userId: true,
+         },
+      });
+      res.json(comments);
+   } catch (error) {
+      res.status(500).send({
+         message: error.message || 'Une erreur est survenue dans la recherche de comments.',
+      });
+   }
+};
+
+exports.getOnecomment = async (req, res) => {
    const { id } = req.params;
    try {
       const comment = await prisma.comments.findUnique({
          where: {
             id: Number(id),
          },
+         select: {
+            body: true,
+            updatedAt: true,
+            postId: true,
+            userId: true,
+         },
       });
-      res.json(comment);
+      res.status(200).json(comment);
    } catch (error) {
       res.status(500).send({
          message: error.message || 'Une erreur est survenue dans la recherche de comment.',
@@ -32,7 +70,7 @@ exports.getOnecommentUser = async (req, res) => {
    }
 };
 
-exports.createcommentUser = async (req, res) => {
+exports.createcomment = async (req, res) => {
    const { body, postId } = req.body;
    const userId = req.session.user.id;
 
@@ -47,6 +85,12 @@ exports.createcommentUser = async (req, res) => {
             postId: Number(postId),
             userId: Number(userId),
          },
+         select: {
+            body: true,
+            createdAt: true,
+            postId: true,
+            userId: true,
+         },
       });
       res.status(201).json(comment);
    } catch (error) {
@@ -56,7 +100,7 @@ exports.createcommentUser = async (req, res) => {
    }
 };
 
-exports.updatecommentUser = async (req, res) => {
+exports.updatecomment = async (req, res) => {
    const commentId = req.params.id;
    const { body, postId } = req.body;
 
@@ -87,6 +131,12 @@ exports.updatecommentUser = async (req, res) => {
          data: {
             body: body,
          },
+         select: {
+            body: true,
+            updatedAt: true,
+            postId: true,
+            userId: true,
+         },
       });
       res.status(201).json(comment);
    } catch (error) {
@@ -96,7 +146,7 @@ exports.updatecommentUser = async (req, res) => {
    }
 };
 
-exports.deletecommentUser = async (req, res) => {
+exports.deletecomment = async (req, res) => {
    const commentId = req.params.id;
    try {
       // Récupération du propriétaire du commentaire sur la Bd
@@ -116,7 +166,7 @@ exports.deletecommentUser = async (req, res) => {
             id: Number(commentId),
          },
       });
-      res.status(200).send('Commentaire supprimé');
+      res.status(200).send(`Commentaire ${comment.id} supprimé`);
    } catch (error) {
       res.status(500).send({
          message: error.message || 'Une erreur est survenue dans la suppression de comment.',

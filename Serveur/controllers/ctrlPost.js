@@ -68,14 +68,13 @@ exports.getOnepost = async (req, res) => {
 
 exports.createpost = async (req, res) => {
    // Récupération des données en entrée
-   let { innerImage, innerBody } = findInnerData(req);
+   const { innerImage, innerBody } = findInnerData(req);
 
    if (innerImage.length == 0 && innerBody == '') {
       return res.status(400).send('Un post ne peut pes être vide');
    }
 
-   const { id } = req.session.user;
-   // console.log('userId = ', id);
+   const userId = req.session.user.id;
 
    try {
       const post = await prisma.posts.create({
@@ -86,7 +85,12 @@ exports.createpost = async (req, res) => {
             dislike: 0,
             userLike: [],
             userDislike: [],
-            userId: Number(id),
+            userId: Number(userId),
+         },
+         select: {
+            body: true,
+            picture: true,
+            createdAt: true,
          },
       });
       res.status(201).json(post);
@@ -143,6 +147,11 @@ exports.updatepost = async (req, res) => {
             body: innerBody,
             picture: innerImage,
          },
+         select: {
+            body: true,
+            picture: true,
+            updatedAt: true,
+         },
       });
       res.status(201).send(post);
    } catch (error) {
@@ -161,7 +170,6 @@ exports.deletepost = async (req, res) => {
       const imagePostBd = dataPostBdObj.picture;
       // Récuperation du userId propriétaire du post
       const userIdPostBd = dataPostBdObj.userId;
-      // console.log('UserId sur la Bd = ', userIdPostBd, 'UserId de session = ', req.session.user.id);
       // Vérifie la propriété du post
       if (parseInt(req.session.user.id) !== userIdPostBd) {
          return res.status(401).send('Erreur user');
@@ -170,6 +178,7 @@ exports.deletepost = async (req, res) => {
       // Efface les anciennes images sur le serveur
       deleteOldPic(imagePostBd);
 
+      // Supprime le post et les comments en cascade
       await prisma.posts.delete({
          where: {
             id: Number(postId),

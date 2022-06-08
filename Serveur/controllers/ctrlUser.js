@@ -152,16 +152,14 @@ exports.logUser = async (req, res) => {
 };
 
 exports.logoutUser = (req, res) => {
-   if (req.session) {
-      const userId = req.session.user.id;
-      req.session.destroy((err) => {
-         if (err) {
-            res.status(400).send(`Logout impossible de user: ${userId}`);
-         } else {
-            res.status(200).send(`Logout OK user: ${userId}`);
-         }
-      });
-   }
+   const userId = req.session.user.id;
+   req.session.destroy((err) => {
+      if (err) {
+         res.status(400).send(`Logout impossible de user: ${userId}`);
+      } else {
+         res.status(200).send(`Logout OK user: ${userId}`);
+      }
+   });
 };
 
 exports.updateUser = async (req, res) => {
@@ -201,7 +199,7 @@ exports.updateUser = async (req, res) => {
          if (imageName != 'fakeImages/person.png') {
             // Efface l'ancienne image
             fs.unlink(`./images/${imageName}`, () => {
-               console.log(`Fichier ${imageName} éffacé`);
+               console.log(`Images ${imageName} éffacée`);
             });
          }
          // Il n'y a pas d'immage, en ajoute une par défaut
@@ -251,7 +249,6 @@ exports.deleteUser = async (req, res) => {
       // Récupère l'ancien password et tableau de post
       const userBd = await findOneUser(userId);
       const oldPasswordBd = userBd.password;
-      console.log(oldPasswordBd);
       const posts = userBd.posts;
 
       // Si oldPassword pas celui enregistré sur la BD
@@ -267,6 +264,17 @@ exports.deleteUser = async (req, res) => {
             deleteImage(image);
          }
       });
+
+      // Supprime son avatar sur le serveur
+      // Extrait le nom de l'url de l'image
+      const imageName = userBd.avatar.split('/images/')[1];
+      // Si l'image enregistrée est différente de l'image par défaut
+      if (imageName != 'fakeImages/person.png') {
+         // Efface l'ancienne image
+         fs.unlink(`./images/${imageName}`, () => {
+            console.log(`Images ${imageName} éffacée`);
+         });
+      }
 
       // Puis supprimer son compte-- user posts et comments en cascade
       const user = await prisma.users.delete({

@@ -32,6 +32,11 @@ const load = async () => {
                posts: {
                   create: {
                      body: faker.lorem.paragraphs(1),
+                     picture: [
+                        faker.image.imageUrl(640, 480, 'cat', true),
+                        faker.image.imageUrl(640, 480, 'dog', true),
+                        faker.image.imageUrl(640, 480, 'fish', true),
+                     ],
                   },
                },
             },
