@@ -58,17 +58,14 @@ exports.getOneUser = async (req, res) => {
 
 // Endpoint non protègé
 exports.createUser = async (req, res) => {
-   console.log('dans create user');
    let innerImage = '';
    // Si une image est reçue elle est enregistrée par multer dans req.file
-   // Recomposition de son nom complet et stockage dans pathName
+   // Recomposition de son nom complet et stockage dans innerImage
    if (req.file) {
-      console.log('il y a une image');
       innerImage = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
    }
 
    const { email, password, pseudo } = req.body;
-   // Valider les données !!!!!!!!!!!!!!!!!!!!!!!
    // Si il manque une donnée requise
    if (!email || !password || !pseudo) {
       // Si il y a une image
@@ -79,7 +76,6 @@ exports.createUser = async (req, res) => {
    }
 
    try {
-      console.log('dans le try');
       // L'email est-elle déja enregistrée sur la BD
       const exist = await prisma.users.count({
          where: {
@@ -87,24 +83,20 @@ exports.createUser = async (req, res) => {
          },
       }); // 0/1 - false/true
       // Si email existe rejetter la demande
-      console.log('apres user count');
       if (exist) {
-         console.log('email existe');
          // Si il y a une image
          if (innerImage != '') {
             deleteImage(innerImage);
          }
          throw new Error("L'email existe déja");
       }
-      console.log('apres le test email');
       // Crypter pw
       const passwordHash = await bcrypt.hash(password, 10);
       // Si il n'y a pas d'immage, en ajouter une par défaut
       if (innerImage == '') {
-         console.log('met un fausse image');
          innerImage = `${req.protocol}://${req.get('host')}/images/fakeImages/person.png`;
       }
-      console.log('avant user create');
+      // Créer le nouveau user
       const user = await prisma.users.create({
          data: {
             email: email,
@@ -118,11 +110,8 @@ exports.createUser = async (req, res) => {
             avatar: true,
          },
       });
-      console.log('apres user create');
-
-      return res.status(201).json(user);
+      res.status(201).json(user);
    } catch (error) {
-      console.log('dans le catch error = ', error);
       res.status(500).send({
          message: error.message || 'Une erreur est survenue dans la création de user.',
       });
