@@ -14,7 +14,7 @@ const load = async () => {
       await prisma.$queryRaw`ALTER SEQUENCE posts_id_seq RESTART WITH 1`;
       await prisma.$queryRaw`ALTER SEQUENCE comments_id_seq RESTART WITH 1`;
 
-      const passwordHash = await bcrypt.hash('$aB123', 10); // Le même mot de passe pour tous => $aB123
+      const passwordHash = await bcrypt.hash('$aB123456', 10); // Le même mot de passe pour tous => $aB123456
 
       const maxCount = 10; // Nombre d'utilisateurs et posts créés
       //Insert n x (user, post, comment)

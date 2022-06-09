@@ -1,6 +1,6 @@
 const yup = require('yup');
 
-const userSchema = yup.object({
+const userCreate = yup.object({
    pseudo: yup.string().trim().required(),
    email: yup.string().email().required(),
    password: yup
@@ -11,4 +11,4 @@ const userSchema = yup.object({
       .required(),
 });
 
-module.exports = userSchema;
+module.exports = userCreate;

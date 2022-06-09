@@ -222,16 +222,13 @@ function findInnerData(req) {
       for (let index = 0; index < req.files.length; index++) {
          const element = req.files[index];
          const pathName = `${req.protocol}://${req.get('host')}/images/${element.filename}`;
-         console.log(pathName);
          innerImage.push(pathName);
       }
    }
-   console.log('innerImage = ', innerImage);
 
    let innerBody = '';
    if (req.body.body) {
       innerBody = req.body.body;
-      console.log('Body = ', req.body.body);
    }
    return { innerImage, innerBody };
 }

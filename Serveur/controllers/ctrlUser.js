@@ -58,21 +58,14 @@ exports.getOneUser = async (req, res) => {
 
 // Endpoint non protègé
 exports.createUser = async (req, res) => {
+   const { email, password, pseudo } = req.body;
+   // Crypter pw
+   const passwordHash = await bcrypt.hash(password, 10);
    let innerImage = '';
    // Si une image est reçue elle est enregistrée par multer dans req.file
    // Recomposition de son nom complet et stockage dans innerImage
    if (req.file) {
       innerImage = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
-   }
-
-   const { email, password, pseudo } = req.body;
-   // Si il manque une donnée requise
-   if (!email || !password || !pseudo) {
-      // Si il y a une image
-      if (innerImage != '') {
-         deleteImage(innerImage);
-      }
-      return res.status(400).json('Pseudo, email, mot de passe obligatoire');
    }
 
    try {
@@ -90,8 +83,6 @@ exports.createUser = async (req, res) => {
          }
          throw new Error("L'email existe déja");
       }
-      // Crypter pw
-      const passwordHash = await bcrypt.hash(password, 10);
       // Si il n'y a pas d'immage, en ajouter une par défaut
       if (innerImage == '') {
          innerImage = `${req.protocol}://${req.get('host')}/images/fakeImages/person.png`;
@@ -121,10 +112,6 @@ exports.createUser = async (req, res) => {
 // Endpoint non protègé
 exports.logUser = async (req, res) => {
    const { email, password } = req.body;
-   // Valider les données !!!!!!!!!!!!!!!!!!!!!!!
-   if (!email || !password) {
-      return res.status(400).json('Email et mot de passe obligatoire');
-   }
 
    try {
       // Cherche un user par son email sur la bd
@@ -140,8 +127,7 @@ exports.logUser = async (req, res) => {
       // User valide
       // Création session
       req.session.user = { id: user.id, role: user.role };
-      // console.log(req.session);
-      res.json(`L'utilisateur ${user.pseudo} est connecté`);
+      res.status(200).json(`L'utilisateur ${user.pseudo} est connecté`);
    } catch (error) {
       res.status(500).send({
          message: error.message || 'Une erreur est survenue dans la création de user.',
@@ -235,22 +221,21 @@ exports.updateUser = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
    const userId = req.session.user.id;
-   const { oldPassword } = req.body;
+   const { password } = req.body;
    // Valider les données !!!!!!!!!!!!!!!!!!!!!!!
    // Si il manque une donnée requise
-   if (!oldPassword) {
+   if (!password) {
       return res.status(400).json('mot de passe obligatoire');
    }
-   console.log(oldPassword);
 
    try {
       // Récupère l'ancien password et tableau de post
       const userBd = await findOneUser(userId);
-      const oldPasswordBd = userBd.password;
-      const posts = userBd.posts;
+      const passwordBd = userBd.password;
+      const posts = userBd.posts; // []
 
       // Si oldPassword pas celui enregistré sur la BD
-      if (!(await bcrypt.compare(oldPassword, oldPasswordBd))) {
+      if (!(await bcrypt.compare(password, passwordBd))) {
          throw new Error('Erreur de mot de passe');
       }
 

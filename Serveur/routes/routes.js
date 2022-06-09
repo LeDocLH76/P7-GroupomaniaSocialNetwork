@@ -6,15 +6,17 @@ const auth = require('../middlewares/auth.js');
 const multer = require('../middlewares/multer.js');
 const isAdmin = require('../middlewares/isAdmin.js');
 const validation = require('../middlewares/validation');
-const userSchema = require('../validation/userValidation');
+const userCreate = require('../validation/userCreateValidation'); //, validation(userCreate)
+const userLogin = require('../validation/userLoginValidation'); //, validation(userLogin)
+const userUpdate = require('../validation/userUpdateValidation'); //, validation(userUpdate)
 
 const router = Router();
-//, validation(userShema)
+
 router.get('/users', auth, isAdmin, ctrlUser.getAllUsers); // is admin
 router.get('/user/:id', auth, ctrlUser.getOneUser);
-router.post('/logUser', ctrlUser.logUser);
-router.post('/userCreate', multer.single('image'), validation(userSchema), ctrlUser.createUser);
-router.put('/userUpdate', auth, multer.single('image'), ctrlUser.updateUser);
+router.post('/logUser', validation(userLogin), ctrlUser.logUser);
+router.post('/userCreate', multer.single('image'), validation(userCreate), ctrlUser.createUser);
+router.put('/userUpdate', auth, multer.single('image'), validation(userUpdate), ctrlUser.updateUser);
 router.delete('/userDelete', auth, ctrlUser.deleteUser);
 router.delete('/logoutUser', auth, ctrlUser.logoutUser);
 
