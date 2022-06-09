@@ -5,12 +5,14 @@ const ctrlPost = require('../controllers/ctrlPost.js');
 const auth = require('../middlewares/auth.js');
 const multer = require('../middlewares/multer.js');
 const isAdmin = require('../middlewares/isAdmin.js');
+const validation = require('../middlewares/validation');
+const userShema = require('../validation/userValidation');
 
 const router = Router();
-//
+//, validation(userShema)
 router.get('/users', auth, isAdmin, ctrlUser.getAllUsers); // is admin
 router.get('/user/:id', auth, ctrlUser.getOneUser);
-router.get('/logUser', ctrlUser.logUser);
+router.post('/logUser', ctrlUser.logUser);
 router.post('/userCreate', multer.single('image'), ctrlUser.createUser);
 router.put('/userUpdate', auth, multer.single('image'), ctrlUser.updateUser);
 router.delete('/userDelete', auth, ctrlUser.deleteUser);

@@ -12,7 +12,7 @@
    "author": "Denis QUEVAL",
    "license": "ISC",
    "dependencies": {
-      "@prisma/client": "^3.14.0",
+      "@prisma/client": "^3.15.0",
       "@quixo3/prisma-session-store": "^3.1.5",
       "bcrypt": "^5.0.1",
       "cors": "^2.8.5",
@@ -23,9 +23,10 @@
       "multer": "^1.4.5-lts.1",
       "nodemon": "^2.0.16",
       "pg": "^8.7.3",
-      "prisma": "^3.14.0"
+      "yup": "^0.32.11"
    },
    "devDependencies": {
-      "@faker-js/faker": "^7.1.0"
+      "@faker-js/faker": "^7.1.0",
+      "prisma": "^3.15.0"
    }
 }
