@@ -71,7 +71,7 @@ exports.createpost = async (req, res) => {
    const { innerImage, innerBody } = findInnerData(req);
 
    if (innerImage.length == 0 && innerBody == '') {
-      return res.status(400).send('Un post ne peut pes être vide');
+      return res.status(400).send('Un post ne peut pas être vide');
    }
 
    const userId = req.session.user.id;
