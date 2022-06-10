@@ -26,6 +26,7 @@ router.get('/posts', auth, ctrlPost.getAllposts);
 router.get('/post/:id', auth, ctrlPost.getOnepost);
 router.post('/postCreate', auth, multer.array('images', 6), validation(post), ctrlPost.createpost);
 router.put('/postUpdate/:id', auth, multer.array('images', 6), validation(post), ctrlPost.updatepost);
+router.put('/postLike/:id', auth, ctrlPost.likePost);
 router.delete('/postDelete/:id', auth, ctrlPost.deletepost);
 
 router.get('/comments', auth, ctrlComment.getAllcomments); // isAdmin

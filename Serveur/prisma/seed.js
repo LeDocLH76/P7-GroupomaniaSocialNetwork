@@ -68,10 +68,11 @@ const load = async () => {
       const adminPasswordHash = await bcrypt.hash(password, 10);
       await prisma.users.create({
          data: {
-            pseudo: 'Denis',
+            pseudo: 'Admin',
             email: email,
             password: adminPasswordHash,
             role: 'admin',
+            avatar: 'http://localhost:3001/images/fakeImages/boite_a_outils.jpg',
          },
       });
    } catch (error) {

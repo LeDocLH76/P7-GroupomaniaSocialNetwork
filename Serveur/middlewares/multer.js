@@ -12,15 +12,15 @@ const fileStorageEngine = multer.diskStorage({
    },
    filename: (req, file, callback) => {
       const name = file.originalname.split(' ').join('_').split('.')[0];
-      const extension = MIME_TYPES[file.mimetype];
+      const extension = file.mimetype.split('/')[1];
       callback(null, name + '--' + Date.now() + '.' + extension);
    },
 });
 
 const fileFilter = (req, file, callback) => {
    const extension = MIME_TYPES[file.mimetype];
-   if (extension != undefined) {
-      // if (file.mimetype.startWith('image')) {
+   // if (extension != undefined) {
+   if (file.mimetype.includes('image')) {
       callback(null, true);
    } else {
       callback('Seulement des images svp', false);

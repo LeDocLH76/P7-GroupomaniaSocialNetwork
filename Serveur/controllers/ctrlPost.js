@@ -91,6 +91,10 @@ exports.createpost = async (req, res) => {
             body: true,
             picture: true,
             createdAt: true,
+            like: true,
+            dislike: true,
+            userLike: true,
+            userDislike: true,
          },
       });
       res.status(201).json(post);
@@ -103,57 +107,107 @@ exports.createpost = async (req, res) => {
 
 exports.updatepost = async (req, res) => {
    const postId = req.params.id;
-   // console.log('postId = ', postId);
-
    // Récupération des données en entrée
    let { innerImage, innerBody } = findInnerData(req);
-
+   // Controle si 1 au moins est present
    if (innerImage.length == 0 && innerBody == '') {
       return res.status(400).send('Un post ne peut pes être vide');
    }
 
    try {
-      // Récuperation du tableau des images et du userId du post "retouné dans un objet"
+      // Récupération des data du post {}
       const dataPostBdObj = await findOnePost(postId);
-      // console.log('objet picture sur la Bd = ', imagePostBdObj);
-      // Récuperation du tableau des url des images
+      // Récuperation des url des images []
       const imagePostBd = dataPostBdObj.picture;
       // Récuperation du userId propriétaire du post
       const userIdPostBd = dataPostBdObj.userId;
-      // console.log('UserId sur la Bd = ', userIdPostBd, 'UserId de session = ', req.session.user.id);
       // Vérifie la propriété du post
       if (parseInt(req.session.user.id) !== userIdPostBd) {
-         // Efface images entrantes du le serveur
+         // Si pas ok éfface images entrantes du le serveur
          for (let index = 0; index < innerImage.length; index++) {
             // Extrait le nom de l'url de l'image
             const imageName = innerImage[index].split('/images/')[1];
-            // console.log('image = ', imageName);
-            fs.unlink(`./images/${imageName}`, () => {
-               // console.log(`Fichier ${imageName} éffacé`);
-            });
+            // Ajoute le nom de dossier et éfface
+            fs.unlink(`./images/${imageName}`, () => {});
          }
          return res.status(401).send('Erreur user');
       }
-
+      // Si demnde valide
       // Efface les anciennes images sur le serveur
       deleteOldPic(imagePostBd);
-
       // Enregistre les nouvelles données
-      const post = await prisma.posts.update({
-         where: {
-            id: Number(postId),
-         },
-         data: {
-            body: innerBody,
-            picture: innerImage,
-         },
-         select: {
-            body: true,
-            picture: true,
-            updatedAt: true,
-         },
-      });
+      const post = await updatePost(postId, innerBody, innerImage);
       res.status(201).send(post);
+   } catch (error) {
+      res.status(500).send({
+         message: error.message || 'Une erreur est survenue dans la modification de post.',
+      });
+   }
+};
+
+exports.likePost = async (req, res) => {
+   const userId = req.session.user.id;
+   const postId = req.params.id;
+   const userLike = req.body.like;
+   let post = {};
+
+   try {
+      // Récupération des data du post "retouné dans un objet"
+      const dataPostBdObj = await findOnePost(postId);
+      let likeBd = dataPostBdObj.like; // int
+      let dislikeBd = dataPostBdObj.dislike; // int
+      let userLikedBd = dataPostBdObj.userLike; // [userId]
+      let userDislikedBd = dataPostBdObj.userDislike; // [userId]
+
+      switch (userLike) {
+         case 1: // Like
+            console.log("J'aime !");
+            if (!userLikedBd.includes(userId) && !userDislikedBd.includes(userId)) {
+               console.log("J'ajoute le like !");
+               likeBd++;
+               userLikedBd.push(userId);
+               post = await updateLikePost(post, postId, likeBd, dislikeBd, userLikedBd, userDislikedBd);
+            }
+            break;
+
+         case 0: // Pas d'avis
+            console.log("Je n'ai pas d'avis.");
+            if (userLikedBd.includes(userId)) {
+               console.log('Je retire le like');
+               if (likeBd >= 1) {
+                  likeBd--;
+               }
+               userLikedBd = userLikedBd.filter((user) => user != userId);
+               // Enregistre les nouvelles données
+               post = await updateLikePost(post, postId, likeBd, dislikeBd, userLikedBd, userDislikedBd);
+            }
+            if (userDislikedBd.includes(userId)) {
+               console.log('Je retire le dislike');
+               if (dislikeBd >= 1) {
+                  dislikeBd--;
+               }
+               userDislikedBd = userDislikedBd.filter((user) => user != userId);
+               // Enregistre les nouvelles données
+               post = await updateLikePost(post, postId, likeBd, dislikeBd, userLikedBd, userDislikedBd);
+            }
+            break;
+
+         case -1: // Dislike
+            console.log("Je n'aime pas !");
+            if (!userLikedBd.includes(userId) && !userDislikedBd.includes(userId)) {
+               console.log("J'ajoute le dislike !");
+               dislikeBd++;
+               userDislikedBd.push(userId);
+               // Enregistre les nouvelles données
+               post = await updateLikePost(post, postId, likeBd, dislikeBd, userLikedBd, userDislikedBd);
+            }
+            break;
+
+         default:
+            console.log('Il y à une erreur !');
+            return res.status(400).json({ message: 'Il y à une erreur !' });
+      }
+      res.status(200).json(post);
    } catch (error) {
       res.status(500).send({
          message: error.message || 'Une erreur est survenue dans la modification de post.',
@@ -193,14 +247,64 @@ exports.deletepost = async (req, res) => {
    }
 };
 
+async function updatePost(postId, innerBody, innerImage) {
+   return await prisma.posts.update({
+      where: {
+         id: Number(postId),
+      },
+      data: {
+         body: innerBody,
+         picture: innerImage,
+      },
+      select: {
+         body: true,
+         picture: true,
+         createdAt: true,
+         like: true,
+         dislike: true,
+         userLike: true,
+         userDislike: true,
+      },
+   });
+}
+
+async function updateLikePost(post, postId, likeBd, dislikeBd, userLikedBd, userDislikedBd) {
+   post = await prisma.posts.update({
+      where: {
+         id: Number(postId),
+      },
+      data: {
+         like: likeBd,
+         dislike: dislikeBd,
+         userLike: userLikedBd,
+         userDislike: userDislikedBd,
+      },
+      select: {
+         body: true,
+         picture: true,
+         createdAt: true,
+         like: true,
+         dislike: true,
+         userLike: true,
+         userDislike: true,
+      },
+   });
+   return post;
+}
+
 async function findOnePost(postId) {
    return await prisma.posts.findUnique({
       where: {
          id: Number(postId),
       },
       select: {
+         body: true,
          picture: true,
          userId: true,
+         like: true,
+         dislike: true,
+         userLike: true,
+         userDislike: true,
       },
    });
 }
