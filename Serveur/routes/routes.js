@@ -11,6 +11,7 @@ const userLogin = require('../validation/userLoginValidation'); //, validation(u
 const userUpdate = require('../validation/userUpdateValidation'); //, validation(userUpdate)
 const post = require('../validation/postValidation'); //, validation(post)
 const comment = require('../validation/commentValidation'); //, validation(comment)
+const like = require('../validation/likeValidation'); //, validation(like)
 
 const router = Router();
 
@@ -26,7 +27,7 @@ router.get('/posts', auth, ctrlPost.getAllposts);
 router.get('/post/:id', auth, ctrlPost.getOnepost);
 router.post('/postCreate', auth, multer.array('images', 6), validation(post), ctrlPost.createpost);
 router.put('/postUpdate/:id', auth, multer.array('images', 6), validation(post), ctrlPost.updatepost);
-router.put('/postLike/:id', auth, ctrlPost.likePost);
+router.put('/postLike/:id', auth, validation(like), ctrlPost.likePost);
 router.delete('/postDelete/:id', auth, ctrlPost.deletepost);
 
 router.get('/comments', auth, ctrlComment.getAllcomments); // isAdmin
