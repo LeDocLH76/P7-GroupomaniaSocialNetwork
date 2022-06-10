@@ -158,7 +158,7 @@ exports.likePost = async (req, res) => {
       let dislikeBd = dataPostBdObj.dislike; // int
       let userLikedBd = dataPostBdObj.userLike; // [userId]
       let userDislikedBd = dataPostBdObj.userDislike; // [userId]
-
+      post = dataPostBdObj;
       switch (userLike) {
          case 1: // Like
             console.log("J'aime !");

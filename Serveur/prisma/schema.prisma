@@ -28,8 +28,8 @@ model posts {
   updatedAt   DateTime   @updatedAt
   like        Int        @default(0)
   dislike     Int        @default(0)
-  userLike    String[]
-  userDislike String[]
+  userLike    Int[]
+  userDislike Int[]
   users       users      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int
   comments    comments[]
