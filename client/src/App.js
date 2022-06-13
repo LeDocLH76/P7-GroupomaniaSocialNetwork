@@ -1,4 +1,4 @@
-import './App.css';
+import './styles/App.css';
 import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Signup from './pages/Signup';
@@ -11,12 +11,12 @@ function App() {
    return (
       <div className="App">
          <BrowserRouter>
-            <nav>
+            {/* <nav>
                <h1>Groupotruc</h1>
                <Link to="/">Home</Link>
                <Link to="/signup">Signup</Link>
                <Link to="/login">Login</Link>
-            </nav>
+            </nav> */}
             <Routes>
                <Route path="/" element={<Home />} />
                <Route path="/signup" element={<Signup />} />

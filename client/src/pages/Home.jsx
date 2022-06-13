@@ -1,5 +1,27 @@
-import React from 'react';
+import { Typography, Button, Stack, Grid, Container } from '@mui/material';
+import '../styles/home.css';
 
 export default function Home() {
-   return <div>Home</div>;
+   return (
+      <div className="page">
+         <Stack paddingTop={20}>
+            <div>
+               <img src="./icon.svg" alt="Logo groupomania" width="80" height="80" />
+            </div>
+            <Typography variant="h3" component="h1" mb={5} sx={{ color: 'primary.main' }}>
+               Groupomania Social Network
+            </Typography>
+         </Stack>
+         <Container maxWidth="sm">
+            <Grid container spacing={3}>
+               <Grid item xs={12} sm={6}>
+                  <Button variant="contained">S'inscrire</Button>
+               </Grid>
+               <Grid item xs={12} sm={6}>
+                  <Button variant="contained">Se connecter</Button>
+               </Grid>
+            </Grid>
+         </Container>
+      </div>
+   );
 }
