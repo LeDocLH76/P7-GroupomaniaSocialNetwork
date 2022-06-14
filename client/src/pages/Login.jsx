@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
    Stack,
    FormControl,
@@ -9,6 +10,7 @@ import {
    FormHelperText,
    Typography,
    ButtonGroup,
+   Button,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import '../styles/login.css';
@@ -81,7 +83,19 @@ export default function Login() {
                label="Password"
             />
          </FormControl>
-         <ButtonGroup></ButtonGroup>
+         <ButtonGroup>
+            <Button variant="contained">
+               <Link to="/">Acceuil</Link>
+            </Button>
+            <Button
+               variant="contained"
+               onClick={() => {
+                  alert('clicked');
+               }}
+            >
+               Valider
+            </Button>
+         </ButtonGroup>
       </div>
    );
 }
