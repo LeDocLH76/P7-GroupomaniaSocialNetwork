@@ -20,9 +20,12 @@ function App() {
             </nav> */}
             <Routes>
                <Route path="/" element={<Home />} />
-               <Route path="/signup" element={<Signup />} />
+               <Route path="/signup" element={<Signup isAuth={isAuth} setIsAuth={setIsAuth} />} />
                <Route path="/login" element={<Login isAuth={isAuth} setIsAuth={setIsAuth} />} />
-               <Route path="/main" element={isAuth ? <Main /> : <Navigate to="/login" />} />
+               <Route
+                  path="/main"
+                  element={isAuth ? <Main isAuth={isAuth} setIsAuth={setIsAuth} /> : <Navigate to="/login" />}
+               />
                <Route path="/*" element={<Navigate to="/" />} />
             </Routes>
          </BrowserRouter>

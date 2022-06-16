@@ -3,6 +3,7 @@ import {
    AlertTitle,
    Box,
    Button,
+   ButtonGroup,
    Container,
    CssBaseline,
    Grid,
@@ -10,12 +11,14 @@ import {
    TextField,
    Typography,
 } from '@mui/material';
-import { display } from '@mui/system';
 import axios from 'axios';
 import React from 'react';
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-export default function Signup() {
+export default function Signup({ setIsAuth }) {
+   const navigate = useNavigate();
+
    const [emailExist, setEmailExist] = useState(false);
    const handleSubmit = async (event) => {
       event.preventDefault();
@@ -40,6 +43,8 @@ export default function Signup() {
             headers: { 'Content-Type': 'multipart/form-data' },
             withCredentials: true,
          });
+         setIsAuth(true);
+         navigate('/main');
       } catch (error) {
          if (error.code === 'ERR_BAD_RESPONSE') {
             console.log(error.response.data.message);
@@ -109,10 +114,14 @@ export default function Signup() {
                      Cette adresse email existe déja
                   </Alert>
                ) : null}
-
-               <Button type="submit" variant="contained" sx={{ mt: 3, mb: 3 }}>
-                  Enregistrer
-               </Button>
+               <ButtonGroup sx={{ mt: 3, mb: 3 }}>
+                  <Button variant="contained">
+                     <Link to="/">Acceuil</Link>
+                  </Button>
+                  <Button type="submit" variant="contained">
+                     Enregistrer
+                  </Button>
+               </ButtonGroup>
             </Box>
          </Box>
       </Container>
