@@ -11,6 +11,6 @@ const corsOptions = {
          callback(new Error('Erreur CORS -- DQ'));
       }
    },
-   credential: true,
+   credentials: true,
 };
 module.exports = cors(corsOptions);

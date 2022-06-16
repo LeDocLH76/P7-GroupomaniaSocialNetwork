@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 import {
    Stack,
    FormControl,
@@ -15,7 +17,12 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import '../styles/login.css';
 
-export default function Login() {
+export default function Login(props) {
+   const navigate = useNavigate();
+   const { setIsAuth } = props;
+   // console.log('props = ', props);
+   // console.log('isAuth = ', isAuth);
+   // console.log('setIsAuth = ', setIsAuth);
    const [values, setValues] = useState({
       password: '',
       showPassword: false,
@@ -38,8 +45,32 @@ export default function Login() {
       event.preventDefault();
    };
 
+   const handleLogin = async (setIsAuth) => {
+      console.log(values.email, values.password);
+      try {
+         const reponse = await axios.post(
+            'http://localhost:3001/api/logUser',
+            {
+               email: values.email,
+               password: values.password,
+            },
+            { withCredentials: true }
+         );
+         // console.log(reponse.data);
+         setIsAuth(true);
+         navigate('/main');
+      } catch (error) {
+         if (error.code === 'ERR_BAD_RESPONSE') {
+            console.log(error.response.data.message);
+         } else {
+            console.log(error.response.data.error.message);
+         }
+         console.log(error);
+      }
+   };
+
    return (
-      <div>
+      <div className="page">
          <Stack paddingTop={20}>
             <div>
                <img src="./icon.svg" alt="Logo groupomania" width="80" height="80" />
@@ -87,12 +118,7 @@ export default function Login() {
             <Button variant="contained">
                <Link to="/">Acceuil</Link>
             </Button>
-            <Button
-               variant="contained"
-               onClick={() => {
-                  alert('clicked');
-               }}
-            >
+            <Button variant="contained" onClick={() => handleLogin(setIsAuth)}>
                Valider
             </Button>
          </ButtonGroup>

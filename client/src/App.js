@@ -7,7 +7,8 @@ import Main from './pages/Main';
 import { useState } from 'react';
 
 function App() {
-   const [isAuth] = useState(false);
+   const [isAuth, setIsAuth] = useState(false);
+
    return (
       <div className="App">
          <BrowserRouter>
@@ -20,7 +21,7 @@ function App() {
             <Routes>
                <Route path="/" element={<Home />} />
                <Route path="/signup" element={<Signup />} />
-               <Route path="/login" element={<Login />} />
+               <Route path="/login" element={<Login isAuth={isAuth} setIsAuth={setIsAuth} />} />
                <Route path="/main" element={isAuth ? <Main /> : <Navigate to="/login" />} />
                <Route path="/*" element={<Navigate to="/" />} />
             </Routes>
