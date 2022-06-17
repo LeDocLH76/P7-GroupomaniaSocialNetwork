@@ -10,13 +10,31 @@ import {
    Container,
    CssBaseline,
    Grid,
-   IconButton,
    Typography,
 } from '@mui/material';
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Main({ isAuth, setIsAuth }) {
+   useEffect(() => {
+      console.log('Coucou une seule fois');
+      const posts = async () => {
+         try {
+            const reponse = await axios.get('http://localhost:3001/api/posts');
+            console.log('reponse = ', reponse);
+         } catch (error) {
+            if (error.code === 'ERR_BAD_RESPONSE') {
+               console.log(error.response.data.message);
+            } else {
+               console.log(error.response.data.error.message);
+            }
+            console.log(error);
+         }
+      };
+      posts();
+   }, []);
+
    return (
       <Container maxWidth="lg">
          <CssBaseline />
@@ -32,7 +50,7 @@ export default function Main({ isAuth, setIsAuth }) {
             </Typography>
             {/* ************************** */}
             <Grid container spacing={3}>
-               <Grid item>
+               <Grid item xs={12} sm={6} md={4} lg={3}>
                   <Card sx={{ maxWidth: 345 }}>
                      <CardHeader
                         avatar={<Avatar aria-label="recipe">R</Avatar>}
@@ -48,7 +66,7 @@ export default function Main({ isAuth, setIsAuth }) {
                      </CardContent>
                   </Card>
                </Grid>
-               <Grid item>
+               <Grid item xs={12} sm={6} md={4} lg={3}>
                   <Card sx={{ maxWidth: 345 }}>
                      <CardHeader
                         avatar={<Avatar aria-label="recipe">R</Avatar>}
@@ -64,7 +82,7 @@ export default function Main({ isAuth, setIsAuth }) {
                      </CardContent>
                   </Card>
                </Grid>
-               <Grid item>
+               <Grid item xs={12} sm={6} md={4} lg={3}>
                   <Card sx={{ maxWidth: 345 }}>
                      <CardHeader
                         avatar={<Avatar aria-label="recipe">R</Avatar>}
@@ -80,7 +98,7 @@ export default function Main({ isAuth, setIsAuth }) {
                      </CardContent>
                   </Card>
                </Grid>
-               <Grid item>
+               <Grid item xs={12} sm={6} md={4} lg={3}>
                   <Card sx={{ maxWidth: 345 }}>
                      <CardHeader
                         avatar={<Avatar aria-label="recipe">R</Avatar>}
