@@ -13,22 +13,29 @@ import {
    Typography,
 } from '@mui/material';
 import axios from 'axios';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Main({ isAuth, setIsAuth }) {
+   const [posts, setPosts] = useState([]);
+
    useEffect(() => {
-      console.log('Coucou une seule fois');
       const posts = async () => {
          try {
-            const reponse = await axios.get('http://localhost:3001/api/posts');
-            console.log('reponse = ', reponse);
+            const reponse = await axios({
+               method: 'get',
+               url: 'http://localhost:3001/api/posts',
+               withCredentials: true,
+            });
+
+            console.log('reponse.data = ', reponse.data);
+            setPosts(reponse.data);
          } catch (error) {
-            if (error.code === 'ERR_BAD_RESPONSE') {
-               console.log(error.response.data.message);
-            } else {
-               console.log(error.response.data.error.message);
-            }
+            // if (error.code === 'ERR_BAD_RESPONSE') {
+            //    console.log(error.response.data.message);
+            // } else {
+            //    console.log(error.response.data.error.message);
+            // }
             console.log(error);
          }
       };
@@ -50,70 +57,32 @@ export default function Main({ isAuth, setIsAuth }) {
             </Typography>
             {/* ************************** */}
             <Grid container spacing={3}>
-               <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <Card sx={{ maxWidth: 345 }}>
-                     <CardHeader
-                        avatar={<Avatar aria-label="recipe">R</Avatar>}
-                        title="Shrimp and Chorizo Paella"
-                        subheader="September 14, 2016"
-                     />
-                     <CardMedia component="img" height="194" image=".\icon-above-font.png" alt="Paella dish" />
-                     <CardContent>
-                        <Typography variant="body2" color="text.secondary">
-                           This impressive paella is a perfect party dish and a fun meal to cook together with your
-                           guests. Add 1 cup of frozen peas along with the mussels, if you like.
-                        </Typography>
-                     </CardContent>
-                  </Card>
-               </Grid>
-               <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <Card sx={{ maxWidth: 345 }}>
-                     <CardHeader
-                        avatar={<Avatar aria-label="recipe">R</Avatar>}
-                        title="Shrimp and Chorizo Paella"
-                        subheader="September 14, 2016"
-                     />
-                     <CardMedia component="img" height="194" image=".\icon-above-font.png" alt="Paella dish" />
-                     <CardContent>
-                        <Typography variant="body2" color="text.secondary">
-                           This impressive paella is a perfect party dish and a fun meal to cook together with your
-                           guests. Add 1 cup of frozen peas along with the mussels, if you like.
-                        </Typography>
-                     </CardContent>
-                  </Card>
-               </Grid>
-               <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <Card sx={{ maxWidth: 345 }}>
-                     <CardHeader
-                        avatar={<Avatar aria-label="recipe">R</Avatar>}
-                        title="Shrimp and Chorizo Paella"
-                        subheader="September 14, 2016"
-                     />
-                     <CardMedia component="img" height="194" image=".\icon-above-font.png" alt="Paella dish" />
-                     <CardContent>
-                        <Typography variant="body2" color="text.secondary">
-                           This impressive paella is a perfect party dish and a fun meal to cook together with your
-                           guests. Add 1 cup of frozen peas along with the mussels, if you like.
-                        </Typography>
-                     </CardContent>
-                  </Card>
-               </Grid>
-               <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <Card sx={{ maxWidth: 345 }}>
-                     <CardHeader
-                        avatar={<Avatar aria-label="recipe">R</Avatar>}
-                        title="Shrimp and Chorizo Paella"
-                        subheader="September 14, 2016"
-                     />
-                     <CardMedia component="img" height="194" image=".\icon-above-font.png" alt="Paella dish" />
-                     <CardContent>
-                        <Typography variant="body2" color="text.secondary">
-                           This impressive paella is a perfect party dish and a fun meal to cook together with your
-                           guests. Add 1 cup of frozen peas along with the mussels, if you like.
-                        </Typography>
-                     </CardContent>
-                  </Card>
-               </Grid>
+               {posts.map((post) => (
+                  <Grid item xs={12} sm={6} md={4} lg={3} key={post.id}>
+                     <Card sx={{ maxWidth: 345 }}>
+                        <CardHeader
+                           avatar={<Avatar aria-label="recipe">R</Avatar>}
+                           title={`Posté par ${post.userId}`}
+                           subheader={post.updatedAt}
+                        />
+                        {post.picture.map((image, i) => (
+                           <CardMedia
+                              component="img"
+                              height="194"
+                              image={image}
+                              alt={`image ${i + 1} du post`}
+                              key={i}
+                           />
+                        ))}
+
+                        <CardContent>
+                           <Typography variant="body2" color="text.secondary">
+                              {post.body}
+                           </Typography>
+                        </CardContent>
+                     </Card>
+                  </Grid>
+               ))}
             </Grid>
 
             {/* ************************** */}
