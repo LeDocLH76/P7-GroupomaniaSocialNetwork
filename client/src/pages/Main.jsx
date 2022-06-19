@@ -1,20 +1,9 @@
-import {
-   Avatar,
-   Box,
-   Button,
-   ButtonGroup,
-   Card,
-   CardContent,
-   CardHeader,
-   CardMedia,
-   Container,
-   CssBaseline,
-   Grid,
-   Typography,
-} from '@mui/material';
+import { Box, Button, ButtonGroup, Container, CssBaseline, Grid, Typography } from '@mui/material';
+
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Post from '../components/Post';
 
 export default function Main({ isAuth, setIsAuth }) {
    const [posts, setPosts] = useState([]);
@@ -58,30 +47,7 @@ export default function Main({ isAuth, setIsAuth }) {
             {/* ************************** */}
             <Grid container spacing={3}>
                {posts.map((post) => (
-                  <Grid item xs={12} sm={6} md={4} lg={3} key={post.id}>
-                     <Card sx={{ maxWidth: 345 }}>
-                        <CardHeader
-                           avatar={<Avatar aria-label="recipe">R</Avatar>}
-                           title={`Posté par ${post.userId}`}
-                           subheader={post.updatedAt}
-                        />
-                        {post.picture.map((image, i) => (
-                           <CardMedia
-                              component="img"
-                              height="194"
-                              image={image}
-                              alt={`image ${i + 1} du post`}
-                              key={i}
-                           />
-                        ))}
-
-                        <CardContent>
-                           <Typography variant="body2" color="text.secondary">
-                              {post.body}
-                           </Typography>
-                        </CardContent>
-                     </Card>
-                  </Grid>
+                  <Post post={post} />
                ))}
             </Grid>
 
