@@ -14,29 +14,75 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { useState } from 'react';
 
-function Post({ post }) {
-   const date = new Date(post.updatedAt);
-   // userId?
-   // userId dans post.userLike?
-   // userId dans post.userDislike?
-   // si userId dans post.userLike setLike = true
-   // si userId dans post.userDislike setDislike = true
-   // !! like et dislike pas == true les deux !!
+function Post({ post, userId }) {
+   let userIncludeLike = false;
+   let userIncludeDislike = false;
+   if (post.userLike.includes(userId)) {
+      // si userId dans post.userLike setLike = true
+      userIncludeLike = true;
+   }
+   if (post.userDislike.includes(userId)) {
+      // si userId dans post.userDislike setDislike = true
+      userIncludeDislike = true;
+   }
+   console.log(post.userLike, userId, userIncludeLike, userIncludeDislike);
 
-   const [like, setLike] = useState(false);
-   const [dislike, setDislike] = useState(false);
+   const [like, setLike] = useState(userIncludeLike);
+   const [dislike, setDislike] = useState(userIncludeDislike);
+   const date = new Date(post.updatedAt);
 
    const handleClickLike = () => {
       // si dislike = true => ne fait rien
-      // si like = true => post.like -= et retirer userId de post.userLike (vérifier l'état avant!!)
-      // si like = false => post.like += et ajouter userId dans post.userLike (vérifier l'état avant!!)
-      // enregister le post
-      setLike(!like);
+      if (dislike !== true) {
+         // si like = true => post.like -= et retirer userId de post.userLike
+         if (like === true) {
+            if (post.like > 0) {
+               // post.like --
+               console.log('post.like --');
+            }
+            // post.userLike = post.userLike.filter(!userId)
+            console.log('post.userLike -user');
+            // enregister le post
+            setLike(!like);
+            return;
+         }
+         // si like = false => post.like += et ajouter userId dans post.userLike
+         if (like === false) {
+            // post.like ++
+            console.log('post.like ++');
+            // post.userLike.push(userId)
+            console.log('post.userLike +user');
+            // enregister le post
+            setLike(!like);
+         }
+      }
    };
 
    const handleClickDislike = () => {
       // si like = true => ne fait rien
-      setDislike(!dislike);
+      if (like !== true) {
+         // si dislike = true => post.dislike -= et retirer userId de post.userDislike
+         if (dislike === true) {
+            if (post.dislike > 0) {
+               // post.dislike --
+               console.log('post.dislike --');
+            }
+            // post.userDislike = post.userdislike.filter(!userId)
+            console.log('post.userDislike -user');
+            // enregister le post
+            setDislike(!dislike);
+            return;
+         }
+         // si dislike = false => post.dislike += et ajouter userId dans post.userDislike
+         if (dislike === false) {
+            // post.dislike ++
+            console.log('post.dislike ++');
+            // post.userdislike.push(userId)
+            console.log('post.userDislike +user');
+            // enregister le post
+            setDislike(!dislike);
+         }
+      }
    };
 
    return (

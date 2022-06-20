@@ -2,14 +2,15 @@ import { Box, Button, ButtonGroup, Container, CssBaseline, Grid, Typography } fr
 
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Post from '../components/Post';
 
 export default function Main({ isAuth, setIsAuth, userId, userAvatar }) {
    const [posts, setPosts] = useState([]);
-   console.log('isAuth = ', isAuth);
-   console.log('userId = ', userId);
-   console.log('userAvatar = ', userAvatar);
+   const navigate = useNavigate();
+   // console.log('isAuth = ', isAuth);
+   // console.log('userId = ', userId);
+   // console.log('userAvatar = ', userAvatar);
 
    useEffect(() => {
       const posts = async () => {
@@ -23,16 +24,18 @@ export default function Main({ isAuth, setIsAuth, userId, userAvatar }) {
             console.log('reponse.data = ', reponse.data);
             setPosts(reponse.data);
          } catch (error) {
-            // if (error.code === 'ERR_BAD_RESPONSE') {
-            //    console.log(error.response.data.message);
-            // } else {
+            if (error.response.status === 401) {
+               console.log(error.response.statusText);
+               navigate('/login');
+            }
+            // else {
             //    console.log(error.response.data.error.message);
             // }
             console.log(error);
          }
       };
       posts();
-   }, []);
+   }, [navigate]);
 
    return (
       <Container maxWidth="lg">
@@ -50,7 +53,7 @@ export default function Main({ isAuth, setIsAuth, userId, userAvatar }) {
             {/* ************************** */}
             <Grid container spacing={3}>
                {posts.map((post) => (
-                  <Post post={post} key={post.id} />
+                  <Post post={post} userId={userId} key={post.id} />
                ))}
             </Grid>
 
