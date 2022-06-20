@@ -28,13 +28,32 @@ function Post({ post, userId }) {
       // si userId dans post.userDislike setDislike = true
       userIncludeDislike = true;
    }
-   console.log(post.userLike, post.userDislike, userId, userIncludeLike, userIncludeDislike);
+   console.log(post.userLike, post.userDislike, post.userId);
 
    const [like, setLike] = useState(userIncludeLike);
    const [dislike, setDislike] = useState(userIncludeDislike);
    const [badgeLike, setBadgeLike] = useState(badgeContentLike);
    const [badgeDislike, setBadgeDislike] = useState(badgeContentDislike);
+   const [postUserAvatar, setPostUserAvatar] = useState(null);
+   const [postUserPseudo, setPostUserPseudo] = useState('');
    const date = new Date(post.updatedAt);
+
+   // Get info user
+   async function getUser(post) {
+      try {
+         const response = await axios({
+            method: 'get',
+            url: `http://localhost:3001/api/user/${post.userId}`,
+            withCredentials: true,
+         });
+         // console.log('reponse.data = ', response.data);
+         setPostUserPseudo(response.data.pseudo);
+         setPostUserAvatar(response.data.avatar);
+      } catch (error) {
+         console.log(error);
+      }
+   }
+   getUser(post);
 
    const handleClickLike = async () => {
       // si dislike = true => ne fait rien
@@ -91,8 +110,8 @@ function Post({ post, userId }) {
       <Grid item xs={12} sm={6} md={4} lg={3}>
          <Card sx={{ maxWidth: 345 }}>
             <CardHeader
-               avatar={<Avatar aria-label="recipe">R</Avatar>}
-               title={`Posté par ${post.userId}`}
+               avatar={<Avatar alt="avatar" src={postUserAvatar}></Avatar>}
+               title={`Posté par ${postUserPseudo}`}
                subheader={date.toLocaleString()}
             />
             {post.picture.map((image, i) => (
@@ -165,13 +184,15 @@ async function updateDB(post, param) {
          { withCredentials: true }
       );
       // console.log(response.data);
-      return response;
+      return response.data;
    } catch (error) {
-      if (error.code === 'ERR_BAD_RESPONSE') {
-         console.log(error.response.data.message);
-      } else {
-         console.log(error.response.data.error.message);
+      if (error.response.status === 401) {
+         console.log(error.response.statusText);
+         // navigate('/login');
       }
+      // else {
+      //    console.log(error.response.data.error.message);
+      // }
       console.log(error);
    }
 }
