@@ -8,6 +8,8 @@ import { useState } from 'react';
 
 function App() {
    const [isAuth, setIsAuth] = useState(false);
+   const [userId, setUserId] = useState(0);
+   const [userAvatar, setUserAvatar] = useState('');
 
    return (
       <div className="App">
@@ -20,11 +22,48 @@ function App() {
             </nav> */}
             <Routes>
                <Route path="/" element={<Home />} />
-               <Route path="/signup" element={<Signup isAuth={isAuth} setIsAuth={setIsAuth} />} />
-               <Route path="/login" element={<Login isAuth={isAuth} setIsAuth={setIsAuth} />} />
+               <Route
+                  path="/signup"
+                  element={
+                     <Signup
+                        isAuth={isAuth}
+                        setIsAuth={setIsAuth}
+                        userId={userId}
+                        setUserId={setUserId}
+                        userAvatar={userAvatar}
+                        setUserAvatar={setUserAvatar}
+                     />
+                  }
+               />
+               <Route
+                  path="/login"
+                  element={
+                     <Login
+                        isAuth={isAuth}
+                        setIsAuth={setIsAuth}
+                        userId={userId}
+                        setUserId={setUserId}
+                        userAvatar={userAvatar}
+                        setUserAvatar={setUserAvatar}
+                     />
+                  }
+               />
                <Route
                   path="/main"
-                  element={isAuth ? <Main isAuth={isAuth} setIsAuth={setIsAuth} /> : <Navigate to="/login" />}
+                  element={
+                     isAuth ? (
+                        <Main
+                           isAuth={isAuth}
+                           setIsAuth={setIsAuth}
+                           userId={userId}
+                           setUserId={setUserId}
+                           userAvatar={userAvatar}
+                           setUserAvatar={setUserAvatar}
+                        />
+                     ) : (
+                        <Navigate to="/login" />
+                     )
+                  }
                />
                <Route path="/*" element={<Navigate to="/" />} />
             </Routes>

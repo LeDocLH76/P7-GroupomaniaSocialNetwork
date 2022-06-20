@@ -17,9 +17,8 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import '../styles/login.css';
 
-export default function Login(props) {
+export default function Login({ setIsAuth, setUserId, setUserAvatar }) {
    const navigate = useNavigate();
-   const { setIsAuth } = props;
    // console.log('props = ', props);
    // console.log('isAuth = ', isAuth);
    // console.log('setIsAuth = ', setIsAuth);
@@ -55,7 +54,10 @@ export default function Login(props) {
             },
             { withCredentials: true }
          );
-         // console.log(reponse.data);
+         console.log(reponse.data);
+
+         setUserId(reponse.data.id);
+         setUserAvatar(reponse.data.avatar);
          setIsAuth(true);
          navigate('/main');
       } catch (error) {

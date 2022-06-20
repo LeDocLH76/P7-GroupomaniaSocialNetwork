@@ -5,8 +5,11 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Post from '../components/Post';
 
-export default function Main({ isAuth, setIsAuth }) {
+export default function Main({ isAuth, setIsAuth, userId, userAvatar }) {
    const [posts, setPosts] = useState([]);
+   console.log('isAuth = ', isAuth);
+   console.log('userId = ', userId);
+   console.log('userAvatar = ', userAvatar);
 
    useEffect(() => {
       const posts = async () => {
@@ -47,7 +50,7 @@ export default function Main({ isAuth, setIsAuth }) {
             {/* ************************** */}
             <Grid container spacing={3}>
                {posts.map((post) => (
-                  <Post post={post} />
+                  <Post post={post} key={post.id} />
                ))}
             </Grid>
 

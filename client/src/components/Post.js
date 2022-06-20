@@ -40,7 +40,7 @@ function Post({ post }) {
    };
 
    return (
-      <Grid item xs={12} sm={6} md={4} lg={3} key={post.id}>
+      <Grid item xs={12} sm={6} md={4} lg={3}>
          <Card sx={{ maxWidth: 345 }}>
             <CardHeader
                avatar={<Avatar aria-label="recipe">R</Avatar>}
