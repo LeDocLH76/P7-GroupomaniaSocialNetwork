@@ -13,6 +13,7 @@ import {
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { useState } from 'react';
+import axios from 'axios';
 
 function Post({ post, userId }) {
    let userIncludeLike = false;
@@ -31,55 +32,47 @@ function Post({ post, userId }) {
    const [dislike, setDislike] = useState(userIncludeDislike);
    const date = new Date(post.updatedAt);
 
-   const handleClickLike = () => {
+   const handleClickLike = async () => {
       // si dislike = true => ne fait rien
       if (dislike !== true) {
          // si like = true => post.like -= et retirer userId de post.userLike
          if (like === true) {
-            if (post.like > 0) {
-               // post.like --
-               console.log('post.like --');
-            }
-            // post.userLike = post.userLike.filter(!userId)
-            console.log('post.userLike -user');
-            // enregister le post
+            console.log('post.like -- post.userLike -user');
+            // retirer le like 0 => BD
+            const param = 0;
+            await updateDB(post, param);
             setLike(!like);
             return;
          }
          // si like = false => post.like += et ajouter userId dans post.userLike
          if (like === false) {
-            // post.like ++
-            console.log('post.like ++');
-            // post.userLike.push(userId)
-            console.log('post.userLike +user');
-            // enregister le post
+            console.log('post.like ++ post.userLike +user');
+            // ajouter le like 1 => BD
+            const param = 1;
+            await updateDB(post, param);
             setLike(!like);
          }
       }
    };
 
-   const handleClickDislike = () => {
+   const handleClickDislike = async () => {
       // si like = true => ne fait rien
       if (like !== true) {
          // si dislike = true => post.dislike -= et retirer userId de post.userDislike
          if (dislike === true) {
-            if (post.dislike > 0) {
-               // post.dislike --
-               console.log('post.dislike --');
-            }
-            // post.userDislike = post.userdislike.filter(!userId)
-            console.log('post.userDislike -user');
-            // enregister le post
+            console.log('post.dislike -- post.userDislike -user');
+            // retirer le dislike 0 => BD
+            const param = 0;
+            await updateDB(post, param);
             setDislike(!dislike);
             return;
          }
          // si dislike = false => post.dislike += et ajouter userId dans post.userDislike
          if (dislike === false) {
-            // post.dislike ++
-            console.log('post.dislike ++');
-            // post.userdislike.push(userId)
-            console.log('post.userDislike +user');
-            // enregister le post
+            console.log('post.dislike ++ post.userDislike +user');
+            // ajouter le dislike -1 => BD
+            const param = -1;
+            await updateDB(post, param);
             setDislike(!dislike);
          }
       }
@@ -152,3 +145,23 @@ function Post({ post, userId }) {
 }
 
 export default Post;
+
+async function updateDB(post, param) {
+   try {
+      const reponse = await axios.put(
+         `http://localhost:3001/api/postLike/${post.id}`,
+         {
+            like: param,
+         },
+         { withCredentials: true }
+      );
+      console.log(reponse.data);
+   } catch (error) {
+      if (error.code === 'ERR_BAD_RESPONSE') {
+         console.log(error.response.data.message);
+      } else {
+         console.log(error.response.data.error.message);
+      }
+      console.log(error);
+   }
+}
