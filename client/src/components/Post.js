@@ -18,6 +18,8 @@ import axios from 'axios';
 function Post({ post, userId }) {
    let userIncludeLike = false;
    let userIncludeDislike = false;
+   let badgeContentLike = post.like;
+   let badgeContentDislike = post.dislike;
    if (post.userLike.includes(userId)) {
       // si userId dans post.userLike setLike = true
       userIncludeLike = true;
@@ -26,10 +28,12 @@ function Post({ post, userId }) {
       // si userId dans post.userDislike setDislike = true
       userIncludeDislike = true;
    }
-   console.log(post.userLike, userId, userIncludeLike, userIncludeDislike);
+   console.log(post.userLike, post.userDislike, userId, userIncludeLike, userIncludeDislike);
 
    const [like, setLike] = useState(userIncludeLike);
    const [dislike, setDislike] = useState(userIncludeDislike);
+   const [badgeLike, setBadgeLike] = useState(badgeContentLike);
+   const [badgeDislike, setBadgeDislike] = useState(badgeContentDislike);
    const date = new Date(post.updatedAt);
 
    const handleClickLike = async () => {
@@ -40,8 +44,9 @@ function Post({ post, userId }) {
             console.log('post.like -- post.userLike -user');
             // retirer le like 0 => BD
             const param = 0;
-            await updateDB(post, param);
+            const response = await updateDB(post, param);
             setLike(!like);
+            setBadgeLike(response.data.like);
             return;
          }
          // si like = false => post.like += et ajouter userId dans post.userLike
@@ -49,8 +54,9 @@ function Post({ post, userId }) {
             console.log('post.like ++ post.userLike +user');
             // ajouter le like 1 => BD
             const param = 1;
-            await updateDB(post, param);
+            const response = await updateDB(post, param);
             setLike(!like);
+            setBadgeLike(response.data.like);
          }
       }
    };
@@ -63,8 +69,10 @@ function Post({ post, userId }) {
             console.log('post.dislike -- post.userDislike -user');
             // retirer le dislike 0 => BD
             const param = 0;
-            await updateDB(post, param);
+            const response = await updateDB(post, param);
             setDislike(!dislike);
+            setBadgeDislike(response.data.dislike);
+
             return;
          }
          // si dislike = false => post.dislike += et ajouter userId dans post.userDislike
@@ -72,8 +80,9 @@ function Post({ post, userId }) {
             console.log('post.dislike ++ post.userDislike +user');
             // ajouter le dislike -1 => BD
             const param = -1;
-            await updateDB(post, param);
+            const response = await updateDB(post, param);
             setDislike(!dislike);
+            setBadgeDislike(response.data.dislike);
          }
       }
    };
@@ -98,7 +107,7 @@ function Post({ post, userId }) {
 
             <CardActions disableSpacing>
                <Badge
-                  badgeContent={post.like}
+                  badgeContent={badgeLike}
                   color="secondary"
                   showZero
                   overlap="circular"
@@ -113,7 +122,7 @@ function Post({ post, userId }) {
                </Badge>
 
                <Badge
-                  badgeContent={post.dislike}
+                  badgeContent={badgeDislike}
                   color="secondary"
                   showZero
                   overlap="circular"
@@ -148,14 +157,15 @@ export default Post;
 
 async function updateDB(post, param) {
    try {
-      const reponse = await axios.put(
+      const response = await axios.put(
          `http://localhost:3001/api/postLike/${post.id}`,
          {
             like: param,
          },
          { withCredentials: true }
       );
-      console.log(reponse.data);
+      // console.log(response.data);
+      return response;
    } catch (error) {
       if (error.code === 'ERR_BAD_RESPONSE') {
          console.log(error.response.data.message);
