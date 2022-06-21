@@ -50,6 +50,15 @@ export default function Main({ isAuth, setIsAuth, userId, userAvatar }) {
             <Typography variant="h6" component="h2">
                Les dernières publications
             </Typography>
+            <ButtonGroup sx={{ mt: 3, mb: 3 }}>
+               <Button variant="contained">
+                  <Link to="/">Acceuil</Link>
+               </Button>
+               <Button variant="contained">
+                  <Link to="/postCreate">Publier</Link>
+               </Button>
+            </ButtonGroup>
+
             {/* ************************** */}
             <Grid container spacing={3}>
                {posts.map((post) => (
@@ -58,12 +67,6 @@ export default function Main({ isAuth, setIsAuth, userId, userAvatar }) {
             </Grid>
 
             {/* ************************** */}
-            <ButtonGroup sx={{ mt: 3, mb: 3 }}>
-               <Button variant="contained">
-                  <Link to="/">Acceuil</Link>
-               </Button>
-               <Button variant="contained">Ne fait rien</Button>
-            </ButtonGroup>
          </Box>
       </Container>
    );

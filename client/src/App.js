@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Main from './pages/Main';
+import PostCreate from './pages/PostCreate';
 import { useState } from 'react';
 
 function App() {
@@ -53,6 +54,23 @@ function App() {
                   element={
                      isAuth ? (
                         <Main
+                           isAuth={isAuth}
+                           setIsAuth={setIsAuth}
+                           userId={userId}
+                           setUserId={setUserId}
+                           userAvatar={userAvatar}
+                           setUserAvatar={setUserAvatar}
+                        />
+                     ) : (
+                        <Navigate to="/login" />
+                     )
+                  }
+               />
+               <Route
+                  path="/postCreate"
+                  element={
+                     isAuth ? (
+                        <PostCreate
                            isAuth={isAuth}
                            setIsAuth={setIsAuth}
                            userId={userId}

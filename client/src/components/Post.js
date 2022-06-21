@@ -116,8 +116,6 @@ function Post({ post, userId, posts, setPosts }) {
    const handleClickDeletePost = async () => {
       console.log('Delete button pressed');
       await deletePost(post, navigate, posts, setPosts);
-      // console.log(posts);
-      // navigate('/main');
    };
 
    return (
