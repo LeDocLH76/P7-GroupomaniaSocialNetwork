@@ -12,10 +12,13 @@ import {
 } from '@mui/material';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-function Post({ post, userId }) {
+function Post({ post, userId, posts, setPosts }) {
+   const navigate = useNavigate();
    let userIncludeLike = false;
    let userIncludeDislike = false;
    let badgeContentLike = post.like;
@@ -46,10 +49,14 @@ function Post({ post, userId }) {
             url: `http://localhost:3001/api/user/${post.userId}`,
             withCredentials: true,
          });
-         // console.log('reponse.data = ', response.data);
          setPostUserPseudo(response.data.pseudo);
          setPostUserAvatar(response.data.avatar);
       } catch (error) {
+         if (error.response.status === 401) {
+            console.log(error.response.statusText);
+            navigate('/login');
+         }
+
          console.log(error);
       }
    }
@@ -106,12 +113,19 @@ function Post({ post, userId }) {
       }
    };
 
+   const handleClickDeletePost = async () => {
+      console.log('Delete button pressed');
+      await deletePost(post, navigate, posts, setPosts);
+      // console.log(posts);
+      // navigate('/main');
+   };
+
    return (
       <Grid item xs={12} sm={6} md={4} lg={3}>
          <Card sx={{ maxWidth: 345 }}>
             <CardHeader
                avatar={<Avatar alt="avatar" src={postUserAvatar}></Avatar>}
-               title={`Posté par ${postUserPseudo}`}
+               title={postUserPseudo}
                subheader={date.toLocaleString()}
             />
             {post.picture.map((image, i) => (
@@ -158,6 +172,12 @@ function Post({ post, userId }) {
                      <ThumbDownIcon />
                   </IconButton>
                </Badge>
+               {post.userId === userId ? (
+                  <IconButton aria-label="dislike" color={'error'} onClick={handleClickDeletePost}>
+                     <DeleteForeverIcon />
+                  </IconButton>
+               ) : null}
+
                {/* <ExpandMore
                                  expand={expanded}
                                  onClick={handleExpandClick}
@@ -173,6 +193,24 @@ function Post({ post, userId }) {
 }
 
 export default Post;
+
+async function deletePost(post, navigate, posts, setPosts) {
+   try {
+      const response = await axios.delete(`http://localhost:3001/api/postDelete/${post.id}`, { withCredentials: true });
+      console.log(response.data);
+      const newPosts = posts.filter((element) => element !== post);
+      setPosts(newPosts);
+   } catch (error) {
+      if (error.response.status === 401) {
+         console.log(error.response.statusText);
+         navigate('/login');
+      }
+      // else {
+      //    console.log(error.response.data.error.message);
+      // }
+      console.log(error);
+   }
+}
 
 async function updateDB(post, param) {
    try {

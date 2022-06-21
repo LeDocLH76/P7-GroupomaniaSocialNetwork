@@ -53,7 +53,7 @@ export default function Main({ isAuth, setIsAuth, userId, userAvatar }) {
             {/* ************************** */}
             <Grid container spacing={3}>
                {posts.map((post) => (
-                  <Post post={post} userId={userId} key={post.id} />
+                  <Post post={post} userId={userId} key={post.id} posts={posts} setPosts={setPosts} />
                ))}
             </Grid>
 
