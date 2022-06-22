@@ -216,7 +216,12 @@ function Post({ post, userId, posts, setPosts }) {
             </CardActions>
             {showAddComment ? (
                <CardContent>
-                  <FormCommentCreate post={post} />
+                  <FormCommentCreate
+                     post={post}
+                     badgeComment={badgeComment}
+                     setBadgeComment={setBadgeComment}
+                     setShowAddComment={setShowAddComment}
+                  />
                </CardContent>
             ) : null}
          </Card>
