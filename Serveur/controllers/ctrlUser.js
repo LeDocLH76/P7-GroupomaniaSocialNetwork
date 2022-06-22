@@ -85,7 +85,7 @@ exports.createUser = async (req, res) => {
       }
       // Si il n'y a pas d'immage, en ajouter une par défaut
       if (innerImage == '') {
-         innerImage = `${req.protocol}://${req.get('host')}/images/fakeImages/person.png`;
+         innerImage = `${req.protocol}://${req.get('host')}/fakeImages/person.png`;
       }
       // Créer le nouveau user
       const user = await prisma.users.create({
@@ -180,7 +180,7 @@ exports.updateUser = async (req, res) => {
       // Si il n'y a pas d'image
       if (innerImage == '') {
          // Extrait le nom de l'url de l'image
-         const imageName = userBd.avatar.split('/images/')[1];
+         const imageName = userBd.avatar.split(':3001/')[1];
          // Si l'image enregistrée est différente de l'image par défaut
          if (imageName != 'fakeImages/person.png') {
             // Efface l'ancienne image
@@ -189,7 +189,7 @@ exports.updateUser = async (req, res) => {
             });
          }
          // Il n'y a pas d'immage, en ajoute une par défaut
-         innerImage = `${req.protocol}://${req.get('host')}/images/fakeImages/person.png`;
+         innerImage = `${req.protocol}://${req.get('host')}/fakeImages/person.png`;
       }
 
       // Crytpe le nouveau mot de passe

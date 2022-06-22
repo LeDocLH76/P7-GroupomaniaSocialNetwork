@@ -72,7 +72,7 @@ const load = async () => {
             email: email,
             password: adminPasswordHash,
             role: 'admin',
-            avatar: 'http://localhost:3001/images/fakeImages/boite_a_outils.jpg',
+            avatar: 'http://localhost:3001/fakeImages/boite_a_outils.jpg',
          },
       });
    } catch (error) {
