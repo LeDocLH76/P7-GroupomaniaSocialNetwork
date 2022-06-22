@@ -9,8 +9,8 @@ const path = require('path');
 app.use(expressSession);
 app.use(express.json());
 app.options('*', corsMiddleware);
-app.use(corsMiddleware);
 app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use(corsMiddleware);
 
 app.get('/', (req, res) => res.status(200).send('Hello Denis'));
 app.use('/api', Routes);
