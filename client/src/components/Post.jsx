@@ -13,9 +13,11 @@ import {
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import CommentIcon from '@mui/icons-material/Comment';
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import FormCommentCreate from './FormCommentCreate';
 
 function Post({ post, userId, posts, setPosts }) {
    const navigate = useNavigate();
@@ -23,6 +25,8 @@ function Post({ post, userId, posts, setPosts }) {
    let userIncludeDislike = false;
    let badgeContentLike = post.like;
    let badgeContentDislike = post.dislike;
+   // console.log(post.comments);
+   let badgeContentComment = post.comments.length;
    // si userId dans post.userLike setLike = true
    if (post.userLike.includes(userId)) {
       userIncludeLike = true;
@@ -41,6 +45,11 @@ function Post({ post, userId, posts, setPosts }) {
    // Gère l'état des infos user
    const [postUserAvatar, setPostUserAvatar] = useState(null);
    const [postUserPseudo, setPostUserPseudo] = useState('');
+   // Gère l'état du nombre de commentaire inscrit dans le badge
+   const [badgeComment, setBadgeComment] = useState(badgeContentComment);
+   // Gère l'état de l'affichage d'ajout de commentaire
+   const [showAddComment, setShowAddComment] = useState(false);
+
    const date = new Date(post.updatedAt);
    // Get infos user
    async function getUser(post) {
@@ -119,6 +128,10 @@ function Post({ post, userId, posts, setPosts }) {
       await deletePost(post, navigate, posts, setPosts);
    };
 
+   const handleClickAddComment = async () => {
+      setShowAddComment(!showAddComment);
+   };
+
    return (
       <Grid item xs={12} sm={6} md={4} lg={3}>
          <Card sx={{ maxWidth: 345 }}>
@@ -171,6 +184,21 @@ function Post({ post, userId, posts, setPosts }) {
                      <ThumbDownIcon />
                   </IconButton>
                </Badge>
+               <Badge
+                  badgeContent={badgeComment}
+                  color="primary"
+                  showZero
+                  overlap="circular"
+                  anchorOrigin={{
+                     vertical: 'top',
+                     horizontal: 'right',
+                  }}
+               >
+                  <IconButton aria-label="dislike" color="primary" onClick={handleClickAddComment}>
+                     <CommentIcon />
+                  </IconButton>
+               </Badge>
+
                {post.userId === userId ? (
                   <IconButton aria-label="dislike" color={'error'} onClick={handleClickDeletePost}>
                      <DeleteForeverIcon />
@@ -186,6 +214,11 @@ function Post({ post, userId, posts, setPosts }) {
                                  <ExpandMoreIcon />
                               </ExpandMore> */}
             </CardActions>
+            {showAddComment ? (
+               <CardContent>
+                  <FormCommentCreate post={post} />
+               </CardContent>
+            ) : null}
          </Card>
       </Grid>
    );

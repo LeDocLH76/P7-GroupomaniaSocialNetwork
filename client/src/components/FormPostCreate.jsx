@@ -1,6 +1,5 @@
 import { Box, Button, ButtonGroup, Grid, Input, TextField, Typography } from '@mui/material';
 import axios from 'axios';
-import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function FormPostCreate() {
