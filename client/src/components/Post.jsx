@@ -18,6 +18,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import FormCommentCreate from './FormCommentCreate';
+import { Visibility } from '@mui/icons-material';
 
 function Post({ post, userId, posts, setPosts }) {
    const navigate = useNavigate();
@@ -132,6 +133,10 @@ function Post({ post, userId, posts, setPosts }) {
       setShowAddComment(!showAddComment);
    };
 
+   const handleClickShowComments = () => {
+      console.log('clic showComment');
+   };
+
    return (
       <Grid item xs={12} sm={6} md={4} lg={3}>
          <Card sx={{ maxWidth: 345 }}>
@@ -143,13 +148,11 @@ function Post({ post, userId, posts, setPosts }) {
             {post.picture.map((image, i) => (
                <CardMedia component="img" height="194" image={image} alt={`image ${i + 1} du post`} key={i} />
             ))}
-
             <CardContent>
                <Typography variant="body2" color="text.secondary">
                   {post.body}
                </Typography>
             </CardContent>
-
             <CardActions disableSpacing>
                <Badge
                   badgeContent={badgeLike}
@@ -205,15 +208,20 @@ function Post({ post, userId, posts, setPosts }) {
                   </IconButton>
                ) : null}
 
+               <IconButton aria-label="voir commentaire" color={'success'} onClick={handleClickShowComments}>
+                  <Visibility />
+               </IconButton>
+
                {/* <ExpandMore
-                                 expand={expanded}
-                                 onClick={handleExpandClick}
-                                 aria-expanded={expanded}
-                                 aria-label="show more"
-                              >
-                                 <ExpandMoreIcon />
-                              </ExpandMore> */}
+                  expand={expanded}
+                  onClick={handleExpandClick}
+                  aria-expanded={expanded}
+                  aria-label="show more"
+               >
+                  <ExpandMoreIcon />
+               </ExpandMore> */}
             </CardActions>
+            {/* Zone de saisie du nouveau commentaire */}
             {showAddComment ? (
                <CardContent>
                   <FormCommentCreate
