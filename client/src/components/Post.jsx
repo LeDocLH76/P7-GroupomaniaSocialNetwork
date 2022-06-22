@@ -23,25 +23,26 @@ function Post({ post, userId, posts, setPosts }) {
    let userIncludeDislike = false;
    let badgeContentLike = post.like;
    let badgeContentDislike = post.dislike;
+   // si userId dans post.userLike setLike = true
    if (post.userLike.includes(userId)) {
-      // si userId dans post.userLike setLike = true
       userIncludeLike = true;
    }
+   // si userId dans post.userDislike setDislike = true
    if (post.userDislike.includes(userId)) {
-      // si userId dans post.userDislike setDislike = true
       userIncludeDislike = true;
    }
-   console.log(post.userLike, post.userDislike, post.userId);
-
+   // console.log(post.userLike, post.userDislike, post.userId);
+   // Gère l'état allumé éteint des pouces haut et bas
    const [like, setLike] = useState(userIncludeLike);
    const [dislike, setDislike] = useState(userIncludeDislike);
+   // Gère l'état du nombre de like dislike inscrit dans les badges
    const [badgeLike, setBadgeLike] = useState(badgeContentLike);
    const [badgeDislike, setBadgeDislike] = useState(badgeContentDislike);
+   // Gère l'état des infos user
    const [postUserAvatar, setPostUserAvatar] = useState(null);
    const [postUserPseudo, setPostUserPseudo] = useState('');
    const date = new Date(post.updatedAt);
-
-   // Get info user
+   // Get infos user
    async function getUser(post) {
       try {
          const response = await axios({
@@ -67,20 +68,20 @@ function Post({ post, userId, posts, setPosts }) {
       if (dislike !== true) {
          // si like = true => post.like -= et retirer userId de post.userLike
          if (like === true) {
-            console.log('post.like -- post.userLike -user');
+            // console.log('post.like -- post.userLike -user');
             // retirer le like 0 => BD
             const param = 0;
-            const response = await updateDB(post, param);
+            const response = await updateDB(post, param, navigate);
             setLike(!like);
             setBadgeLike(response.data.like);
             return;
          }
          // si like = false => post.like += et ajouter userId dans post.userLike
          if (like === false) {
-            console.log('post.like ++ post.userLike +user');
+            // console.log('post.like ++ post.userLike +user');
             // ajouter le like 1 => BD
             const param = 1;
-            const response = await updateDB(post, param);
+            const response = await updateDB(post, param, navigate);
             setLike(!like);
             setBadgeLike(response.data.like);
          }
@@ -92,10 +93,10 @@ function Post({ post, userId, posts, setPosts }) {
       if (like !== true) {
          // si dislike = true => post.dislike -= et retirer userId de post.userDislike
          if (dislike === true) {
-            console.log('post.dislike -- post.userDislike -user');
+            // console.log('post.dislike -- post.userDislike -user');
             // retirer le dislike 0 => BD
             const param = 0;
-            const response = await updateDB(post, param);
+            const response = await updateDB(post, param, navigate);
             setDislike(!dislike);
             setBadgeDislike(response.data.dislike);
 
@@ -103,10 +104,10 @@ function Post({ post, userId, posts, setPosts }) {
          }
          // si dislike = false => post.dislike += et ajouter userId dans post.userDislike
          if (dislike === false) {
-            console.log('post.dislike ++ post.userDislike +user');
+            // console.log('post.dislike ++ post.userDislike +user');
             // ajouter le dislike -1 => BD
             const param = -1;
-            const response = await updateDB(post, param);
+            const response = await updateDB(post, param, navigate);
             setDislike(!dislike);
             setBadgeDislike(response.data.dislike);
          }
@@ -114,7 +115,7 @@ function Post({ post, userId, posts, setPosts }) {
    };
 
    const handleClickDeletePost = async () => {
-      console.log('Delete button pressed');
+      // console.log('Delete button pressed');
       await deletePost(post, navigate, posts, setPosts);
    };
 
@@ -195,7 +196,7 @@ export default Post;
 async function deletePost(post, navigate, posts, setPosts) {
    try {
       const response = await axios.delete(`http://localhost:3001/api/postDelete/${post.id}`, { withCredentials: true });
-      console.log(response.data);
+      // console.log(response.data);
       const newPosts = posts.filter((element) => element !== post);
       setPosts(newPosts);
    } catch (error) {
@@ -210,7 +211,7 @@ async function deletePost(post, navigate, posts, setPosts) {
    }
 }
 
-async function updateDB(post, param) {
+async function updateDB(post, param, navigate) {
    try {
       const response = await axios.put(
          `http://localhost:3001/api/postLike/${post.id}`,
@@ -223,7 +224,7 @@ async function updateDB(post, param) {
    } catch (error) {
       if (error.response.status === 401) {
          console.log('error 401', error.response.statusText);
-         // navigate('/login');
+         navigate('/login');
       }
       // else {
       //    console.log(error.response.data.error.message);
