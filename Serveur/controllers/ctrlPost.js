@@ -5,7 +5,7 @@ exports.getAllposts = async (req, res) => {
    try {
       const posts = await prisma.posts.findMany({
          orderBy: {
-            updatedAt: 'desc',
+            createdAt: 'desc',
          },
          select: {
             id: true,

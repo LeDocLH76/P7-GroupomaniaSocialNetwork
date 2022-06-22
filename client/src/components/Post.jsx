@@ -219,16 +219,15 @@ async function updateDB(post, param) {
          },
          { withCredentials: true }
       );
-      // console.log(response.data);
-      return response.data;
+      return response;
    } catch (error) {
       if (error.response.status === 401) {
-         console.log(error.response.statusText);
+         console.log('error 401', error.response.statusText);
          // navigate('/login');
       }
       // else {
       //    console.log(error.response.data.error.message);
       // }
-      console.log(error);
+      console.log('updateDB error = ', error);
    }
 }
