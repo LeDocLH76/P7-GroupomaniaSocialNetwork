@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 export default function FormPostCreate() {
    const navigate = useNavigate();
+
    const handleSubmit = async (event) => {
       event.preventDefault();
       // Recupère les entrées du formulaire
@@ -30,7 +31,8 @@ export default function FormPostCreate() {
       for (let index = 0; index < images.length; index++) {
          data.append('images', images[index]);
       }
-      console.log(data.getAll('images'));
+      // console.log(data.getAll('images'));
+
       try {
          // const response =
          await axios({

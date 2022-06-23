@@ -50,6 +50,8 @@ function Post({ post, userId, posts, setPosts }) {
    const [showAddComment, setShowAddComment] = useState(false);
    // Gère l'état de l'affichage des commentaires
    const [showComment, setShowComment] = useState(false);
+   // Gère le contenu de post.comments
+   const [comments, setComments] = useState(post.comments);
 
    const date = new Date(post.createdAt);
    // Get infos user
@@ -144,7 +146,7 @@ function Post({ post, userId, posts, setPosts }) {
             <CardHeader
                avatar={<Avatar alt="avatar" src={postUserAvatar}></Avatar>}
                title={postUserPseudo}
-               subheader={date.toLocaleString()}
+               subheader={`${post.id}  ${date.toLocaleString()}`}
             />
             {post.picture.map((image, i) => (
                <CardMedia component="img" height="194" image={image} alt={`image ${i + 1} du post`} key={i} />
@@ -219,6 +221,8 @@ function Post({ post, userId, posts, setPosts }) {
             {showAddComment ? (
                <CardContent>
                   <FormCommentCreate
+                     comments={comments}
+                     setComments={setComments}
                      post={post}
                      badgeComment={badgeComment}
                      setBadgeComment={setBadgeComment}
@@ -233,7 +237,18 @@ function Post({ post, userId, posts, setPosts }) {
                <CardContent>
                   <Grid container spacing={3}>
                      {post.comments.map((comment) => (
-                        <Comments key={comment.id} comment={comment} userId={userId} />
+                        <Comments
+                           key={comment.id}
+                           post={post}
+                           comment={comment}
+                           userId={userId}
+                           comments={comments}
+                           setComments={setComments}
+                           posts={posts}
+                           setPosts={setPosts}
+                           badgeComment={badgeComment}
+                           setBadgeComment={setBadgeComment}
+                        />
                      ))}
                   </Grid>
                </CardContent>
@@ -249,7 +264,8 @@ export default Post;
 
 async function deletePost(post, navigate, posts, setPosts) {
    try {
-      const response = await axios.delete(`http://localhost:3001/api/postDelete/${post.id}`, { withCredentials: true });
+      // const response =
+      await axios.delete(`http://localhost:3001/api/postDelete/${post.id}`, { withCredentials: true });
       // console.log(response.data);
       const newPosts = posts.filter((element) => element !== post);
       setPosts(newPosts);

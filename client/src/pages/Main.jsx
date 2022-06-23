@@ -20,8 +20,7 @@ export default function Main({ isAuth, setIsAuth, userId, userAvatar }) {
                url: 'http://localhost:3001/api/posts',
                withCredentials: true,
             });
-
-            console.log('reponse.data = ', reponse.data);
+            console.log('Liste des posts au chargement = ', reponse.data);
             setPosts(reponse.data);
          } catch (error) {
             if (error.response.status === 401) {

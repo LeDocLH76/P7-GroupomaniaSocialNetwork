@@ -3,7 +3,14 @@ import { useNavigate } from 'react-router-dom';
 
 import { Box, Button, ButtonGroup, Grid, TextField, Typography } from '@mui/material';
 
-export default function FormCommentCreate({ post, badgeComment, setBadgeComment, setShowAddComment }) {
+export default function FormCommentCreate({
+   comments,
+   setComments,
+   post,
+   badgeComment,
+   setBadgeComment,
+   setShowAddComment,
+}) {
    const navigate = useNavigate();
    const handleSubmit = async (event) => {
       event.preventDefault();
@@ -20,9 +27,12 @@ export default function FormCommentCreate({ post, badgeComment, setBadgeComment,
       const body = { body: data.get('body'), postId: post.id };
       try {
          const response = await axios.post('http://localhost:3001/api/commentCreate', body, { withCredentials: true });
-         console.log(response);
+         console.log(response.data);
+         const newComments = comments;
+         newComments.unshift(response.data);
          setBadgeComment(badgeComment + 1);
-         setShowAddComment(false);
+         setComments(newComments);
+         // setShowAddComment(false);
       } catch (error) {
          if (error.code === 'ERR_BAD_RESPONSE') {
             console.log(error.response.data.message);
