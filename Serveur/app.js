@@ -9,6 +9,7 @@ const path = require('path');
 app.use(expressSession);
 app.use(express.json());
 app.options('*', corsMiddleware);
+app.use('/fakeimages', express.static(path.join(__dirname, 'fakeimages')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(corsMiddleware);
 

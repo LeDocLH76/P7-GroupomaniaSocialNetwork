@@ -6,19 +6,17 @@ import {
    CardContent,
    CardHeader,
    CardMedia,
+   Collapse,
    Grid,
    IconButton,
    Typography,
 } from '@mui/material';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbDownIcon from '@mui/icons-material/ThumbDown';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import CommentIcon from '@mui/icons-material/Comment';
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { ThumbUp, ThumbDown, Comment, DeleteForever, ExpandMore, ExpandLess } from '@mui/icons-material';
 import FormCommentCreate from './FormCommentCreate';
-import { Visibility } from '@mui/icons-material';
+import Comments from './Comments';
 
 function Post({ post, userId, posts, setPosts }) {
    const navigate = useNavigate();
@@ -50,8 +48,10 @@ function Post({ post, userId, posts, setPosts }) {
    const [badgeComment, setBadgeComment] = useState(badgeContentComment);
    // Gère l'état de l'affichage d'ajout de commentaire
    const [showAddComment, setShowAddComment] = useState(false);
+   // Gère l'état de l'affichage des commentaires
+   const [showComment, setShowComment] = useState(false);
 
-   const date = new Date(post.updatedAt);
+   const date = new Date(post.createdAt);
    // Get infos user
    async function getUser(post) {
       try {
@@ -135,6 +135,7 @@ function Post({ post, userId, posts, setPosts }) {
 
    const handleClickShowComments = () => {
       console.log('clic showComment');
+      setShowComment(!showComment);
    };
 
    return (
@@ -165,7 +166,7 @@ function Post({ post, userId, posts, setPosts }) {
                   }}
                >
                   <IconButton aria-label="like" color={like ? 'primary' : 'secondary'} onClick={handleClickLike}>
-                     <ThumbUpIcon />
+                     <ThumbUp />
                   </IconButton>
                </Badge>
 
@@ -184,9 +185,10 @@ function Post({ post, userId, posts, setPosts }) {
                      color={dislike ? 'primary' : 'secondary'}
                      onClick={handleClickDislike}
                   >
-                     <ThumbDownIcon />
+                     <ThumbDown />
                   </IconButton>
                </Badge>
+
                <Badge
                   badgeContent={badgeComment}
                   color="primary"
@@ -198,29 +200,21 @@ function Post({ post, userId, posts, setPosts }) {
                   }}
                >
                   <IconButton aria-label="dislike" color="primary" onClick={handleClickAddComment}>
-                     <CommentIcon />
+                     <Comment />
                   </IconButton>
                </Badge>
 
                {post.userId === userId ? (
-                  <IconButton aria-label="dislike" color={'error'} onClick={handleClickDeletePost}>
-                     <DeleteForeverIcon />
+                  <IconButton aria-label="éffacer publication" color={'error'} onClick={handleClickDeletePost}>
+                     <DeleteForever />
                   </IconButton>
                ) : null}
 
                <IconButton aria-label="voir commentaire" color={'success'} onClick={handleClickShowComments}>
-                  <Visibility />
+                  {showComment ? <ExpandLess /> : <ExpandMore />}
                </IconButton>
-
-               {/* <ExpandMore
-                  expand={expanded}
-                  onClick={handleExpandClick}
-                  aria-expanded={expanded}
-                  aria-label="show more"
-               >
-                  <ExpandMoreIcon />
-               </ExpandMore> */}
             </CardActions>
+
             {/* Zone de saisie du nouveau commentaire */}
             {showAddComment ? (
                <CardContent>
@@ -232,6 +226,20 @@ function Post({ post, userId, posts, setPosts }) {
                   />
                </CardContent>
             ) : null}
+
+            {/* ***************** unmountOnExit*/}
+
+            <Collapse in={showComment} timeout="auto">
+               <CardContent>
+                  <Grid container spacing={3}>
+                     {post.comments.map((comment) => (
+                        <Comments key={comment.id} comment={comment} />
+                     ))}
+                  </Grid>
+               </CardContent>
+            </Collapse>
+
+            {/* ***************** */}
          </Card>
       </Grid>
    );
