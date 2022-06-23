@@ -233,7 +233,7 @@ function Post({ post, userId, posts, setPosts }) {
                <CardContent>
                   <Grid container spacing={3}>
                      {post.comments.map((comment) => (
-                        <Comments key={comment.id} comment={comment} />
+                        <Comments key={comment.id} comment={comment} userId={userId} />
                      ))}
                   </Grid>
                </CardContent>

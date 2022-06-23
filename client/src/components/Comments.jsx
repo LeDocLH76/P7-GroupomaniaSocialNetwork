@@ -1,9 +1,10 @@
-import { Avatar, Card, CardContent, CardHeader, Grid, Typography } from '@mui/material';
+import { Avatar, Card, CardActions, CardContent, CardHeader, Grid, IconButton, Typography } from '@mui/material';
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { DeleteForever } from '@mui/icons-material';
 
-export default function Comments({ comment }) {
+export default function Comments({ comment, userId }) {
    const navigate = useNavigate();
    const date = new Date(comment.createdAt);
    // Gère l'état des infos user
@@ -31,6 +32,11 @@ export default function Comments({ comment }) {
    }
    getUser(comment);
 
+   const handleClickDeleteComment = async () => {
+      console.log('Delete button pressed');
+      // await deleteComment(comment, navigate, posts, setPosts);
+   };
+
    return (
       <Grid item>
          <Card>
@@ -44,6 +50,13 @@ export default function Comments({ comment }) {
                   {comment.body}
                </Typography>
             </CardContent>
+            <CardActions>
+               {comment.userId === userId ? (
+                  <IconButton aria-label="éffacer commentaire" color={'error'} onClick={handleClickDeleteComment}>
+                     <DeleteForever />
+                  </IconButton>
+               ) : null}
+            </CardActions>
          </Card>
       </Grid>
    );
