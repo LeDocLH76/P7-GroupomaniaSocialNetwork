@@ -43,9 +43,9 @@ export default function Comments({
    getUser(comment);
 
    const handleClickDeleteComment = async () => {
-      console.log('Delete button pressed posts = ', posts);
-      console.log("Les comments avant l'appel à delete comment", comments);
-      await deleteComment(post, comment, navigate, posts, setPosts, badgeComment, setBadgeComment);
+      console.log('Delete button pressed = ');
+      // console.log("Les comments avant l'appel à delete comment", comments);
+      await deleteComment(setPosts, comment, navigate, badgeComment, setBadgeComment);
    };
 
    return (
@@ -73,32 +73,20 @@ export default function Comments({
    );
 }
 
-async function deleteComment(post, comment, navigate, posts, setPosts, badgeComment, setBadgeComment) {
-   console.log('Dans delete comment, posts avant try = ', posts);
-
+async function deleteComment(setPosts, comment, navigate, badgeComment, setBadgeComment) {
    try {
-      // const response =
-      await axios.delete(`http://localhost:3001/api/commentDelete/${comment.id}`, {
+      const response = await axios.delete(`http://localhost:3001/api/commentDelete/${comment.id}`, {
          withCredentials: true,
       });
+      console.log('response de delete = ', response);
 
       try {
-         const response = await axios.get(`http://localhost:3001/api/post/${post.id}`, { withCredentials: true });
-         console.log('Le nouveau post sur la BD = ', response.data);
-
-         let newPosts = posts;
-         console.log('La copie du state des posts newPosts = ', newPosts);
-         const index = newPosts.indexOf(post);
-         console.log("Le post à remplacer est à l'index", index);
-
-         console.log('newPosts avant = ', newPosts);
-         // Remplace le post à la position index
-         newPosts.splice(index, 1, response.data);
-         console.log('newPosts apres = ', newPosts);
-         // Met à jour le compteur de post
+         const response = await axios.get(`http://localhost:3001/api/posts`, {
+            withCredentials: true,
+         });
+         console.log('Les posts = ', response.data);
          setBadgeComment(badgeComment - 1);
-         // Met à jour les posts
-         setPosts(newPosts);
+         setPosts(response.data);
       } catch (error) {
          if (error.response.status === 401) {
             console.log(error.response.statusText);
@@ -119,5 +107,4 @@ async function deleteComment(post, comment, navigate, posts, setPosts, badgeComm
       // }
       console.log(error);
    }
-   console.log('posts en fin de delete comment = ', posts);
 }

@@ -221,9 +221,8 @@ function Post({ post, userId, posts, setPosts }) {
             {showAddComment ? (
                <CardContent>
                   <FormCommentCreate
-                     comments={comments}
-                     setComments={setComments}
                      post={post}
+                     setPosts={setPosts}
                      badgeComment={badgeComment}
                      setBadgeComment={setBadgeComment}
                      setShowAddComment={setShowAddComment}
@@ -231,9 +230,9 @@ function Post({ post, userId, posts, setPosts }) {
                </CardContent>
             ) : null}
 
-            {/* ***************** unmountOnExit*/}
+            {/* ***************** */}
 
-            <Collapse in={showComment} timeout="auto">
+            <Collapse in={showComment} timeout="auto" unmountOnExit>
                <CardContent>
                   <Grid container spacing={3}>
                      {post.comments.map((comment) => (
@@ -242,7 +241,6 @@ function Post({ post, userId, posts, setPosts }) {
                            post={post}
                            comment={comment}
                            userId={userId}
-                           comments={comments}
                            setComments={setComments}
                            posts={posts}
                            setPosts={setPosts}
