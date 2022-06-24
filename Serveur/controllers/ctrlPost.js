@@ -18,7 +18,11 @@ exports.getAllposts = async (req, res) => {
             userId: true,
             userLike: true,
             userDislike: true,
-            comments: true,
+            comments: {
+               orderBy: {
+                  createdAt: 'desc',
+               },
+            },
          },
       });
 
@@ -52,7 +56,11 @@ exports.getOnepost = async (req, res) => {
             userId: true,
             userLike: true,
             userDislike: true,
-            comments: true,
+            comments: {
+               orderBy: {
+                  createdAt: 'desc',
+               },
+            },
          },
       });
 
