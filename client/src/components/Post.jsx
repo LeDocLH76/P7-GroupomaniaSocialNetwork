@@ -18,7 +18,7 @@ import { ThumbUp, ThumbDown, Comment, DeleteForever, ExpandMore, ExpandLess } fr
 import FormCommentCreate from './FormCommentCreate';
 import Comments from './Comments';
 
-function Post({ post, userId, posts, setPosts }) {
+function Post({ post, userId, isAdmin, posts, setPosts }) {
    const navigate = useNavigate();
    let userIncludeLike = false;
    let userIncludeDislike = false;
@@ -191,6 +191,12 @@ function Post({ post, userId, posts, setPosts }) {
                   </IconButton>
                </Badge>
 
+               {post.userId === userId || isAdmin ? (
+                  <IconButton aria-label="éffacer publication" color={'error'} onClick={handleClickDeletePost}>
+                     <DeleteForever />
+                  </IconButton>
+               ) : null}
+
                <Badge
                   badgeContent={badgeComment}
                   color="primary"
@@ -201,16 +207,10 @@ function Post({ post, userId, posts, setPosts }) {
                      horizontal: 'right',
                   }}
                >
-                  <IconButton aria-label="dislike" color="primary" onClick={handleClickAddComment}>
+                  <IconButton aria-label="nouveau commentaire" color="primary" onClick={handleClickAddComment}>
                      <Comment />
                   </IconButton>
                </Badge>
-
-               {post.userId === userId ? (
-                  <IconButton aria-label="éffacer publication" color={'error'} onClick={handleClickDeletePost}>
-                     <DeleteForever />
-                  </IconButton>
-               ) : null}
 
                <IconButton aria-label="voir commentaire" color={'success'} onClick={handleClickShowComments}>
                   {showComment ? <ExpandLess /> : <ExpandMore />}
@@ -241,6 +241,7 @@ function Post({ post, userId, posts, setPosts }) {
                            post={post}
                            comment={comment}
                            userId={userId}
+                           isAdmin={isAdmin}
                            setComments={setComments}
                            posts={posts}
                            setPosts={setPosts}

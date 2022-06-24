@@ -4,8 +4,9 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Post from '../components/Post';
+import Disconnect from '../components/Disconnect';
 
-export default function Main({ isAuth, setIsAuth, userId, userAvatar }) {
+export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userId, userAvatar }) {
    const [posts, setPosts] = useState([]);
    const navigate = useNavigate();
    // console.log('isAuth = ', isAuth);
@@ -57,11 +58,18 @@ export default function Main({ isAuth, setIsAuth, userId, userAvatar }) {
                   <Link to="/postCreate">Publier</Link>
                </Button>
             </ButtonGroup>
+            <ButtonGroup sx={{ mt: 3, mb: 3 }}>
+               <Disconnect />
+               <Button variant="contained">
+                  {/* Mon compte */}
+                  <Link to="/compte">Mon compte</Link>
+               </Button>
+            </ButtonGroup>
 
             {/* ************************** */}
             <Grid container spacing={3}>
                {posts.map((post) => (
-                  <Post post={post} userId={userId} key={post.id} posts={posts} setPosts={setPosts} />
+                  <Post post={post} userId={userId} key={post.id} posts={posts} setPosts={setPosts} isAdmin={isAdmin} />
                ))}
             </Grid>
 

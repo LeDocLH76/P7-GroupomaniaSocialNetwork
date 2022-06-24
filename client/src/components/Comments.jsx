@@ -8,6 +8,7 @@ export default function Comments({
    post,
    comment,
    userId,
+   isAdmin,
    comments,
    setComments,
    posts,
@@ -62,7 +63,7 @@ export default function Comments({
                </Typography>
             </CardContent>
             <CardActions>
-               {comment.userId === userId ? (
+               {comment.userId === userId || isAdmin ? (
                   <IconButton aria-label="éffacer commentaire" color={'error'} onClick={handleClickDeleteComment}>
                      <DeleteForever />
                   </IconButton>

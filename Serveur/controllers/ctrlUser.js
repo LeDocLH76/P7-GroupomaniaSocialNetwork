@@ -100,9 +100,14 @@ exports.createUser = async (req, res) => {
             email: true,
             avatar: true,
             id: true,
+            role: true,
          },
       });
-      res.status(201).json(user);
+      // User valide
+      // Création session
+      req.session.user = { id: user.id, role: user.role };
+
+      res.status(201).json({ id: user.id, avatar: user.avatar, role: user.role });
    } catch (error) {
       res.status(500).send({
          message: error.message || 'Une erreur est survenue dans la création de user.',

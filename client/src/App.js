@@ -4,11 +4,13 @@ import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Main from './pages/Main';
+import Compte from './pages/Compte';
 import PostCreate from './pages/PostCreate';
 import { useState } from 'react';
 
 function App() {
    const [isAuth, setIsAuth] = useState(false);
+   const [isAdmin, setIsAdmin] = useState(false);
    const [userId, setUserId] = useState(0);
    const [userAvatar, setUserAvatar] = useState('');
 
@@ -29,6 +31,8 @@ function App() {
                      <Signup
                         isAuth={isAuth}
                         setIsAuth={setIsAuth}
+                        isAdmin={isAdmin}
+                        setIsAdmin={setIsAdmin}
                         userId={userId}
                         setUserId={setUserId}
                         userAvatar={userAvatar}
@@ -42,6 +46,8 @@ function App() {
                      <Login
                         isAuth={isAuth}
                         setIsAuth={setIsAuth}
+                        isAdmin={isAdmin}
+                        setIsAdmin={setIsAdmin}
                         userId={userId}
                         setUserId={setUserId}
                         userAvatar={userAvatar}
@@ -56,6 +62,27 @@ function App() {
                         <Main
                            isAuth={isAuth}
                            setIsAuth={setIsAuth}
+                           isAdmin={isAdmin}
+                           setIsAdmin={setIsAdmin}
+                           userId={userId}
+                           setUserId={setUserId}
+                           userAvatar={userAvatar}
+                           setUserAvatar={setUserAvatar}
+                        />
+                     ) : (
+                        <Navigate to="/login" />
+                     )
+                  }
+               />
+               <Route
+                  path="/compte"
+                  element={
+                     isAuth ? (
+                        <Compte
+                           isAuth={isAuth}
+                           setIsAuth={setIsAuth}
+                           isAdmin={isAdmin}
+                           setIsAdmin={setIsAdmin}
                            userId={userId}
                            setUserId={setUserId}
                            userAvatar={userAvatar}
@@ -73,6 +100,8 @@ function App() {
                         <PostCreate
                            isAuth={isAuth}
                            setIsAuth={setIsAuth}
+                           isAdmin={isAdmin}
+                           setIsAdmin={setIsAdmin}
                            userId={userId}
                            setUserId={setUserId}
                            userAvatar={userAvatar}

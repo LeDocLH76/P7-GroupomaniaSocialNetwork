@@ -16,7 +16,16 @@ import React from 'react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-export default function Signup({ setIsAuth }) {
+export default function Signup({
+   isAuth,
+   setIsAuth,
+   isAdmin,
+   setIsAdmin,
+   userId,
+   setUserId,
+   userAvatar,
+   setUserAvatar,
+}) {
    const navigate = useNavigate();
 
    const [emailExist, setEmailExist] = useState(false);
@@ -29,12 +38,12 @@ export default function Signup({ setIsAuth }) {
       const image = event.target[6].value;
       console.log(pseudo, email, password, image);
       const data = new FormData(event.currentTarget);
-      console.log({
-         pseudo: data.get('pseudo'),
-         email: data.get('email'),
-         password: data.get('password'),
-         image: data.get('image'),
-      });
+      // console.log({
+      //    pseudo: data.get('pseudo'),
+      //    email: data.get('email'),
+      //    password: data.get('password'),
+      //    image: data.get('image'),
+      // });
       try {
          const reponse = await axios({
             method: 'post',
@@ -43,6 +52,15 @@ export default function Signup({ setIsAuth }) {
             headers: { 'Content-Type': 'multipart/form-data' },
             withCredentials: true,
          });
+         console.log(reponse);
+
+         if (reponse.data.role === 'admin') {
+            setIsAdmin(true);
+         } else {
+            setIsAdmin(false);
+         }
+         setUserId(reponse.data.id);
+         setUserAvatar(reponse.data.avatar);
          setIsAuth(true);
          navigate('/main');
       } catch (error) {

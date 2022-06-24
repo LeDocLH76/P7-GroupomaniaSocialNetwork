@@ -17,7 +17,16 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import '../styles/login.css';
 
-export default function Login({ setIsAuth, setUserId, setUserAvatar }) {
+export default function Login({
+   isAuth,
+   setIsAuth,
+   isAdmin,
+   setIsAdmin,
+   userId,
+   setUserId,
+   userAvatar,
+   setUserAvatar,
+}) {
    const navigate = useNavigate();
    // console.log('props = ', props);
    // console.log('isAuth = ', isAuth);
@@ -43,7 +52,7 @@ export default function Login({ setIsAuth, setUserId, setUserAvatar }) {
       event.preventDefault();
    };
 
-   const handleLogin = async (setIsAuth) => {
+   const handleLogin = async (isAuth, setIsAuth, isAdmin, setIsAdmin, userId, setUserId, userAvatar, setUserAvatar) => {
       console.log(values.email, values.password);
       try {
          const reponse = await axios.post(
@@ -56,16 +65,22 @@ export default function Login({ setIsAuth, setUserId, setUserAvatar }) {
          );
          console.log(reponse.data);
 
-         setUserId(reponse.data.id);
-         setUserAvatar(reponse.data.avatar);
          setIsAuth(true);
+         setUserId(reponse.data.id);
+         console.log('reponse.data.role = ', reponse.data.role);
+         setUserAvatar(reponse.data.avatar);
+         if (reponse.data.role === 'admin') {
+            setIsAdmin(true);
+         } else {
+            setIsAdmin(false);
+         }
          navigate('/main');
       } catch (error) {
-         if (error.code === 'ERR_BAD_RESPONSE') {
-            console.log(error.response.data.message);
-         } else {
-            console.log(error.response.data.error.message);
-         }
+         // if (error.code === 'ERR_BAD_RESPONSE') {
+         //    console.log(error.response.data.message);
+         // } else {
+         //    console.log(error.response.data.error.message);
+         // }
          console.log(error);
       }
    };
@@ -119,7 +134,12 @@ export default function Login({ setIsAuth, setUserId, setUserAvatar }) {
             <Button variant="contained">
                <Link to="/">Acceuil</Link>
             </Button>
-            <Button variant="contained" onClick={() => handleLogin(setIsAuth)}>
+            <Button
+               variant="contained"
+               onClick={() =>
+                  handleLogin(isAuth, setIsAuth, isAdmin, setIsAdmin, userId, setUserId, userAvatar, setUserAvatar)
+               }
+            >
                Valider
             </Button>
          </ButtonGroup>
