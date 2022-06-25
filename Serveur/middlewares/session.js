@@ -4,7 +4,7 @@ const { PrismaClient } = require('@prisma/client');
 
 module.exports = expressSession({
    cookie: {
-      maxAge: 1 * 1 * 15 * 60 * 1000, // jour-1 * heure-24 * minute-60 * seconde-60 * miliseconde-1000
+      maxAge: 1 * 2 * 60 * 60 * 1000, // jour-1 * heure-24 * minute-60 * seconde-60 * miliseconde-1000
       secure: false, // Only for dev !!!!!!!!!!
       httpOnly: true,
       sameSite: 'lax',

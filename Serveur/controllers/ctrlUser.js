@@ -234,7 +234,8 @@ exports.deleteUser = async (req, res) => {
    if (!password) {
       return res.status(400).json('mot de passe obligatoire');
    }
-
+   console.log('userId = ', userId);
+   console.log('password = ', password);
    try {
       // Récupère l'ancien password et tableau de post
       const userBd = await findOneUser(userId);

@@ -143,19 +143,26 @@ function Post({ post, userId, isAdmin, posts, setPosts }) {
    return (
       <Grid item xs={12} sm={6} md={4} lg={3}>
          <Card sx={{ maxWidth: 345 }}>
+            {/* L'auteur et la date de publication */}
             <CardHeader
                avatar={<Avatar alt="avatar" src={postUserAvatar}></Avatar>}
                title={postUserPseudo}
                subheader={`${post.id}  ${date.toLocaleString()}`}
             />
+
+            {/* Les images de la publication */}
             {post.picture.map((image, i) => (
                <CardMedia component="img" height="194" image={image} alt={`image ${i + 1} du post`} key={i} />
             ))}
+
+            {/* Le texte de la publication */}
             <CardContent>
                <Typography variant="body2" color="text.secondary">
                   {post.body}
                </Typography>
             </CardContent>
+
+            {/* La zone des boutons d'action */}
             <CardActions disableSpacing>
                <Badge
                   badgeContent={badgeLike}
@@ -230,8 +237,7 @@ function Post({ post, userId, isAdmin, posts, setPosts }) {
                </CardContent>
             ) : null}
 
-            {/* ***************** */}
-
+            {/* Zone dépliable des commentaires */}
             <Collapse in={showComment} timeout="auto" unmountOnExit>
                <CardContent>
                   <Grid container spacing={3}>
@@ -252,8 +258,6 @@ function Post({ post, userId, isAdmin, posts, setPosts }) {
                   </Grid>
                </CardContent>
             </Collapse>
-
-            {/* ***************** */}
          </Card>
       </Grid>
    );

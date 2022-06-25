@@ -1,12 +1,19 @@
 import { Box, Button, ButtonGroup, Container, CssBaseline, Typography } from '@mui/material';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import DeleteAccount from '../components/DeleteAccount';
 
 export default function Compte() {
    const navigate = useNavigate();
+   const [showDelete, setShowDelete] = useState(false);
 
-   const back = async () => {
+   function back() {
       navigate('/main');
-   };
+   }
+
+   function deleteAccount() {
+      setShowDelete(!showDelete);
+   }
 
    return (
       <Container maxWidth="lg">
@@ -25,8 +32,11 @@ export default function Compte() {
                <Button variant="contained" onClick={back}>
                   Retour
                </Button>
-               <Button variant="contained">Non actif</Button>
+               <Button variant="contained" onClick={deleteAccount}>
+                  Supprimer le compte
+               </Button>
             </ButtonGroup>
+            {showDelete ? <DeleteAccount /> : null}
          </Box>
       </Container>
    );
