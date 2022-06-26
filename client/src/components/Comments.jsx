@@ -1,21 +1,20 @@
-import { Avatar, Card, CardActions, CardContent, CardHeader, Grid, IconButton, Typography } from '@mui/material';
+import {
+   Avatar,
+   Card,
+   CardActions,
+   CardContent,
+   CardHeader,
+   Grid,
+   IconButton,
+   Typography,
+   Tooltip,
+} from '@mui/material';
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { DeleteForever } from '@mui/icons-material';
 
-export default function Comments({
-   post,
-   comment,
-   userId,
-   isAdmin,
-   comments,
-   setComments,
-   posts,
-   setPosts,
-   badgeComment,
-   setBadgeComment,
-}) {
+export default function Comments({ comment, userId, isAdmin, setPosts, badgeComment, setBadgeComment }) {
    const navigate = useNavigate();
    const date = new Date(comment.createdAt);
    // Gère l'état des infos user
@@ -62,11 +61,14 @@ export default function Comments({
                   {comment.body}
                </Typography>
             </CardContent>
+
             <CardActions>
                {comment.userId === userId || isAdmin ? (
-                  <IconButton aria-label="éffacer commentaire" color={'error'} onClick={handleClickDeleteComment}>
-                     <DeleteForever />
-                  </IconButton>
+                  <Tooltip title={'Supprimer'} followCursor={true}>
+                     <IconButton aria-label="éffacer commentaire" color={'error'} onClick={handleClickDeleteComment}>
+                        <DeleteForever />
+                     </IconButton>
+                  </Tooltip>
                ) : null}
             </CardActions>
          </Card>

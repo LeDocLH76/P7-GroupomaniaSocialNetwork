@@ -148,7 +148,7 @@ function Post({ post, userId, isAdmin, posts, setPosts }) {
             <CardHeader
                avatar={<Avatar alt="avatar" src={postUserAvatar}></Avatar>}
                title={postUserPseudo}
-               subheader={`${post.id}  ${date.toLocaleString()}`}
+               subheader={`${date.toLocaleString()}`}
             />
 
             {/* Les images de la publication */}
@@ -175,7 +175,7 @@ function Post({ post, userId, isAdmin, posts, setPosts }) {
                      horizontal: 'left',
                   }}
                >
-                  <Tooltip title={'Like'}>
+                  <Tooltip title={'Like'} followCursor={true}>
                      <IconButton aria-label="like" color={like ? 'primary' : 'secondary'} onClick={handleClickLike}>
                         <ThumbUp />
                      </IconButton>
@@ -192,19 +192,23 @@ function Post({ post, userId, isAdmin, posts, setPosts }) {
                      horizontal: 'right',
                   }}
                >
-                  <IconButton
-                     aria-label="dislike"
-                     color={dislike ? 'primary' : 'secondary'}
-                     onClick={handleClickDislike}
-                  >
-                     <ThumbDown />
-                  </IconButton>
+                  <Tooltip title={'Dislike'} followCursor={true}>
+                     <IconButton
+                        aria-label="dislike"
+                        color={dislike ? 'primary' : 'secondary'}
+                        onClick={handleClickDislike}
+                     >
+                        <ThumbDown />
+                     </IconButton>
+                  </Tooltip>
                </Badge>
 
                {post.userId === userId || isAdmin ? (
-                  <IconButton aria-label="éffacer publication" color={'error'} onClick={handleClickDeletePost}>
-                     <DeleteForever />
-                  </IconButton>
+                  <Tooltip title={'Supprimer'} followCursor={true}>
+                     <IconButton aria-label="éffacer publication" color={'error'} onClick={handleClickDeletePost}>
+                        <DeleteForever />
+                     </IconButton>
+                  </Tooltip>
                ) : null}
 
                <Badge
@@ -217,14 +221,18 @@ function Post({ post, userId, isAdmin, posts, setPosts }) {
                      horizontal: 'right',
                   }}
                >
-                  <IconButton aria-label="nouveau commentaire" color="primary" onClick={handleClickAddComment}>
-                     <Comment />
-                  </IconButton>
+                  <Tooltip title={'Ajouter'} followCursor={true}>
+                     <IconButton aria-label="nouveau commentaire" color="primary" onClick={handleClickAddComment}>
+                        <Comment />
+                     </IconButton>
+                  </Tooltip>
                </Badge>
 
-               <IconButton aria-label="voir commentaire" color={'success'} onClick={handleClickShowComments}>
-                  {showComment ? <ExpandLess /> : <ExpandMore />}
-               </IconButton>
+               <Tooltip title={showComment ? 'Voir moins' : 'Voir plus'} followCursor={true}>
+                  <IconButton aria-label="voir commentaire" color={'success'} onClick={handleClickShowComments}>
+                     {showComment ? <ExpandLess /> : <ExpandMore />}
+                  </IconButton>
+               </Tooltip>
             </CardActions>
 
             {/* Zone de saisie du nouveau commentaire */}
