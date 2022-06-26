@@ -14,7 +14,16 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { DeleteForever } from '@mui/icons-material';
 
-export default function Comments({ comment, userId, isAdmin, setPosts, badgeComment, setBadgeComment }) {
+export default function Comments({
+   comment,
+   userId,
+   isAdmin,
+   setIsAuth,
+   setIsAdmin,
+   setPosts,
+   badgeComment,
+   setBadgeComment,
+}) {
    const navigate = useNavigate();
    const date = new Date(comment.createdAt);
    // Gère l'état des infos user
@@ -45,7 +54,7 @@ export default function Comments({ comment, userId, isAdmin, setPosts, badgeComm
    const handleClickDeleteComment = async () => {
       console.log('Delete button pressed = ');
       // console.log("Les comments avant l'appel à delete comment", comments);
-      await deleteComment(setPosts, comment, navigate, badgeComment, setBadgeComment);
+      await deleteComment(setPosts, comment, navigate, badgeComment, setBadgeComment, setIsAuth, setIsAdmin);
    };
 
    return (
@@ -76,7 +85,7 @@ export default function Comments({ comment, userId, isAdmin, setPosts, badgeComm
    );
 }
 
-async function deleteComment(setPosts, comment, navigate, badgeComment, setBadgeComment) {
+async function deleteComment(setPosts, comment, navigate, badgeComment, setBadgeComment, setIsAuth, setIsAdmin) {
    try {
       const response = await axios.delete(`http://localhost:3001/api/commentDelete/${comment.id}`, {
          withCredentials: true,
@@ -93,6 +102,9 @@ async function deleteComment(setPosts, comment, navigate, badgeComment, setBadge
       } catch (error) {
          if (error.response.status === 401) {
             console.log(error.response.statusText);
+            localStorage.removeItem('user');
+            setIsAuth(false);
+            setIsAdmin(false);
             navigate('/login');
          }
          // else {
@@ -103,6 +115,9 @@ async function deleteComment(setPosts, comment, navigate, badgeComment, setBadge
    } catch (error) {
       if (error.response.status === 401) {
          console.log(error.response.statusText);
+         localStorage.removeItem('user');
+         setIsAuth(false);
+         setIsAdmin(false);
          navigate('/login');
       }
       // else {

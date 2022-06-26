@@ -19,7 +19,7 @@ import { ThumbUp, ThumbDown, Comment, DeleteForever, ExpandMore, ExpandLess } fr
 import FormCommentCreate from './FormCommentCreate';
 import Comments from './Comments';
 
-function Post({ post, userId, isAdmin, posts, setPosts }) {
+function Post({ post, userId, isAdmin, setIsAdmin, setIsAuth, posts, setPosts }) {
    const navigate = useNavigate();
    let userIncludeLike = false;
    let userIncludeDislike = false;
@@ -68,9 +68,11 @@ function Post({ post, userId, isAdmin, posts, setPosts }) {
       } catch (error) {
          if (error.response.status === 401) {
             console.log(error.response.statusText);
+            localStorage.removeItem('user');
+            setIsAuth(false);
+            setIsAuth(false);
             navigate('/login');
          }
-
          console.log(error);
       }
    }
@@ -84,7 +86,7 @@ function Post({ post, userId, isAdmin, posts, setPosts }) {
             // console.log('post.like -- post.userLike -user');
             // retirer le like 0 => BD
             const param = 0;
-            const response = await updateDB(post, param, navigate);
+            const response = await updateDB(post, param, navigate, setIsAuth, setIsAdmin);
             setLike(!like);
             setBadgeLike(response.data.like);
             return;
@@ -94,7 +96,7 @@ function Post({ post, userId, isAdmin, posts, setPosts }) {
             // console.log('post.like ++ post.userLike +user');
             // ajouter le like 1 => BD
             const param = 1;
-            const response = await updateDB(post, param, navigate);
+            const response = await updateDB(post, param, navigate, setIsAuth, setIsAdmin);
             setLike(!like);
             setBadgeLike(response.data.like);
          }
@@ -109,7 +111,7 @@ function Post({ post, userId, isAdmin, posts, setPosts }) {
             // console.log('post.dislike -- post.userDislike -user');
             // retirer le dislike 0 => BD
             const param = 0;
-            const response = await updateDB(post, param, navigate);
+            const response = await updateDB(post, param, navigate, setIsAuth, setIsAdmin);
             setDislike(!dislike);
             setBadgeDislike(response.data.dislike);
 
@@ -120,7 +122,7 @@ function Post({ post, userId, isAdmin, posts, setPosts }) {
             // console.log('post.dislike ++ post.userDislike +user');
             // ajouter le dislike -1 => BD
             const param = -1;
-            const response = await updateDB(post, param, navigate);
+            const response = await updateDB(post, param, navigate, setIsAuth, setIsAdmin);
             setDislike(!dislike);
             setBadgeDislike(response.data.dislike);
          }
@@ -129,7 +131,7 @@ function Post({ post, userId, isAdmin, posts, setPosts }) {
 
    const handleClickDeletePost = async () => {
       // console.log('Delete button pressed');
-      await deletePost(post, navigate, posts, setPosts);
+      await deletePost(post, navigate, posts, setPosts, setIsAuth, setIsAdmin);
    };
 
    const handleClickAddComment = async () => {
@@ -137,7 +139,6 @@ function Post({ post, userId, isAdmin, posts, setPosts }) {
    };
 
    const handleClickShowComments = () => {
-      console.log('clic showComment');
       setShowComment(!showComment);
    };
 
@@ -244,6 +245,8 @@ function Post({ post, userId, isAdmin, posts, setPosts }) {
                      badgeComment={badgeComment}
                      setBadgeComment={setBadgeComment}
                      setShowAddComment={setShowAddComment}
+                     setIsAuth={setIsAuth}
+                     setIsAdmin={setIsAdmin}
                   />
                </CardContent>
             ) : null}
@@ -264,6 +267,8 @@ function Post({ post, userId, isAdmin, posts, setPosts }) {
                            setPosts={setPosts}
                            badgeComment={badgeComment}
                            setBadgeComment={setBadgeComment}
+                           setIsAuth={setIsAuth}
+                           setIsAdmin={setIsAdmin}
                         />
                      ))}
                   </Grid>
@@ -276,7 +281,7 @@ function Post({ post, userId, isAdmin, posts, setPosts }) {
 
 export default Post;
 
-async function deletePost(post, navigate, posts, setPosts) {
+async function deletePost(post, navigate, posts, setPosts, setIsAuth, setIsAdmin) {
    try {
       // const response =
       await axios.delete(`http://localhost:3001/api/postDelete/${post.id}`, { withCredentials: true });
@@ -286,6 +291,9 @@ async function deletePost(post, navigate, posts, setPosts) {
    } catch (error) {
       if (error.response.status === 401) {
          console.log(error.response.statusText);
+         localStorage.removeItem('user');
+         setIsAuth(false);
+         setIsAdmin(false);
          navigate('/login');
       }
       // else {
@@ -295,7 +303,7 @@ async function deletePost(post, navigate, posts, setPosts) {
    }
 }
 
-async function updateDB(post, param, navigate) {
+async function updateDB(post, param, navigate, setIsAuth, setIsAdmin) {
    try {
       const response = await axios.put(
          `http://localhost:3001/api/postLike/${post.id}`,
@@ -308,6 +316,9 @@ async function updateDB(post, param, navigate) {
    } catch (error) {
       if (error.response.status === 401) {
          console.log('error 401', error.response.statusText);
+         localStorage.removeItem('user');
+         setIsAuth(false);
+         setIsAdmin(false);
          navigate('/login');
       }
       // else {

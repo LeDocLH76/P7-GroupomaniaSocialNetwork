@@ -59,7 +59,7 @@ export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userId, u
                </Button>
             </ButtonGroup>
             <ButtonGroup sx={{ mt: 3, mb: 3 }}>
-               <Disconnect />
+               <Disconnect setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} />
                <Button variant="contained">
                   {/* Mon compte */}
                   <Link to="/compte">Mon compte</Link>
@@ -69,7 +69,16 @@ export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userId, u
             {/* ************************** */}
             <Grid container spacing={3}>
                {posts.map((post) => (
-                  <Post post={post} userId={userId} key={post.id} posts={posts} setPosts={setPosts} isAdmin={isAdmin} />
+                  <Post
+                     post={post}
+                     userId={userId}
+                     key={post.id}
+                     posts={posts}
+                     setPosts={setPosts}
+                     isAdmin={isAdmin}
+                     setIsAdmin={setIsAdmin}
+                     setIsAuth={setIsAuth}
+                  />
                ))}
             </Grid>
 

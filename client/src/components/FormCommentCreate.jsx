@@ -3,7 +3,15 @@ import { useNavigate } from 'react-router-dom';
 
 import { Box, Button, ButtonGroup, Grid, TextField, Typography } from '@mui/material';
 
-export default function FormCommentCreate({ post, setPosts, badgeComment, setBadgeComment, setShowAddComment }) {
+export default function FormCommentCreate({
+   post,
+   setPosts,
+   badgeComment,
+   setBadgeComment,
+   setShowAddComment,
+   setIsAuth,
+   setIsAdmin,
+}) {
    const navigate = useNavigate();
    const handleSubmit = async (event) => {
       event.preventDefault();
@@ -33,6 +41,9 @@ export default function FormCommentCreate({ post, setPosts, badgeComment, setBad
          } catch (error) {
             if (error.response.status === 401) {
                console.log(error.response.statusText);
+               localStorage.removeItem('user');
+               setIsAuth(false);
+               setIsAdmin(false);
                navigate('/login');
             }
             // else {
@@ -48,6 +59,9 @@ export default function FormCommentCreate({ post, setPosts, badgeComment, setBad
          }
          if (error.response.status === 401) {
             console.log(error.response.statusText);
+            localStorage.removeItem('user');
+            setIsAuth(false);
+            setIsAdmin(false);
             navigate('/login');
          }
          console.log(error);

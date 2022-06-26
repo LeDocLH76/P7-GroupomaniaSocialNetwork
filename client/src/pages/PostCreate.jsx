@@ -2,7 +2,7 @@ import { Box, Container, CssBaseline, Typography } from '@mui/material';
 import React from 'react';
 import FormPostCreate from '../components/FormPostCreate';
 
-export default function PostCreate() {
+export default function PostCreate({ setIsAuth, setIsAdmin }) {
    return (
       <Container maxWidth="lg">
          <CssBaseline />
@@ -16,7 +16,7 @@ export default function PostCreate() {
             <Typography variant="h4" component="h2" mb={2}>
                Création d'une publication
             </Typography>
-            <FormPostCreate />
+            <FormPostCreate setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} />
          </Box>
       </Container>
    );

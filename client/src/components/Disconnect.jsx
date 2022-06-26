@@ -1,8 +1,9 @@
+import { SettingsSystemDaydreamOutlined } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-export default function Disconnect() {
+export default function Disconnect({ setIsAuth, setIsAdmin }) {
    const navigate = useNavigate();
 
    const disconnect = async () => {
@@ -11,10 +12,16 @@ export default function Disconnect() {
             withCredentials: true,
          });
          console.log(response);
+         localStorage.removeItem('user');
+         setIsAuth(false);
+         setIsAdmin(false);
          navigate('/login');
       } catch (error) {
          if (error.response.status === 401) {
             console.log(error.response.statusText);
+            localStorage.removeItem('user');
+            setIsAuth(false);
+            setIsAdmin(false);
             navigate('/login');
          }
          // else {
@@ -28,7 +35,7 @@ export default function Disconnect() {
       <Button
          variant="contained"
          onClick={() => {
-            disconnect(navigate);
+            disconnect();
          }}
       >
          Déconnection

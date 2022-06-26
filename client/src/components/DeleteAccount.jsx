@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-export default function Login() {
+export default function DeleteAccount({ setIsAuth, setIsAdmin }) {
    const navigate = useNavigate();
    // const [values, setValues] = useState({
    //    password: '',
@@ -51,10 +51,16 @@ export default function Login() {
             withCredentials: true,
          });
          console.log(reponse);
+         localStorage.removeItem('user');
+         setIsAuth(false);
+         setIsAdmin(false);
          navigate('/');
       } catch (error) {
          if (error.response.status === 401) {
             console.log(error.response.statusText);
+            localStorage.removeItem('user');
+            setIsAuth(false);
+            setIsAdmin(false);
             navigate('/login');
          }
          if (error.response.status === 500 && error.code === 'ERR_BAD_RESPONSE') {
