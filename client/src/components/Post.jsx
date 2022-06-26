@@ -9,6 +9,7 @@ import {
    Collapse,
    Grid,
    IconButton,
+   Tooltip,
    Typography,
 } from '@mui/material';
 import { useState } from 'react';
@@ -174,9 +175,11 @@ function Post({ post, userId, isAdmin, posts, setPosts }) {
                      horizontal: 'left',
                   }}
                >
-                  <IconButton aria-label="like" color={like ? 'primary' : 'secondary'} onClick={handleClickLike}>
-                     <ThumbUp />
-                  </IconButton>
+                  <Tooltip title={'Like'}>
+                     <IconButton aria-label="like" color={like ? 'primary' : 'secondary'} onClick={handleClickLike}>
+                        <ThumbUp />
+                     </IconButton>
+                  </Tooltip>
                </Badge>
 
                <Badge

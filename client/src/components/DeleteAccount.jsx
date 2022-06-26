@@ -40,20 +40,27 @@ export default function Login() {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
       const password = data.get('password');
+
       console.log(password);
 
       try {
-         const reponse = await axios.delete('http://localhost:3001/api/userDelete', password, {
+         const reponse = await axios({
+            method: 'delete',
+            url: 'http://localhost:3001/api/userDelete',
+            data: { password: password },
             withCredentials: true,
          });
          console.log(reponse);
-         // navigate('/');
+         navigate('/');
       } catch (error) {
-         // if (error.response.status === 401) {
-         //    console.log(error.response.statusText);
-         //    navigate('/login');
-         // }
-
+         if (error.response.status === 401) {
+            console.log(error.response.statusText);
+            navigate('/login');
+         }
+         if (error.response.status === 500 && error.code === 'ERR_BAD_RESPONSE') {
+            console.log(error.response.data);
+            return;
+         }
          console.log(error);
       }
    };
@@ -68,12 +75,6 @@ export default function Login() {
             id="password"
             autoComplete="New-password"
          />
-         {/* {emailExist ? (
-                  <Alert severity="error" sx={{ display: 'flex', justifyContent: 'center' }}>
-                     <AlertTitle>Erreur</AlertTitle>
-                     Cette adresse email existe déja
-                  </Alert>
-               ) : null} */}
          <Button type="submit" variant="contained">
             Supprimer
          </Button>

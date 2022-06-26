@@ -239,6 +239,9 @@ exports.deleteUser = async (req, res) => {
    try {
       // Récupère l'ancien password et tableau de post
       const userBd = await findOneUser(userId);
+      if (!userBd) {
+         throw new Error('User non trouvé');
+      }
       const passwordBd = userBd.password;
       const posts = userBd.posts; // []
 
