@@ -1,3 +1,4 @@
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
    Alert,
    AlertTitle,
@@ -7,7 +8,9 @@ import {
    Container,
    CssBaseline,
    Grid,
+   IconButton,
    Input,
+   InputAdornment,
    TextField,
    Typography,
 } from '@mui/material';
@@ -29,6 +32,16 @@ export default function Signup({
    const navigate = useNavigate();
 
    const [emailExist, setEmailExist] = useState(false);
+   const [showPassword, setShowPassword] = useState(false);
+
+   const handleClickShowPassword = () => {
+      setShowPassword(!showPassword);
+   };
+
+   const handleMouseDownPassword = (event) => {
+      event.preventDefault();
+   };
+
    const handleSubmit = async (event) => {
       event.preventDefault();
 
@@ -110,9 +123,23 @@ export default function Signup({
                         required
                         name="password"
                         label="Password"
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
                         id="password"
                         autoComplete="New-password"
+                        InputProps={{
+                           endAdornment: (
+                              <InputAdornment position="end">
+                                 <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                    edge="end"
+                                 >
+                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                 </IconButton>
+                              </InputAdornment>
+                           ),
+                        }}
                      />
                   </Grid>
 
