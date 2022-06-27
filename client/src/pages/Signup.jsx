@@ -11,6 +11,7 @@ import {
    IconButton,
    Input,
    InputAdornment,
+   Popover,
    TextField,
    Typography,
 } from '@mui/material';
@@ -18,21 +19,20 @@ import axios from 'axios';
 import React from 'react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { userCreateSchema } from '../Validations/userCreateValidation';
 
-export default function Signup({
-   isAuth,
-   setIsAuth,
-   isAdmin,
-   setIsAdmin,
-   userId,
-   setUserId,
-   userAvatar,
-   setUserAvatar,
-}) {
+export default function Signup({ setIsAuth, setIsAdmin, setUserId, setUserAvatar }) {
    const navigate = useNavigate();
 
    const [emailExist, setEmailExist] = useState(false);
    const [showPassword, setShowPassword] = useState(false);
+
+   const [anchorEl, setAnchorEl] = useState(null);
+   const handleClose = () => {
+      setAnchorEl(null);
+   };
+   const open = Boolean(anchorEl);
+   const id = open ? 'simple-popover' : undefined;
 
    const handleClickShowPassword = () => {
       setShowPassword(!showPassword);
@@ -44,47 +44,54 @@ export default function Signup({
 
    const handleSubmit = async (event) => {
       event.preventDefault();
-
-      const pseudo = event.target[0].value;
-      const email = event.target[2].value;
-      const password = event.target[4].value;
-      const image = event.target[6].value;
-      console.log(pseudo, email, password, image);
       const data = new FormData(event.currentTarget);
-      // console.log({
-      //    pseudo: data.get('pseudo'),
-      //    email: data.get('email'),
-      //    password: data.get('password'),
-      //    image: data.get('image'),
-      // });
-      try {
-         const reponse = await axios({
-            method: 'post',
-            url: 'http://localhost:3001/api/userCreate',
-            data: data,
-            headers: { 'Content-Type': 'multipart/form-data' },
-            withCredentials: true,
-         });
-         console.log(reponse);
-
-         if (reponse.data.role === 'admin') {
-            setIsAdmin(true);
-         } else {
-            setIsAdmin(false);
+      const pseudo = data.get('pseudo');
+      const email = data.get('email');
+      const password = data.get('password');
+      const image = data.get('image');
+      console.log(pseudo, email, password, image);
+      //Valider les inputs *********************
+      const user = {
+         pseudo: pseudo,
+         email: email,
+         password: password,
+      };
+      const isValid = await userCreateSchema.isValid(user);
+      console.log('isValid = ', isValid);
+      if (!isValid) {
+         // input invalide
+         // console.log('Invalide');
+         setAnchorEl(event.target);
+      } else {
+         // input valide
+         // console.log('Valide');
+         try {
+            const reponse = await axios({
+               method: 'post',
+               url: 'http://localhost:3001/api/userCreate',
+               data: data,
+               headers: { 'Content-Type': 'multipart/form-data' },
+               withCredentials: true,
+            });
+            console.log(reponse);
+            if (reponse.data.role === 'admin') {
+               setIsAdmin(true);
+            } else {
+               setIsAdmin(false);
+            }
+            setUserId(reponse.data.id);
+            setUserAvatar(reponse.data.avatar);
+            setIsAuth(true);
+            navigate('/main');
+         } catch (error) {
+            if (error.code === 'ERR_BAD_RESPONSE') {
+               console.log(error.response.data.message);
+               setEmailExist(true);
+            } else {
+               console.log(error.response.data.error.message);
+            }
+            console.log(error);
          }
-         setUserId(reponse.data.id);
-         setUserAvatar(reponse.data.avatar);
-         setIsAuth(true);
-         navigate('/main');
-      } catch (error) {
-         if (error.code === 'ERR_BAD_RESPONSE') {
-            console.log(error.response.data.message);
-            setEmailExist(true);
-         } else {
-            console.log(error.response.data.error.message);
-         }
-
-         console.log(error);
       }
    };
 
@@ -167,6 +174,21 @@ export default function Signup({
                      Enregistrer
                   </Button>
                </ButtonGroup>
+
+               <Popover
+                  id={id}
+                  open={open}
+                  anchorEl={anchorEl}
+                  onClose={handleClose}
+                  anchorOrigin={{
+                     vertical: 'bottom',
+                     horizontal: 'left',
+                  }}
+               >
+                  <Typography sx={{ p: 2 }}>
+                     Email valide et password de 8 à 30 caractères, mini 1 minuscule 1 majuscule et 1 caractère @$!%*?&
+                  </Typography>
+               </Popover>
             </Box>
          </Box>
       </Container>

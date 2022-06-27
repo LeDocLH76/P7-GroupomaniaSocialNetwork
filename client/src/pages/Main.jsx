@@ -50,21 +50,27 @@ export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userId, u
             <Typography variant="h6" component="h2">
                Les dernières publications
             </Typography>
-            <ButtonGroup sx={{ mt: 3, mb: 3 }}>
-               <Button variant="contained">
-                  <Link to="/">Acceuil</Link>
-               </Button>
-               <Button variant="contained">
-                  <Link to="/postCreate">Publier</Link>
-               </Button>
-            </ButtonGroup>
-            <ButtonGroup sx={{ mt: 3, mb: 3 }}>
-               <Disconnect setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} />
-               <Button variant="contained">
-                  {/* Mon compte */}
-                  <Link to="/compte">Mon compte</Link>
-               </Button>
-            </ButtonGroup>
+            <Grid container spacing={2}>
+               <Grid item xs={12} sm={6}>
+                  <ButtonGroup sx={{ mt: 1, mb: 1 }}>
+                     <Button variant="contained">
+                        <Link to="/">Acceuil</Link>
+                     </Button>
+                     <Button variant="contained">
+                        <Link to="/postCreate">Publier</Link>
+                     </Button>
+                  </ButtonGroup>
+               </Grid>
+               <Grid item xs={12} sm={6}>
+                  <ButtonGroup sx={{ mt: 1, mb: 1 }}>
+                     <Disconnect setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} />
+                     <Button variant="contained">
+                        {/* Mon compte */}
+                        <Link to="/compte">Mon compte</Link>
+                     </Button>
+                  </ButtonGroup>
+               </Grid>
+            </Grid>
 
             {/* ************************** */}
             <Grid container spacing={3}>

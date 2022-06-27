@@ -1,7 +1,5 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
-   Alert,
-   AlertTitle,
    Box,
    Button,
    ButtonGroup,
@@ -9,7 +7,6 @@ import {
    CssBaseline,
    Grid,
    IconButton,
-   Input,
    InputAdornment,
    TextField,
    Typography,
@@ -18,20 +15,12 @@ import axios from 'axios';
 import React from 'react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { userLoginSchema } from '../Validations/userLoginValidation';
 
-export default function Login({
-   isAuth,
-   setIsAuth,
-   isAdmin,
-   setIsAdmin,
-   userId,
-   setUserId,
-   userAvatar,
-   setUserAvatar,
-}) {
+export default function Login({ setIsAuth, setIsAdmin, setUserId, setUserAvatar }) {
    const navigate = useNavigate();
-
    const [showPassword, setShowPassword] = useState(false);
+   const [showMessageEmail, setShowMessageEmail] = useState(false);
 
    const handleClickShowPassword = () => {
       setShowPassword(!showPassword);
@@ -41,58 +30,51 @@ export default function Login({
       event.preventDefault();
    };
 
-   const handleSubmit = async (
-      event,
-      isAuth,
-      setIsAuth,
-      isAdmin,
-      setIsAdmin,
-      userId,
-      setUserId,
-      userAvatar,
-      setUserAvatar
-   ) => {
+   const handleSubmit = async (event) => {
       event.preventDefault();
 
       const data = new FormData(event.currentTarget);
       const email = data.get('email');
       const password = data.get('password');
-
       console.log(email, password);
-
       //Valider les inputs *********************
-
-      // ********************
-
-      //    try {
-      //       const reponse = await axios.post(
-      //          'http://localhost:3001/api/logUser',
-      //          {
-      //             email: values.email,
-      //             password: values.password,
-      //          },
-      //          { withCredentials: true }
-      //       );
-      //       console.log(reponse.data);
-
-      //       setIsAuth(true);
-      //       setUserId(reponse.data.id);
-      //       console.log('reponse.data.role = ', reponse.data.role);
-      //       setUserAvatar(reponse.data.avatar);
-      //       if (reponse.data.role === 'admin') {
-      //          setIsAdmin(true);
-      //       } else {
-      //          setIsAdmin(false);
-      //       }
-      //       navigate('/main');
-      //    } catch (error) {
-      //       // if (error.code === 'ERR_BAD_RESPONSE') {
-      //       //    console.log(error.response.data.message);
-      //       // } else {
-      //       //    console.log(error.response.data.error.message);
-      //       // }
-      //       console.log(error);
-      //    }
+      const user = { email: email, password: password };
+      const isValid = await userLoginSchema.isValid(user);
+      // console.log('isValid = ', isValid);
+      if (!isValid) {
+         // input invalide
+         setShowMessageEmail(true);
+      } else {
+         // input valide
+         try {
+            const reponse = await axios.post(
+               'http://localhost:3001/api/logUser',
+               {
+                  email: email,
+                  password: password,
+               },
+               { withCredentials: true }
+            );
+            console.log(reponse.data);
+            setIsAuth(true);
+            setUserId(reponse.data.id);
+            console.log('reponse.data.role = ', reponse.data.role);
+            setUserAvatar(reponse.data.avatar);
+            if (reponse.data.role === 'admin') {
+               setIsAdmin(true);
+            } else {
+               setIsAdmin(false);
+            }
+            navigate('/main');
+         } catch (error) {
+            // if (error.code === 'ERR_BAD_RESPONSE') {
+            //    console.log(error.response.data.message);
+            // } else {
+            //    console.log(error.response.data.error.message);
+            // }
+            console.log(error);
+         }
+      }
    };
 
    return (
@@ -111,11 +93,24 @@ export default function Login({
             <Box component="form" novalidate onSubmit={handleSubmit}>
                <Grid container spacing={2}>
                   <Grid item xs={12}>
-                     <TextField required id="email" label="Adresse email" name="email" autoComplete="email" />
+                     <TextField
+                        onClick={() => {
+                           setShowMessageEmail(false);
+                        }}
+                        required
+                        id="email"
+                        label="Adresse email"
+                        name="email"
+                        autoComplete="email"
+                        helperText={showMessageEmail ? 'Email ou password invalide' : 'Entrer email et password svp'}
+                     />
                   </Grid>
 
                   <Grid item xs={12}>
                      <TextField
+                        onClick={() => {
+                           setShowMessageEmail(false);
+                        }}
                         required
                         name="password"
                         label="Password"

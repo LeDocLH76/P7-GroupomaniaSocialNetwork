@@ -51,8 +51,6 @@ function Post({ post, userId, isAdmin, setIsAdmin, setIsAuth, posts, setPosts })
    const [showAddComment, setShowAddComment] = useState(false);
    // Gère l'état de l'affichage des commentaires
    const [showComment, setShowComment] = useState(false);
-   // Gère le contenu de post.comments
-   const [comments, setComments] = useState(post.comments);
 
    const date = new Date(post.createdAt);
    // Get infos user
@@ -258,12 +256,9 @@ function Post({ post, userId, isAdmin, setIsAdmin, setIsAuth, posts, setPosts })
                      {post.comments.map((comment) => (
                         <Comments
                            key={comment.id}
-                           post={post}
                            comment={comment}
                            userId={userId}
                            isAdmin={isAdmin}
-                           setComments={setComments}
-                           posts={posts}
                            setPosts={setPosts}
                            badgeComment={badgeComment}
                            setBadgeComment={setBadgeComment}
