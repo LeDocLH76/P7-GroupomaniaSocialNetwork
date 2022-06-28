@@ -143,7 +143,7 @@ function Post({ post, userId, isAdmin, setIsAdmin, setIsAuth, posts, setPosts })
    };
 
    return (
-      <Grid item xs={12} sm={6} md={4} lg={3}>
+      <Grid component="article" item xs={12} sm={6} md={4} lg={3}>
          <Card sx={{ maxWidth: 345 }}>
             {/* L'auteur et la date de publication */}
             <CardHeader

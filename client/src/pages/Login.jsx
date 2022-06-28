@@ -79,7 +79,7 @@ export default function Login({ setIsAuth, setIsAdmin, setUserId, setUserAvatar 
    };
 
    return (
-      <Container maxWidth="lg">
+      <Container component="main" maxWidth="lg">
          <CssBaseline />
          <Box>
             <div>
@@ -95,6 +95,7 @@ export default function Login({ setIsAuth, setIsAdmin, setUserId, setUserAvatar 
                <Grid container spacing={2}>
                   <Grid item xs={12}>
                      <TextField
+                        aria-label="Saisie de l'email"
                         onClick={() => {
                            setShowMessageEmail(false);
                         }}
@@ -109,6 +110,7 @@ export default function Login({ setIsAuth, setIsAdmin, setUserId, setUserAvatar 
 
                   <Grid item xs={12}>
                      <TextField
+                        aria-label="Saisie du password"
                         onClick={() => {
                            setShowMessageEmail(false);
                         }}
@@ -122,7 +124,7 @@ export default function Login({ setIsAuth, setIsAdmin, setUserId, setUserAvatar 
                            endAdornment: (
                               <InputAdornment position="end">
                                  <IconButton
-                                    aria-label="toggle password visibility"
+                                    aria-label={showPassword ? 'password visible' : 'password caché'}
                                     onClick={handleClickShowPassword}
                                     onMouseDown={handleMouseDownPassword}
                                     edge="end"

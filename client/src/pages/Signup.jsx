@@ -112,11 +112,19 @@ export default function Signup({ setIsAuth, setIsAdmin, setUserId, setUserAvatar
             <Box component="form" novalidate onSubmit={handleSubmit}>
                <Grid container spacing={2}>
                   <Grid item xs={12}>
-                     <TextField required id="pseudo" label="Pseudo" name="pseudo" autoComplete="pseudo" />
+                     <TextField
+                        aria-label="Saisie du pseudo"
+                        required
+                        id="pseudo"
+                        label="Pseudo"
+                        name="pseudo"
+                        autoComplete="pseudo"
+                     />
                   </Grid>
 
                   <Grid item xs={12}>
                      <TextField
+                        aria-label="Saisie de l'email"
                         onClick={() => setEmailExist(false)}
                         required
                         id="email"
@@ -128,6 +136,7 @@ export default function Signup({ setIsAuth, setIsAdmin, setUserId, setUserAvatar
 
                   <Grid item xs={12}>
                      <TextField
+                        aria-label="Saisie du password"
                         required
                         name="password"
                         label="Password"
@@ -138,7 +147,7 @@ export default function Signup({ setIsAuth, setIsAdmin, setUserId, setUserAvatar
                            endAdornment: (
                               <InputAdornment position="end">
                                  <IconButton
-                                    aria-label="toggle password visibility"
+                                    aria-label={showPassword ? 'password visible' : 'password caché'}
                                     onClick={handleClickShowPassword}
                                     onMouseDown={handleMouseDownPassword}
                                     edge="end"
@@ -158,7 +167,14 @@ export default function Signup({ setIsAuth, setIsAdmin, setUserId, setUserAvatar
                   </Grid>
 
                   <Grid item xs={12}>
-                     <Input accept="image/*" name="image" label="Avatar" type="file" id="image" />
+                     <Input
+                        aria-label="Choisir une image"
+                        accept="image/*"
+                        name="image"
+                        label="Avatar"
+                        type="file"
+                        id="image"
+                     />
                   </Grid>
                </Grid>
                {emailExist ? (

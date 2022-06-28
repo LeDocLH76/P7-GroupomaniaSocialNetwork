@@ -41,39 +41,40 @@ export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userId, u
       <Container maxWidth="lg">
          <CssBaseline />
          <Box>
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-               <img src="./icon.svg" alt="Logo groupomania" width="50" height="50" />
-               <Typography variant="h5" component="h1" sx={{ color: 'primary.main' }}>
-                  Groupomania Social Network
+            <header>
+               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <img src="./icon.svg" alt="Logo groupomania" width="50" height="50" />
+                  <Typography variant="h5" component="h1" sx={{ color: 'primary.main' }}>
+                     Groupomania Social Network
+                  </Typography>
+               </Box>
+               <Typography variant="h6" component="h2">
+                  Les dernières publications
                </Typography>
-            </Box>
-            <Typography variant="h6" component="h2">
-               Les dernières publications
-            </Typography>
-            <Grid container spacing={2}>
-               <Grid item xs={12} sm={6}>
-                  <ButtonGroup sx={{ mt: 1, mb: 1 }}>
-                     <Button variant="contained">
-                        <Link to="/">Acceuil</Link>
-                     </Button>
-                     <Button variant="contained">
-                        <Link to="/postCreate">Publier</Link>
-                     </Button>
-                  </ButtonGroup>
+               <Grid component="nav" container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                     <ButtonGroup sx={{ mt: 1, mb: 1 }}>
+                        <Button variant="contained">
+                           <Link to="/">Acceuil</Link>
+                        </Button>
+                        <Button variant="contained">
+                           <Link to="/postCreate">Publier</Link>
+                        </Button>
+                     </ButtonGroup>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                     <ButtonGroup sx={{ mt: 1, mb: 1 }}>
+                        <Disconnect setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} />
+                        <Button variant="contained">
+                           {/* Mon compte */}
+                           <Link to="/compte">Mon compte</Link>
+                        </Button>
+                     </ButtonGroup>
+                  </Grid>
                </Grid>
-               <Grid item xs={12} sm={6}>
-                  <ButtonGroup sx={{ mt: 1, mb: 1 }}>
-                     <Disconnect setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} />
-                     <Button variant="contained">
-                        {/* Mon compte */}
-                        <Link to="/compte">Mon compte</Link>
-                     </Button>
-                  </ButtonGroup>
-               </Grid>
-            </Grid>
+            </header>
 
-            {/* ************************** */}
-            <Grid container spacing={3}>
+            <Grid component="main" container spacing={3}>
                {posts.map((post) => (
                   <Post
                      post={post}
@@ -87,8 +88,6 @@ export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userId, u
                   />
                ))}
             </Grid>
-
-            {/* ************************** */}
          </Box>
       </Container>
    );
