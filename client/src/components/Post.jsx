@@ -1,6 +1,8 @@
+import '../styles/post.css'
 import {
    Avatar,
    Badge,
+   Box,
    Card,
    CardActions,
    CardContent,
@@ -163,44 +165,46 @@ function Post({ post, userId, isAdmin, setIsAdmin, setIsAuth, posts, setPosts })
             </CardContent>
 
             {/* La zone des boutons d'action */}
-            <CardActions disableSpacing>
-               <Badge
-                  badgeContent={badgeLike}
-                  color="secondary"
-                  showZero
-                  overlap="circular"
-                  anchorOrigin={{
-                     vertical: 'top',
-                     horizontal: 'left',
-                  }}
-               >
-                  <Tooltip title={'Like'} followCursor={true}>
-                     <IconButton aria-label="like" color={like ? 'primary' : 'secondary'} onClick={handleClickLike}>
-                        <ThumbUp />
-                     </IconButton>
-                  </Tooltip>
-               </Badge>
+            <CardActions className="cardAction" disableSpacing>
+               <Box>
+                  <Badge
+                     badgeContent={badgeLike}
+                     color="secondary"
+                     showZero
+                     overlap="circular"
+                     anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                     }}
+                  >
+                     <Tooltip title={'Like'} followCursor={true}>
+                        <IconButton aria-label="like" color={like ? 'primary' : 'secondary'} onClick={handleClickLike}>
+                           <ThumbUp />
+                        </IconButton>
+                     </Tooltip>
+                  </Badge>
 
-               <Badge
-                  badgeContent={badgeDislike}
-                  color="secondary"
-                  showZero
-                  overlap="circular"
-                  anchorOrigin={{
-                     vertical: 'bottom',
-                     horizontal: 'right',
-                  }}
-               >
-                  <Tooltip title={'Dislike'} followCursor={true}>
-                     <IconButton
-                        aria-label="dislike"
-                        color={dislike ? 'primary' : 'secondary'}
-                        onClick={handleClickDislike}
-                     >
-                        <ThumbDown />
-                     </IconButton>
-                  </Tooltip>
-               </Badge>
+                  <Badge
+                     badgeContent={badgeDislike}
+                     color="secondary"
+                     showZero
+                     overlap="circular"
+                     anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                     }}
+                  >
+                     <Tooltip title={'Dislike'} followCursor={true}>
+                        <IconButton
+                           aria-label="dislike"
+                           color={dislike ? 'primary' : 'secondary'}
+                           onClick={handleClickDislike}
+                        >
+                           <ThumbDown />
+                        </IconButton>
+                     </Tooltip>
+                  </Badge>
+               </Box>
 
                {post.userId === userId || isAdmin ? (
                   <Tooltip title={'Supprimer'} followCursor={true}>
@@ -210,28 +214,30 @@ function Post({ post, userId, isAdmin, setIsAdmin, setIsAuth, posts, setPosts })
                   </Tooltip>
                ) : null}
 
-               <Badge
-                  badgeContent={badgeComment}
-                  color="primary"
-                  showZero
-                  overlap="circular"
-                  anchorOrigin={{
-                     vertical: 'top',
-                     horizontal: 'right',
-                  }}
-               >
-                  <Tooltip title={'Ajouter'} followCursor={true}>
-                     <IconButton aria-label="nouveau commentaire" color="primary" onClick={handleClickAddComment}>
-                        <Comment />
+               <Box>
+                  <Badge
+                     badgeContent={badgeComment}
+                     color="primary"
+                     showZero
+                     overlap="circular"
+                     anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                     }}
+                  >
+                     <Tooltip title={'Ajouter'} followCursor={true}>
+                        <IconButton aria-label="nouveau commentaire" color="primary" onClick={handleClickAddComment}>
+                           <Comment />
+                        </IconButton>
+                     </Tooltip>
+                  </Badge>
+
+                  <Tooltip title={showComment ? 'Voir moins' : 'Voir plus'} followCursor={true}>
+                     <IconButton aria-label="voir commentaire" color={'success'} onClick={handleClickShowComments}>
+                        {showComment ? <ExpandLess /> : <ExpandMore />}
                      </IconButton>
                   </Tooltip>
-               </Badge>
-
-               <Tooltip title={showComment ? 'Voir moins' : 'Voir plus'} followCursor={true}>
-                  <IconButton aria-label="voir commentaire" color={'success'} onClick={handleClickShowComments}>
-                     {showComment ? <ExpandLess /> : <ExpandMore />}
-                  </IconButton>
-               </Tooltip>
+               </Box>
             </CardActions>
 
             {/* Zone de saisie du nouveau commentaire */}

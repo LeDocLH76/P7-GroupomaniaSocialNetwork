@@ -1,0 +1,4 @@
+.cardAction {
+   display: flex;
+   justify-content: space-between;
+}
