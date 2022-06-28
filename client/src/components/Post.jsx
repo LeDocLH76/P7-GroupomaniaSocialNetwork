@@ -1,4 +1,4 @@
-import '../styles/post.css'
+import '../styles/post.css';
 import {
    Avatar,
    Badge,
@@ -154,7 +154,14 @@ function Post({ post, userId, isAdmin, setIsAdmin, setIsAuth, posts, setPosts })
 
             {/* Les images de la publication */}
             {post.picture.map((image, i) => (
-               <CardMedia component="img" height="194" image={image} alt={`image ${i + 1} du post`} key={i} />
+               <CardMedia
+                  component="img"
+                  className="imgPost"
+                  height="194"
+                  image={image}
+                  alt={`image ${i + 1} du post`}
+                  key={i}
+               />
             ))}
 
             {/* Le texte de la publication */}
