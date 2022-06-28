@@ -7,6 +7,30 @@ import Main from './pages/Main';
 import Compte from './pages/Compte';
 import PostCreate from './pages/PostCreate';
 import { useEffect, useState } from 'react';
+import { createTheme, ThemeProvider } from '@mui/material';
+
+const theme = createTheme({
+   palette: {
+      primary: {
+         light: '#ff6a38',
+         main: '#fd2d01',
+         dark: '#c10000',
+         contrastText: '#fff',
+      },
+      secondary: {
+         light: '#ffffff',
+         main: '#fdd7d7',
+         dark: '#cba6a6',
+         contrastText: '#000',
+      },
+      text: {
+         primary: '#4e5166',
+      },
+   },
+   typography: {
+      fontFamily: 'Lato',
+   },
+});
 
 function App() {
    const [isAuth, setIsAuth] = useState(false);
@@ -35,131 +59,133 @@ function App() {
 
    return (
       <div className="App">
-         <BrowserRouter>
-            {/* <nav>
+         <ThemeProvider theme={theme}>
+            <BrowserRouter>
+               {/* <nav>
                <h1>Groupotruc</h1>
                <Link to="/">Home</Link>
                <Link to="/signup">Signup</Link>
                <Link to="/login">Login</Link>
             </nav> */}
-            <Routes>
-               <Route path="/" element={<Home />} />
-               <Route
-                  path="/signup"
-                  element={
-                     isAuth ? (
-                        <Main
-                           isAuth={isAuth}
-                           setIsAuth={setIsAuth}
-                           isAdmin={isAdmin}
-                           setIsAdmin={setIsAdmin}
-                           userId={userId}
-                           setUserId={setUserId}
-                           userAvatar={userAvatar}
-                           setUserAvatar={setUserAvatar}
-                        />
-                     ) : (
-                        <Signup
-                           isAuth={isAuth}
-                           setIsAuth={setIsAuth}
-                           isAdmin={isAdmin}
-                           setIsAdmin={setIsAdmin}
-                           userId={userId}
-                           setUserId={setUserId}
-                           userAvatar={userAvatar}
-                           setUserAvatar={setUserAvatar}
-                        />
-                     )
-                  }
-               />
-               <Route
-                  path="/login"
-                  element={
-                     isAuth ? (
-                        <Main
-                           isAuth={isAuth}
-                           setIsAuth={setIsAuth}
-                           isAdmin={isAdmin}
-                           setIsAdmin={setIsAdmin}
-                           userId={userId}
-                           setUserId={setUserId}
-                           userAvatar={userAvatar}
-                           setUserAvatar={setUserAvatar}
-                        />
-                     ) : (
-                        <Login
-                           isAuth={isAuth}
-                           setIsAuth={setIsAuth}
-                           isAdmin={isAdmin}
-                           setIsAdmin={setIsAdmin}
-                           userId={userId}
-                           setUserId={setUserId}
-                           userAvatar={userAvatar}
-                           setUserAvatar={setUserAvatar}
-                        />
-                     )
-                  }
-               />
-               <Route
-                  path="/main"
-                  element={
-                     isAuth ? (
-                        <Main
-                           isAuth={isAuth}
-                           setIsAuth={setIsAuth}
-                           isAdmin={isAdmin}
-                           setIsAdmin={setIsAdmin}
-                           userId={userId}
-                           setUserId={setUserId}
-                           userAvatar={userAvatar}
-                           setUserAvatar={setUserAvatar}
-                        />
-                     ) : (
-                        <Navigate to="/login" />
-                     )
-                  }
-               />
-               <Route
-                  path="/compte"
-                  element={
-                     isAuth ? (
-                        <Compte
-                           isAuth={isAuth}
-                           setIsAuth={setIsAuth}
-                           isAdmin={isAdmin}
-                           setIsAdmin={setIsAdmin}
-                           userId={userId}
-                           setUserId={setUserId}
-                           userAvatar={userAvatar}
-                           setUserAvatar={setUserAvatar}
-                        />
-                     ) : (
-                        <Navigate to="/login" />
-                     )
-                  }
-               />
-               <Route
-                  path="/postCreate"
-                  element={
-                     isAuth ? (
-                        <PostCreate
-                           isAuth={isAuth}
-                           setIsAuth={setIsAuth}
-                           isAdmin={isAdmin}
-                           setIsAdmin={setIsAdmin}
-                           userId={userId}
-                           setUserId={setUserId}
-                           userAvatar={userAvatar}
-                           setUserAvatar={setUserAvatar}
-                        />
-                     ) : (
-                        <Navigate to="/login" />
-                     )
-                  }
-               />
-               <Route path="/*" element={<Navigate to="/" />} />
-            </Routes>
-         </BrowserRouter>
+               <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route
+                     path="/signup"
+                     element={
+                        isAuth ? (
+                           <Main
+                              isAuth={isAuth}
+                              setIsAuth={setIsAuth}
+                              isAdmin={isAdmin}
+                              setIsAdmin={setIsAdmin}
+                              userId={userId}
+                              setUserId={setUserId}
+                              userAvatar={userAvatar}
+                              setUserAvatar={setUserAvatar}
+                           />
+                        ) : (
+                           <Signup
+                              isAuth={isAuth}
+                              setIsAuth={setIsAuth}
+                              isAdmin={isAdmin}
+                              setIsAdmin={setIsAdmin}
+                              userId={userId}
+                              setUserId={setUserId}
+                              userAvatar={userAvatar}
+                              setUserAvatar={setUserAvatar}
+                           />
+                        )
+                     }
+                  />
+                  <Route
+                     path="/login"
+                     element={
+                        isAuth ? (
+                           <Main
+                              isAuth={isAuth}
+                              setIsAuth={setIsAuth}
+                              isAdmin={isAdmin}
+                              setIsAdmin={setIsAdmin}
+                              userId={userId}
+                              setUserId={setUserId}
+                              userAvatar={userAvatar}
+                              setUserAvatar={setUserAvatar}
+                           />
+                        ) : (
+                           <Login
+                              isAuth={isAuth}
+                              setIsAuth={setIsAuth}
+                              isAdmin={isAdmin}
+                              setIsAdmin={setIsAdmin}
+                              userId={userId}
+                              setUserId={setUserId}
+                              userAvatar={userAvatar}
+                              setUserAvatar={setUserAvatar}
+                           />
+                        )
+                     }
+                  />
+                  <Route
+                     path="/main"
+                     element={
+                        isAuth ? (
+                           <Main
+                              isAuth={isAuth}
+                              setIsAuth={setIsAuth}
+                              isAdmin={isAdmin}
+                              setIsAdmin={setIsAdmin}
+                              userId={userId}
+                              setUserId={setUserId}
+                              userAvatar={userAvatar}
+                              setUserAvatar={setUserAvatar}
+                           />
+                        ) : (
+                           <Navigate to="/login" />
+                        )
+                     }
+                  />
+                  <Route
+                     path="/compte"
+                     element={
+                        isAuth ? (
+                           <Compte
+                              isAuth={isAuth}
+                              setIsAuth={setIsAuth}
+                              isAdmin={isAdmin}
+                              setIsAdmin={setIsAdmin}
+                              userId={userId}
+                              setUserId={setUserId}
+                              userAvatar={userAvatar}
+                              setUserAvatar={setUserAvatar}
+                           />
+                        ) : (
+                           <Navigate to="/login" />
+                        )
+                     }
+                  />
+                  <Route
+                     path="/postCreate"
+                     element={
+                        isAuth ? (
+                           <PostCreate
+                              isAuth={isAuth}
+                              setIsAuth={setIsAuth}
+                              isAdmin={isAdmin}
+                              setIsAdmin={setIsAdmin}
+                              userId={userId}
+                              setUserId={setUserId}
+                              userAvatar={userAvatar}
+                              setUserAvatar={setUserAvatar}
+                           />
+                        ) : (
+                           <Navigate to="/login" />
+                        )
+                     }
+                  />
+                  <Route path="/*" element={<Navigate to="/" />} />
+               </Routes>
+            </BrowserRouter>
+         </ThemeProvider>
       </div>
    );
 }

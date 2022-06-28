@@ -1,18 +1,7 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-import {
-   FormControl,
-   InputLabel,
-   OutlinedInput,
-   IconButton,
-   InputAdornment,
-   Button,
-   Box,
-   TextField,
-} from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Button, Box, TextField } from '@mui/material';
 
 export default function DeleteAccount({ setIsAuth, setIsAdmin }) {
    const navigate = useNavigate();
