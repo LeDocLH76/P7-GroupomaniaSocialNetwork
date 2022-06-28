@@ -1,5 +1,5 @@
+import '../styles/site.css';
 import { Box, Button, ButtonGroup, Container, CssBaseline, Grid, Typography } from '@mui/material';
-
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -54,9 +54,7 @@ export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userId, u
                <Grid item xs={12} sm={6}>
                   <ButtonGroup sx={{ mt: 1, mb: 1 }}>
                      <Button variant="contained">
-                        <Link to="/" sx={{ textDecoration: 'none' }}>
-                           Acceuil
-                        </Link>
+                        <Link to="/">Acceuil</Link>
                      </Button>
                      <Button variant="contained">
                         <Link to="/postCreate">Publier</Link>

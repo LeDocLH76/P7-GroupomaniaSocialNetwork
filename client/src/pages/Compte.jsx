@@ -1,3 +1,4 @@
+import '../styles/site.css'
 import { Box, Button, ButtonGroup, Container, CssBaseline, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';

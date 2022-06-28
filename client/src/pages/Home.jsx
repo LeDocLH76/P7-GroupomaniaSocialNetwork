@@ -1,4 +1,5 @@
 import { Typography, Button, Stack, Grid, Container } from '@mui/material';
+import '../styles/site.css';
 import '../styles/home.css';
 import { Link } from 'react-router-dom';
 

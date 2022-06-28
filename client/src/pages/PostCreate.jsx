@@ -1,3 +1,4 @@
+import '../styles/site.css';
 import { Box, Container, CssBaseline, Typography } from '@mui/material';
 import React from 'react';
 import FormPostCreate from '../components/FormPostCreate';
