@@ -238,12 +238,13 @@ function Post({ post, userId, isAdmin, setIsAdmin, setIsAuth, posts, setPosts })
                         </IconButton>
                      </Tooltip>
                   </Badge>
-
-                  <Tooltip title={showComment ? 'Voir moins' : 'Voir plus'} followCursor={true}>
-                     <IconButton aria-label="voir commentaire" color={'success'} onClick={handleClickShowComments}>
-                        {showComment ? <ExpandLess /> : <ExpandMore />}
-                     </IconButton>
-                  </Tooltip>
+                  {badgeComment > 0 ? (
+                     <Tooltip title={showComment ? 'Voir moins' : 'Voir plus'} followCursor={true}>
+                        <IconButton aria-label="voir commentaire" color={'success'} onClick={handleClickShowComments}>
+                           {showComment ? <ExpandLess /> : <ExpandMore />}
+                        </IconButton>
+                     </Tooltip>
+                  ) : null}
                </Box>
             </CardActions>
 
