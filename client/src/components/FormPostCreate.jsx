@@ -69,7 +69,7 @@ export default function FormPostCreate({ setIsAuth, setIsAdmin }) {
             </Grid>
 
             <Grid item xs={12}>
-               <Typography variant="h5" mt={2}>
+               <Typography component="h3" variant="h5" mt={2}>
                   Choisissez vos photos (3 maximum)
                </Typography>
             </Grid>

@@ -98,7 +98,7 @@ export default function Signup({ setIsAuth, setIsAdmin, setUserId, setUserAvatar
    };
 
    return (
-      <Container maxWidth="lg">
+      <Container component={'main'} maxWidth="lg">
          <CssBaseline />
          <Box>
             <div>
@@ -162,7 +162,7 @@ export default function Signup({ setIsAuth, setIsAdmin, setUserId, setUserAvatar
                   </Grid>
 
                   <Grid item xs={12}>
-                     <Typography variant="h5" mt={2}>
+                     <Typography component="h3" variant="h5" mt={2}>
                         Choisissez votre avatar
                      </Typography>
                   </Grid>

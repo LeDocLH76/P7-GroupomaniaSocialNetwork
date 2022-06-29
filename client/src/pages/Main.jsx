@@ -10,9 +10,6 @@ import Disconnect from '../components/Disconnect';
 export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userPseudo, userId, userAvatar }) {
    const [posts, setPosts] = useState([]);
    const navigate = useNavigate();
-   // console.log('isAuth = ', isAuth);
-   // console.log('userId = ', userId);
-   // console.log('userAvatar = ', userAvatar);
 
    useEffect(() => {
       const posts = async () => {

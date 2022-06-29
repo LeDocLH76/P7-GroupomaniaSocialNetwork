@@ -147,7 +147,7 @@ function Post({ post, userId, isAdmin, setIsAdmin, setIsAuth, posts, setPosts })
          <Card sx={{ maxWidth: 345 }}>
             {/* L'auteur et la date de publication */}
             <CardHeader
-               avatar={<Avatar alt="avatar" src={postUserAvatar}></Avatar>}
+               avatar={<Avatar alt={`avatar de ${postUserPseudo}`} src={postUserAvatar}></Avatar>}
                title={postUserPseudo}
                subheader={`${date.toLocaleString()}`}
             />
@@ -159,7 +159,7 @@ function Post({ post, userId, isAdmin, setIsAdmin, setIsAuth, posts, setPosts })
                   className="imgPost"
                   height="194"
                   image={image}
-                  alt={`image ${i + 1} du post`}
+                  alt={`image ${i + 1} du post ${post.id}`}
                   key={i}
                />
             ))}

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 export default function Home() {
    return (
-      <div className="page">
+      <main className="page">
          <Stack paddingTop={20}>
             <div>
                <img src="./icon.svg" alt="Logo groupomania" width="80" height="80" />
@@ -28,6 +28,6 @@ export default function Home() {
                </Grid>
             </Grid>
          </Container>
-      </div>
+      </main>
    );
 }

@@ -72,7 +72,9 @@ export default function FormCommentCreate({
       <Box component="form" novalidate onSubmit={handleSubmit}>
          <Grid container spacing={1}>
             <Grid item xs={12}>
-               <Typography variant="h6">Commenter</Typography>
+               <Typography component="h3" variant="h6">
+                  Commenter
+               </Typography>
             </Grid>
 
             <Grid item xs={12}>

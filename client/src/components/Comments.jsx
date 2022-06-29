@@ -52,8 +52,6 @@ export default function Comments({
    getUser(comment);
 
    const handleClickDeleteComment = async () => {
-      console.log('Delete button pressed = ');
-      // console.log("Les comments avant l'appel à delete comment", comments);
       await deleteComment(setPosts, comment, navigate, badgeComment, setBadgeComment, setIsAuth, setIsAdmin);
    };
 
