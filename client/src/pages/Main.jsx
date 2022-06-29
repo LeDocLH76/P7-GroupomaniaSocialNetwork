@@ -1,5 +1,6 @@
 import '../styles/site.css';
 import { Box, Button, ButtonGroup, Container, CssBaseline, Grid, Typography } from '@mui/material';
+import Masonry from '@mui/lab/Masonry';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -74,7 +75,8 @@ export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userId, u
                </Grid>
             </header>
 
-            <Grid component="main" container spacing={3}>
+            {/* <Grid component="main" container spacing={3}> */}
+            <Masonry component="main" columns={{ xs: 1, sm: 2, md: 3, lg: 4 }} spacing={3}>
                {posts.map((post) => (
                   <Post
                      post={post}
@@ -87,7 +89,8 @@ export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userId, u
                      setIsAuth={setIsAuth}
                   />
                ))}
-            </Grid>
+            </Masonry>
+            {/* </Grid> */}
          </Box>
       </Container>
    );

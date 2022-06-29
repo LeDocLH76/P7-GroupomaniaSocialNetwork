@@ -86,9 +86,6 @@ export default function FormPostCreate({ setIsAuth, setIsAdmin }) {
             </Grid>
          </Grid>
          <ButtonGroup sx={{ mt: 3, mb: 3 }}>
-            <Button variant="contained">
-               <Link to="/">Acceuil</Link>
-            </Button>
             <Button type="submit" variant="contained">
                Enregistrer
             </Button>
