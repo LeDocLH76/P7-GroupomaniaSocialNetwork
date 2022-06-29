@@ -4,8 +4,29 @@ import Masonry from '@mui/lab/Masonry';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { createTheme, ThemeProvider, experimental_sx as sx } from '@mui/material';
 import Post from '../components/Post';
 import Disconnect from '../components/Disconnect';
+
+const themeChip = createTheme({
+   components: {
+      MuiChip: {
+         styleOverrides: {
+            root: sx({
+               borderWidth: 3,
+               borderRadius: 25,
+               borderColor: '#FFD7D7',
+               height: 50,
+               fontSize: '2rem',
+            }),
+            avatar: sx({
+               width: 45,
+               height: 45,
+            }),
+         },
+      },
+   },
+});
 
 export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userPseudo, userId, userAvatar }) {
    const [posts, setPosts] = useState([]);
@@ -63,11 +84,13 @@ export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userPseud
                   </Grid>
 
                   <Grid item xs={12} sm={4}>
-                     <Chip
-                        avatar={<Avatar alt="votre avatar" src={userAvatar}></Avatar>}
-                        label={userPseudo}
-                        variant="outlined"
-                     />
+                     <ThemeProvider theme={themeChip}>
+                        <Chip
+                           avatar={<Avatar alt="votre avatar" src={userAvatar} sx={{ width: 40, height: 40 }}></Avatar>}
+                           label={userPseudo}
+                           variant="outlined"
+                        />{' '}
+                     </ThemeProvider>
                   </Grid>
 
                   <Grid item xs={12} sm={4}>
