@@ -18,7 +18,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { userLoginSchema } from '../Validations/userLoginValidation';
 
-export default function Login({ setIsAuth, setIsAdmin, setUserId, setUserAvatar }) {
+export default function Login({ setIsAuth, setIsAdmin, setUserId, setUserAvatar, setUserPseudo }) {
    const navigate = useNavigate();
    const [showPassword, setShowPassword] = useState(false);
    const [showMessageEmail, setShowMessageEmail] = useState(false);
@@ -41,7 +41,6 @@ export default function Login({ setIsAuth, setIsAdmin, setUserId, setUserAvatar 
       //Valider les inputs *********************
       const user = { email: email, password: password };
       const isValid = await userLoginSchema.isValid(user);
-      // console.log('isValid = ', isValid);
       if (!isValid) {
          // input invalide
          setShowMessageEmail(true);
@@ -56,11 +55,11 @@ export default function Login({ setIsAuth, setIsAdmin, setUserId, setUserAvatar 
                },
                { withCredentials: true }
             );
-            console.log(reponse.data);
+            console.log('reponse.data = ', reponse.data);
             setIsAuth(true);
             setUserId(reponse.data.id);
-            console.log('reponse.data.role = ', reponse.data.role);
             setUserAvatar(reponse.data.avatar);
+            setUserPseudo(reponse.data.pseudo);
             if (reponse.data.role === 'admin') {
                setIsAdmin(true);
             } else {

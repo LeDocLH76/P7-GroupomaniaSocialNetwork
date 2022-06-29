@@ -37,6 +37,7 @@ function App() {
    const [isAdmin, setIsAdmin] = useState(false);
    const [userId, setUserId] = useState(0);
    const [userAvatar, setUserAvatar] = useState('');
+   const [userPseudo, setUserPseudo] = useState('');
 
    useEffect(() => {
       if (localStorage.getItem('user')) {
@@ -46,16 +47,17 @@ function App() {
          setIsAdmin(userStored.isAdmin);
          setUserId(userStored.userId);
          setUserAvatar(userStored.userAvatar);
+         setUserPseudo(userStored.userPseudo);
       } else {
          console.log('Pas user in storage');
       }
    }, []);
 
    useEffect(() => {
-      const user = { isAuth: isAuth, isAdmin: isAdmin, userId: userId, userAvatar: userAvatar };
+      const user = { isAuth: isAuth, isAdmin: isAdmin, userId: userId, userAvatar: userAvatar, userPseudo: userPseudo };
       console.log('user = ', user);
       localStorage.setItem('user', JSON.stringify(user));
-   }, [isAuth, isAdmin, userId, userAvatar]);
+   }, [isAuth, isAdmin, userId, userAvatar, userPseudo]);
 
    return (
       <div className="App">
@@ -80,6 +82,8 @@ function App() {
                               setIsAdmin={setIsAdmin}
                               userId={userId}
                               setUserId={setUserId}
+                              userPseudo={userPseudo}
+                              setUserPseudo={setUserPseudo}
                               userAvatar={userAvatar}
                               setUserAvatar={setUserAvatar}
                            />
@@ -91,6 +95,8 @@ function App() {
                               setIsAdmin={setIsAdmin}
                               userId={userId}
                               setUserId={setUserId}
+                              userPseudo={userPseudo}
+                              setUserPseudo={setUserPseudo}
                               userAvatar={userAvatar}
                               setUserAvatar={setUserAvatar}
                            />
@@ -110,6 +116,8 @@ function App() {
                               setUserId={setUserId}
                               userAvatar={userAvatar}
                               setUserAvatar={setUserAvatar}
+                              userPseudo={userPseudo}
+                              setUserPseudo={setUserPseudo}
                            />
                         ) : (
                            <Login
@@ -121,6 +129,8 @@ function App() {
                               setUserId={setUserId}
                               userAvatar={userAvatar}
                               setUserAvatar={setUserAvatar}
+                              userPseudo={userPseudo}
+                              setUserPseudo={setUserPseudo}
                            />
                         )
                      }
@@ -138,6 +148,8 @@ function App() {
                               setUserId={setUserId}
                               userAvatar={userAvatar}
                               setUserAvatar={setUserAvatar}
+                              userPseudo={userPseudo}
+                              setUserPseudo={setUserPseudo}
                            />
                         ) : (
                            <Navigate to="/login" />
@@ -157,6 +169,8 @@ function App() {
                               setUserId={setUserId}
                               userAvatar={userAvatar}
                               setUserAvatar={setUserAvatar}
+                              userPseudo={userPseudo}
+                              setUserPseudo={setUserPseudo}
                            />
                         ) : (
                            <Navigate to="/login" />
@@ -176,6 +190,8 @@ function App() {
                               setUserId={setUserId}
                               userAvatar={userAvatar}
                               setUserAvatar={setUserAvatar}
+                              userPseudo={userPseudo}
+                              setUserPseudo={setUserPseudo}
                            />
                         ) : (
                            <Navigate to="/login" />

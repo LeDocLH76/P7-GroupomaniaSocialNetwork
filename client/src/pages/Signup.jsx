@@ -22,7 +22,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { userCreateSchema } from '../Validations/userCreateValidation';
 
-export default function Signup({ setIsAuth, setIsAdmin, setUserId, setUserAvatar }) {
+export default function Signup({ setIsAuth, setIsAdmin, setUserId, setUserAvatar, setUserPseudo }) {
    const navigate = useNavigate();
 
    const [emailExist, setEmailExist] = useState(false);
@@ -82,6 +82,7 @@ export default function Signup({ setIsAuth, setIsAdmin, setUserId, setUserAvatar
             }
             setUserId(reponse.data.id);
             setUserAvatar(reponse.data.avatar);
+            setUserPseudo(reponse.data.pseudo);
             setIsAuth(true);
             navigate('/main');
          } catch (error) {

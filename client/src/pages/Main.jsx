@@ -1,5 +1,5 @@
 import '../styles/site.css';
-import { Box, Button, ButtonGroup, Container, CssBaseline, Grid, Typography } from '@mui/material';
+import { Box, Button, ButtonGroup, Container, CssBaseline, Grid, Typography, Avatar, Chip } from '@mui/material';
 import Masonry from '@mui/lab/Masonry';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Post from '../components/Post';
 import Disconnect from '../components/Disconnect';
 
-export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userId, userAvatar }) {
+export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userPseudo, userId, userAvatar }) {
    const [posts, setPosts] = useState([]);
    const navigate = useNavigate();
    // console.log('isAuth = ', isAuth);
@@ -52,8 +52,9 @@ export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userId, u
                <Typography variant="h6" component="h2">
                   Les dernières publications
                </Typography>
+
                <Grid component="nav" container spacing={2}>
-                  <Grid item xs={12} sm={6}>
+                  <Grid item xs={12} sm={4}>
                      <ButtonGroup sx={{ mt: 1, mb: 1 }}>
                         <Button variant="contained">
                            <Link to="/">Acceuil</Link>
@@ -63,7 +64,16 @@ export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userId, u
                         </Button>
                      </ButtonGroup>
                   </Grid>
-                  <Grid item xs={12} sm={6}>
+
+                  <Grid item xs={12} sm={4}>
+                     <Chip
+                        avatar={<Avatar alt="votre avatar" src={userAvatar}></Avatar>}
+                        label={userPseudo}
+                        variant="outlined"
+                     />
+                  </Grid>
+
+                  <Grid item xs={12} sm={4}>
                      <ButtonGroup sx={{ mt: 1, mb: 1 }}>
                         <Disconnect setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} />
                         <Button variant="contained">
