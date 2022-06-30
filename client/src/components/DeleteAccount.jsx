@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { Button, Box, TextField } from '@mui/material';
 
-export default function DeleteAccount({ setIsAuth, setIsAdmin }) {
+export default function DeleteAccount({ setIsAuth, setIsAdmin, setUserAvatar, setUserPseudo }) {
    const navigate = useNavigate();
    // const [values, setValues] = useState({
    //    password: '',
@@ -41,6 +41,8 @@ export default function DeleteAccount({ setIsAuth, setIsAdmin }) {
          });
          console.log(reponse);
          localStorage.removeItem('user');
+         setUserAvatar('');
+         setUserPseudo('');
          setIsAuth(false);
          setIsAdmin(false);
          navigate('/');
@@ -48,6 +50,8 @@ export default function DeleteAccount({ setIsAuth, setIsAdmin }) {
          if (error.response.status === 401) {
             console.log(error.response.statusText);
             localStorage.removeItem('user');
+            setUserAvatar('');
+            setUserPseudo('');
             setIsAuth(false);
             setIsAdmin(false);
             navigate('/login');

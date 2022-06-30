@@ -2,7 +2,7 @@ import { Button } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-export default function Disconnect({ setIsAuth, setIsAdmin }) {
+export default function Disconnect({ setIsAuth, setIsAdmin, setUserAvatar, setUserPseudo }) {
    const navigate = useNavigate();
 
    const disconnect = async () => {
@@ -19,6 +19,8 @@ export default function Disconnect({ setIsAuth, setIsAdmin }) {
          if (error.response.status === 401) {
             console.log(error.response.statusText);
             localStorage.removeItem('user');
+            setUserAvatar('');
+            setUserPseudo('');
             setIsAuth(false);
             setIsAdmin(false);
             navigate('/login');

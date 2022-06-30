@@ -21,7 +21,7 @@ import { ThumbUp, ThumbDown, Comment, DeleteForever, ExpandMore, ExpandLess } fr
 import FormCommentCreate from './FormCommentCreate';
 import Comments from './Comments';
 
-function Post({ post, userId, isAdmin, setIsAdmin, setIsAuth, posts, setPosts }) {
+function Post({ post, userId, isAdmin, setIsAdmin, setIsAuth, setUserAvatar, setUserPseudo, posts, setPosts }) {
    const navigate = useNavigate();
    let userIncludeLike = false;
    let userIncludeDislike = false;
@@ -69,6 +69,8 @@ function Post({ post, userId, isAdmin, setIsAdmin, setIsAuth, posts, setPosts })
          if (error.response.status === 401) {
             console.log(error.response.statusText);
             localStorage.removeItem('user');
+            setUserAvatar('');
+            setUserPseudo('');
             setIsAuth(false);
             setIsAdmin(false);
             navigate('/login');
@@ -131,7 +133,7 @@ function Post({ post, userId, isAdmin, setIsAdmin, setIsAuth, posts, setPosts })
 
    const handleClickDeletePost = async () => {
       // console.log('Delete button pressed');
-      await deletePost(post, navigate, posts, setPosts, setIsAuth, setIsAdmin);
+      await deletePost(post, navigate, posts, setPosts, setIsAuth, setIsAdmin, setUserAvatar, setUserPseudo);
    };
 
    const handleClickAddComment = async () => {
@@ -290,7 +292,7 @@ function Post({ post, userId, isAdmin, setIsAdmin, setIsAuth, posts, setPosts })
 
 export default Post;
 
-async function deletePost(post, navigate, posts, setPosts, setIsAuth, setIsAdmin) {
+async function deletePost(post, navigate, posts, setPosts, setIsAuth, setIsAdmin, setUserAvatar, setUserPseudo) {
    try {
       // const response =
       await axios.delete(`http://localhost:3001/api/postDelete/${post.id}`, { withCredentials: true });
@@ -301,6 +303,8 @@ async function deletePost(post, navigate, posts, setPosts, setIsAuth, setIsAdmin
       if (error.response.status === 401) {
          console.log(error.response.statusText);
          localStorage.removeItem('user');
+         setUserAvatar('');
+         setUserPseudo('');
          setIsAuth(false);
          setIsAdmin(false);
          navigate('/login');
@@ -312,7 +316,7 @@ async function deletePost(post, navigate, posts, setPosts, setIsAuth, setIsAdmin
    }
 }
 
-async function updateDB(post, param, navigate, setIsAuth, setIsAdmin) {
+async function updateDB(post, param, navigate, setIsAuth, setIsAdmin, setUserAvatar, setUserPseudo) {
    try {
       const response = await axios.put(
          `http://localhost:3001/api/postLike/${post.id}`,
@@ -326,6 +330,8 @@ async function updateDB(post, param, navigate, setIsAuth, setIsAdmin) {
       if (error.response.status === 401) {
          console.log('error 401', error.response.statusText);
          localStorage.removeItem('user');
+         setUserAvatar('');
+         setUserPseudo('');
          setIsAuth(false);
          setIsAdmin(false);
          navigate('/login');

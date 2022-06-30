@@ -28,7 +28,17 @@ const themeChip = createTheme({
    },
 });
 
-export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userPseudo, userId, userAvatar }) {
+export default function Main({
+   isAuth,
+   setIsAuth,
+   isAdmin,
+   setIsAdmin,
+   userPseudo,
+   setUserPseudo,
+   userId,
+   userAvatar,
+   setUserAvatar,
+}) {
    const [posts, setPosts] = useState([]);
    const navigate = useNavigate();
 
@@ -48,6 +58,8 @@ export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userPseud
                localStorage.removeItem('user');
                setIsAuth(false);
                setIsAdmin(false);
+               setUserAvatar('');
+               setUserPseudo('');
                navigate('/login');
             }
             // else {
@@ -57,7 +69,7 @@ export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userPseud
          }
       };
       posts();
-   }, [navigate, setIsAuth, setIsAdmin]);
+   }, [navigate, setIsAuth, setIsAdmin, setUserAvatar, setUserPseudo]);
 
    return (
       <Container maxWidth="lg">

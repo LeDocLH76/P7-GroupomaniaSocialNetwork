@@ -2,7 +2,7 @@ import { Box, Button, ButtonGroup, Grid, Input, TextField, Typography } from '@m
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
-export default function FormPostCreate({ setIsAuth, setIsAdmin }) {
+export default function FormPostCreate({ setIsAuth, setIsAdmin, setUserAvatar, setUserPseudo }) {
    const navigate = useNavigate();
 
    const handleSubmit = async (event) => {
@@ -53,6 +53,8 @@ export default function FormPostCreate({ setIsAuth, setIsAdmin }) {
          if (error.response.status === 401) {
             console.log(error.response.statusText);
             localStorage.removeItem('user');
+            setUserAvatar('');
+            setUserPseudo('');
             setIsAuth(false);
             setIsAdmin(false);
             navigate('/login');

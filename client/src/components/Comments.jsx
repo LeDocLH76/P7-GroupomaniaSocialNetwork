@@ -20,6 +20,8 @@ export default function Comments({
    isAdmin,
    setIsAuth,
    setIsAdmin,
+   setUserAvatar,
+   setUserPseudo,
    setPosts,
    badgeComment,
    setBadgeComment,
@@ -43,6 +45,11 @@ export default function Comments({
       } catch (error) {
          if (error.response.status === 401) {
             console.log(error.response.statusText);
+            localStorage.removeItem('user');
+            setUserAvatar('');
+            setUserPseudo('');
+            setIsAuth(false);
+            setIsAdmin(false);
             navigate('/login');
          }
 
@@ -83,7 +90,17 @@ export default function Comments({
    );
 }
 
-async function deleteComment(setPosts, comment, navigate, badgeComment, setBadgeComment, setIsAuth, setIsAdmin) {
+async function deleteComment(
+   setPosts,
+   comment,
+   navigate,
+   badgeComment,
+   setBadgeComment,
+   setIsAuth,
+   setIsAdmin,
+   setUserAvatar,
+   setUserPseudo
+) {
    try {
       const response = await axios.delete(`http://localhost:3001/api/commentDelete/${comment.id}`, {
          withCredentials: true,
@@ -101,6 +118,8 @@ async function deleteComment(setPosts, comment, navigate, badgeComment, setBadge
          if (error.response.status === 401) {
             console.log(error.response.statusText);
             localStorage.removeItem('user');
+            setUserAvatar('');
+            setUserPseudo('');
             setIsAuth(false);
             setIsAdmin(false);
             navigate('/login');
@@ -114,6 +133,8 @@ async function deleteComment(setPosts, comment, navigate, badgeComment, setBadge
       if (error.response.status === 401) {
          console.log(error.response.statusText);
          localStorage.removeItem('user');
+         setUserAvatar('');
+         setUserPseudo('');
          setIsAuth(false);
          setIsAdmin(false);
          navigate('/login');

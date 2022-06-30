@@ -11,6 +11,8 @@ export default function FormCommentCreate({
    setShowAddComment,
    setIsAuth,
    setIsAdmin,
+   setUserAvatar,
+   setUserPseudo,
 }) {
    const navigate = useNavigate();
    const handleSubmit = async (event) => {
@@ -42,6 +44,8 @@ export default function FormCommentCreate({
             if (error.response.status === 401) {
                console.log(error.response.statusText);
                localStorage.removeItem('user');
+               setUserAvatar('');
+               setUserPseudo('');
                setIsAuth(false);
                setIsAdmin(false);
                navigate('/login');
@@ -60,6 +64,8 @@ export default function FormCommentCreate({
          if (error.response.status === 401) {
             console.log(error.response.statusText);
             localStorage.removeItem('user');
+            setUserAvatar('');
+            setUserPseudo('');
             setIsAuth(false);
             setIsAdmin(false);
             navigate('/login');
