@@ -67,12 +67,13 @@ export default function Login({ setIsAuth, setIsAdmin, setUserId, setUserAvatar,
             }
             navigate('/main');
          } catch (error) {
-            // if (error.code === 'ERR_BAD_RESPONSE') {
-            //    console.log(error.response.data.message);
-            // } else {
-            //    console.log(error.response.data.error.message);
-            // }
+            if (error.code === 'ERR_BAD_RESPONSE') {
+               console.log(error.response.data.message);
+            } else {
+               console.log(error.response.data.error.message);
+            }
             console.log(error);
+            setShowMessageEmail(true);
          }
       }
    };
@@ -103,7 +104,11 @@ export default function Login({ setIsAuth, setIsAdmin, setUserId, setUserAvatar,
                         label="Adresse email"
                         name="email"
                         autoComplete="email"
-                        helperText={showMessageEmail ? 'Email ou password invalide' : 'Entrer email et password svp'}
+                        helperText={
+                           <Typography sx={{ mt: 3, mb: 3, fontSize: 20 }}>
+                              {showMessageEmail ? 'Email ou password invalide' : 'Entrer email et password svp'}
+                           </Typography>
+                        }
                      />
                   </Grid>
 

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DeleteAccount from '../components/DeleteAccount';
 
-export default function Compte({ setIsAuth, setIsAdmin }) {
+export default function Compte({ setIsAuth, setIsAdmin, setUserAvatar, setUserPseudo }) {
    const navigate = useNavigate();
    const [showDelete, setShowDelete] = useState(false);
 
@@ -37,7 +37,14 @@ export default function Compte({ setIsAuth, setIsAdmin }) {
                   Supprimer le compte
                </Button>
             </ButtonGroup>
-            {showDelete ? <DeleteAccount setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} /> : null}
+            {showDelete ? (
+               <DeleteAccount
+                  setIsAuth={setIsAuth}
+                  setIsAdmin={setIsAdmin}
+                  setUserAvatar={setUserAvatar}
+                  setUserPseudo={setUserPseudo}
+               />
+            ) : null}
          </Box>
       </Container>
    );

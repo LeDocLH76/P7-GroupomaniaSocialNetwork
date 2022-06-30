@@ -10,7 +10,7 @@ export default function Home() {
             <div>
                <img src="./icon.svg" alt="Logo groupomania" width="80" height="80" />
             </div>
-            <Typography variant="h3" component="h1" mb={5} sx={{ color: 'primary.main' }}>
+            <Typography variant="h3" component="h1" mt={8} mb={8} sx={{ color: 'primary.main' }}>
                Groupomania Social Network
             </Typography>
          </Stack>
