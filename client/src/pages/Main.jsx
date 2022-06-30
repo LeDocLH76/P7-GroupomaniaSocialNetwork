@@ -110,7 +110,12 @@ export default function Main({
 
                   <Grid item xs={12} sm={4}>
                      <ButtonGroup sx={{ mt: 1, mb: 1 }}>
-                        <Disconnect setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} />
+                        <Disconnect
+                           setIsAuth={setIsAuth}
+                           setIsAdmin={setIsAdmin}
+                           setUserAvatar={setUserAvatar}
+                           setUserPseudo={setUserPseudo}
+                        />
                         <Button variant="groupomania">
                            {/* Mon compte */}
                            <Link to="/compte">Mon compte</Link>
@@ -132,6 +137,8 @@ export default function Main({
                      isAdmin={isAdmin}
                      setIsAdmin={setIsAdmin}
                      setIsAuth={setIsAuth}
+                     setUserAvatar={setUserAvatar}
+                     setUserPseudo={setUserPseudo}
                   />
                ))}
             </Masonry>

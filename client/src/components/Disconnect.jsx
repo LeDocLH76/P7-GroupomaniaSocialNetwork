@@ -12,6 +12,8 @@ export default function Disconnect({ setIsAuth, setIsAdmin, setUserAvatar, setUs
          });
          console.log(response);
          localStorage.removeItem('user');
+         setUserAvatar('');
+         setUserPseudo('');
          setIsAuth(false);
          setIsAdmin(false);
          navigate('/login');
