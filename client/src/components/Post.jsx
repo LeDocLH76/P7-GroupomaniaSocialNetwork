@@ -70,7 +70,7 @@ function Post({ post, userId, isAdmin, setIsAdmin, setIsAuth, posts, setPosts })
             console.log(error.response.statusText);
             localStorage.removeItem('user');
             setIsAuth(false);
-            setIsAuth(false);
+            setIsAdmin(false);
             navigate('/login');
          }
          console.log(error);
@@ -224,7 +224,7 @@ function Post({ post, userId, isAdmin, setIsAdmin, setIsAuth, posts, setPosts })
                <Box>
                   <Badge
                      badgeContent={badgeComment}
-                     color="primary"
+                     color="secondary"
                      showZero
                      overlap="circular"
                      anchorOrigin={{

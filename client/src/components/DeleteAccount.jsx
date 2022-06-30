@@ -70,7 +70,7 @@ export default function DeleteAccount({ setIsAuth, setIsAdmin }) {
             id="password"
             autoComplete="New-password"
          />
-         <Button type="submit" variant="contained">
+         <Button type="submit" variant="groupomania">
             Supprimer
          </Button>
       </Box>

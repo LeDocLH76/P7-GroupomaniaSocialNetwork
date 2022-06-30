@@ -17,12 +17,12 @@ export default function Home() {
          <Container maxWidth="sm">
             <Grid container spacing={3}>
                <Grid item xs={12} sm={6}>
-                  <Button variant="contained">
+                  <Button variant="groupomania">
                      <Link to="/signup">S'inscrire</Link>
                   </Button>
                </Grid>
                <Grid item xs={12} sm={6}>
-                  <Button variant="contained">
+                  <Button variant="groupomania">
                      <Link to="/login">Se connecter</Link>
                   </Button>
                </Grid>

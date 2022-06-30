@@ -86,10 +86,10 @@ export default function FormPostCreate({ setIsAuth, setIsAdmin }) {
             </Grid>
          </Grid>
          <ButtonGroup sx={{ mt: 3, mb: 3 }}>
-            <Button type="submit" variant="contained">
+            <Button type="submit" variant="groupomania">
                Enregistrer
             </Button>
-            <Button variant="contained">
+            <Button variant="groupomania">
                <Link to="/main">Annuler</Link>
             </Button>
          </ButtonGroup>

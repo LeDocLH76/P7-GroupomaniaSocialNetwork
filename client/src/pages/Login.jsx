@@ -137,10 +137,10 @@ export default function Login({ setIsAuth, setIsAdmin, setUserId, setUserAvatar,
                   </Grid>
                </Grid>
                <ButtonGroup sx={{ mt: 3, mb: 3 }}>
-                  <Button variant="contained">
+                  <Button variant="groupomania">
                      <Link to="/">Acceuil</Link>
                   </Button>
-                  <Button type="submit" variant="contained">
+                  <Button type="submit" variant="groupomania">
                      Valider
                   </Button>
                </ButtonGroup>

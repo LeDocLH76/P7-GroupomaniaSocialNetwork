@@ -9,6 +9,26 @@ import PostCreate from './pages/PostCreate';
 import { useEffect, useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material';
 
+const defaultTheme = createTheme({
+   palette: {
+      primary: {
+         light: '#ff6a38',
+         main: '#fd2d01',
+         dark: '#c10000',
+         contrastText: '#000',
+      },
+      secondary: {
+         light: '#ffffff',
+         main: '#fdd7d7',
+         dark: '#cba6a6',
+         contrastText: '#000',
+      },
+      text: {
+         primary: '#4e5166',
+      },
+   },
+});
+
 const theme = createTheme({
    palette: {
       primary: {
@@ -29,6 +49,25 @@ const theme = createTheme({
    },
    typography: {
       fontFamily: 'Lato',
+   },
+   components: {
+      MuiButton: {
+         variants: [
+            {
+               props: { variant: 'groupomania' },
+               style: {
+                  border: `3px solid ${defaultTheme.palette.primary.main}`,
+                  borderRadius: 15,
+                  fontSize: '1rem',
+                  color: defaultTheme.palette.text.primary,
+                  backgroundColor: defaultTheme.palette.secondary.main,
+                  '&:hover': {
+                     backgroundColor: defaultTheme.palette.secondary.dark,
+                  },
+               },
+            },
+         ],
+      },
    },
 });
 

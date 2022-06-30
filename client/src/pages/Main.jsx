@@ -44,7 +44,10 @@ export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userPseud
             setPosts(reponse.data);
          } catch (error) {
             if (error.response.status === 401) {
-               console.log(error.response.statusText);
+               console.log('Main UE[] Get posts', error.response.statusText);
+               localStorage.removeItem('user');
+               setIsAuth(false);
+               setIsAdmin(false);
                navigate('/login');
             }
             // else {
@@ -54,7 +57,7 @@ export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userPseud
          }
       };
       posts();
-   }, [navigate]);
+   }, [navigate, setIsAuth, setIsAdmin]);
 
    return (
       <Container maxWidth="lg">
@@ -74,10 +77,10 @@ export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userPseud
                <Grid component="nav" container spacing={2}>
                   <Grid item xs={12} sm={4}>
                      <ButtonGroup sx={{ mt: 1, mb: 1 }}>
-                        <Button variant="contained">
+                        <Button variant="groupomania">
                            <Link to="/">Acceuil</Link>
                         </Button>
-                        <Button variant="contained">
+                        <Button variant="groupomania">
                            <Link to="/postCreate">Publier</Link>
                         </Button>
                      </ButtonGroup>
@@ -96,7 +99,7 @@ export default function Main({ isAuth, setIsAuth, isAdmin, setIsAdmin, userPseud
                   <Grid item xs={12} sm={4}>
                      <ButtonGroup sx={{ mt: 1, mb: 1 }}>
                         <Disconnect setIsAuth={setIsAuth} setIsAdmin={setIsAdmin} />
-                        <Button variant="contained">
+                        <Button variant="groupomania">
                            {/* Mon compte */}
                            <Link to="/compte">Mon compte</Link>
                         </Button>

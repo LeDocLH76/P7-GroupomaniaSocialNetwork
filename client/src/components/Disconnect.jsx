@@ -32,7 +32,7 @@ export default function Disconnect({ setIsAuth, setIsAdmin }) {
 
    return (
       <Button
-         variant="contained"
+         variant="groupomania"
          onClick={() => {
             disconnect();
          }}

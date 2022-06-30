@@ -83,11 +83,11 @@ export default function FormCommentCreate({
          </Grid>
 
          <ButtonGroup sx={{ mt: 1 }}>
-            <Button type="submit" variant="contained">
+            <Button type="submit" variant="groupomania">
                Enregistrer
             </Button>
             <Button
-               variant="contained"
+               variant="groupomania"
                onClick={() => {
                   setShowAddComment(false);
                }}

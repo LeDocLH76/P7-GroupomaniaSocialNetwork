@@ -1,4 +1,4 @@
-import '../styles/site.css'
+import '../styles/site.css';
 import { Box, Button, ButtonGroup, Container, CssBaseline, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -30,10 +30,10 @@ export default function Compte({ setIsAuth, setIsAdmin }) {
                Gestion du compte = En travaux
             </Typography>
             <ButtonGroup sx={{ mt: 3, mb: 3 }}>
-               <Button variant="contained" onClick={back}>
+               <Button variant="groupomania" onClick={back}>
                   Retour
                </Button>
-               <Button variant="contained" onClick={deleteAccount}>
+               <Button variant="groupomania" onClick={deleteAccount}>
                   Supprimer le compte
                </Button>
             </ButtonGroup>

@@ -185,10 +185,10 @@ export default function Signup({ setIsAuth, setIsAdmin, setUserId, setUserAvatar
                   </Alert>
                ) : null}
                <ButtonGroup sx={{ mt: 3, mb: 3 }}>
-                  <Button variant="groupomania">
+                  <Button variant="contained">
                      <Link to="/">Acceuil</Link>
                   </Button>
-                  <Button type="submit" variant="groupomania">
+                  <Button type="submit" variant="contained">
                      Enregistrer
                   </Button>
                </ButtonGroup>
