@@ -81,7 +81,7 @@ function App() {
    useEffect(() => {
       if (localStorage.getItem('user')) {
          const userStored = JSON.parse(localStorage.getItem('user'));
-         console.log('user in storage = ', userStored);
+         console.log('user from storage = ', userStored);
          setIsAuth(userStored.isAuth);
          setIsAdmin(userStored.isAdmin);
          setUserId(userStored.userId);
@@ -94,7 +94,7 @@ function App() {
 
    useEffect(() => {
       const user = { isAuth: isAuth, isAdmin: isAdmin, userId: userId, userAvatar: userAvatar, userPseudo: userPseudo };
-      console.log('user = ', user);
+      console.log('user to storage = ', user);
       localStorage.setItem('user', JSON.stringify(user));
    }, [isAuth, isAdmin, userId, userAvatar, userPseudo]);
 
@@ -102,12 +102,6 @@ function App() {
       <div className="App">
          <ThemeProvider theme={theme}>
             <BrowserRouter>
-               {/* <nav>
-               <h1>Groupotruc</h1>
-               <Link to="/">Home</Link>
-               <Link to="/signup">Signup</Link>
-               <Link to="/login">Login</Link>
-            </nav> */}
                <Routes>
                   <Route path="/" element={<Home />} />
                   <Route
