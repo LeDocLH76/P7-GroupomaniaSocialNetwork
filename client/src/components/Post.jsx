@@ -167,7 +167,7 @@ function Post({ post, userId, isAdmin, setIsAdmin, setIsAuth, setUserAvatar, set
             ))}
 
             {/* Le texte de la publication */}
-            <CardContent>
+            <CardContent sx={{ padding: 0 }}>
                <Typography variant="body2" color="text.secondary">
                   {post.body}
                </Typography>

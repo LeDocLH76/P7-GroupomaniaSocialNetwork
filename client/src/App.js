@@ -58,7 +58,7 @@ const theme = createTheme({
                style: {
                   border: `3px solid ${defaultTheme.palette.primary.main}`,
                   borderRadius: 15,
-                  fontSize: '1rem',
+                  fontSize: '0.9rem',
                   color: defaultTheme.palette.text.primary,
                   backgroundColor: defaultTheme.palette.secondary.main,
                   '&:hover': {
