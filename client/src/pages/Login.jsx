@@ -104,12 +104,13 @@ export default function Login({ setIsAuth, setIsAdmin, setUserId, setUserAvatar,
                         label="Adresse email"
                         name="email"
                         autoComplete="email"
-                        helperText={
-                           <Typography sx={{ mt: 3, mb: 3, fontSize: 20 }}>
-                              {showMessageEmail ? 'Email ou password invalide' : 'Entrer email et password svp'}
-                           </Typography>
-                        }
                      />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                     <Typography sx={{ mt: 3, mb: 3, fontSize: 20 }}>
+                        {showMessageEmail ? 'Email ou password invalide' : 'Entrer email et password svp'}
+                     </Typography>
                   </Grid>
 
                   <Grid item xs={12}>

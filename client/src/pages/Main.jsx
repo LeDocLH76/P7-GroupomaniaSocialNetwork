@@ -104,7 +104,7 @@ export default function Main({
                            avatar={<Avatar alt="votre avatar" src={userAvatar} sx={{ width: 40, height: 40 }}></Avatar>}
                            label={userPseudo}
                            variant="outlined"
-                        />{' '}
+                        />
                      </ThemeProvider>
                   </Grid>
 
