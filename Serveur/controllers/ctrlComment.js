@@ -155,10 +155,12 @@ exports.deletecomment = async (req, res) => {
       if (!dataCommentBd) {
          return res.status(404).send('Commentaire non trouvé');
       }
-
-      // Vérification du propriétaire du commentaire
-      if (parseInt(req.session.user.id) !== dataCommentBd.userId) {
-         return res.status(401).send('Erreur de user');
+      // Autoriser si Admin
+      if (req.session.user.role !== 'admin') {
+         // Vérification du propriétaire du commentaire
+         if (parseInt(req.session.user.id) !== dataCommentBd.userId) {
+            return res.status(401).send('Erreur de user');
+         }
       }
 
       const comment = await prisma.comments.delete({

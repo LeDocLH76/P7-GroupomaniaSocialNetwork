@@ -234,9 +234,12 @@ exports.deletepost = async (req, res) => {
       const imagePostBd = dataPostBdObj.picture;
       // Récuperation du userId propriétaire du post
       const userIdPostBd = dataPostBdObj.userId;
-      // Vérifie la propriété du post
-      if (parseInt(req.session.user.id) !== userIdPostBd) {
-         return res.status(401).send('Erreur user');
+      // Autoriser si Admin
+      if (req.session.user.role !== 'admin') {
+         // Vérifie la propriété du post
+         if (parseInt(req.session.user.id) !== userIdPostBd) {
+            return res.status(401).send('Erreur user');
+         }
       }
 
       // Efface les anciennes images sur le serveur
